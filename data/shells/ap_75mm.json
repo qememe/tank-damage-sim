@@ -1,0 +1,8 @@
+{
+  "id": "ap_75mm",
+  "name": "75 mm AP",
+  "type": "AP",
+  "caliberMm": 75,
+  "velocityMps": 790,
+  "penetrationMm": 109
+}

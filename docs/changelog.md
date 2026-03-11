@@ -1,6 +1,11 @@
 # Changelog
 
 ## 2026-03-11
+- Replaced the placeholder `packages/shared` contract with split JSON-first schema files for math, tank, shell, scenario, and result payloads.
+- Added minimal example assets in `data/tanks/test_tank_a.json` and `data/shells/ap_75mm.json` to exercise the shared schema shape.
+- The shared result contract now covers replay-oriented shell paths, fragment paths, module damage, and crew damage in a serializable form for sim-core and the dev viewer.
+- Kept the types intentionally minimal: no classes, no runtime validation layer, and no schema for the separate debug report yet.
+- Remaining unfinished work: wire these types into sim-core inputs/outputs and add runtime validation once the first executable simulation pass exists.
 - Initialized repository structure.
 - Added AGENTS.md with project rules and documentation policy.
 - Added docs skeleton.

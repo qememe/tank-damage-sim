@@ -34,3 +34,18 @@ What changed:
 
 Tradeoff:
 - The repo remains npm-native and simple, but package versions must stay aligned when local workspace dependencies change.
+
+## 2026-03-11 — Split shared schemas by simulation domain
+The shared contract package now uses separate source files for math primitives, tank definitions, shell definitions, scenario input, and simulation result output.
+
+Why:
+- The placeholder single-file contract mixed unrelated concerns and would get harder to maintain as the simulation core and viewer start consuming more of the JSON pipeline.
+- Domain-split files keep authored data, runtime inputs, and result payloads explicit without adding frameworks or complex schema tooling.
+
+What changed:
+- `packages/shared/src/math.ts` defines `Vec3`, `Ray`, and `AABB`.
+- `packages/shared/src/tank.ts`, `shell.ts`, `scenario.ts`, and `result.ts` define the first minimal JSON contracts for authored data and simulation I/O.
+- `packages/shared/src/index.ts` now re-exports those contracts as the public package surface.
+
+Tradeoff:
+- The types are intentionally compile-time only for now, so malformed JSON is still possible until runtime validation is added later in sim-core or a dedicated validation layer.
