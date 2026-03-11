@@ -8,7 +8,7 @@
   - `src/math.ts` for explicit vector math and ray/AABB intersection helpers
   - `src/simulate.ts` for the shot pipeline and damage resolution
   - `src/cli.ts` for the workspace simulation command
-- `packages/dev-viewer` — browser-side viewer entrypoint reserved for loading and inspecting result JSON
+- `packages/dev-viewer` — Vite-powered React + React Three Fiber dev viewer that loads `SimulationResult` JSON via file picker or bundled sample, and renders armor, module, crew, and trace geometry through dedicated viewer/components/hooks/loaders modules with simple playback controls.
 - `data` — tanks, shells, scenarios, and generated results/debug files
 - `docs` — changelog, decisions, architecture, roadmap, testing
 
@@ -20,7 +20,7 @@
 5. on penetration, sim-core generates a shell path plus fragment rays and checks them against module and crew AABBs
 6. sim-core produces a `SimulationResult` JSON payload from `packages/shared` plus a separate debug report
 7. result and debug files are written to `data/results`
-8. dev-viewer loads result JSON for replay and inspection
+8. dev-viewer loads result JSON via file picker or built-in sample, then animates armor/module/crew shells, fragments, and event markers with playback controls, speed options, and visibility toggles.
 
 ## Sim-core notes
 - The monorepo is intentionally lightweight: one root workspace, three focused packages, and no extra build tooling beyond TypeScript.

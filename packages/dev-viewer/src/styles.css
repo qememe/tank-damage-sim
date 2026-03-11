@@ -1,0 +1,114 @@
+:root {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  color: #f1f2f5;
+  background-color: #040509;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #040509;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.viewer-column {
+  flex: 1;
+  position: relative;
+}
+
+.viewer-column > * {
+  position: absolute;
+  inset: 0;
+}
+
+.control-panel {
+  width: 320px;
+  padding: 1.25rem;
+  background: #11131a;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.panel-section {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.panel-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.control-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+button,
+select,
+input[type="file"] {
+  font-size: 0.85rem;
+}
+
+button {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+button.active {
+  border-color: #4ac0ff;
+  background: rgba(74, 192, 255, 0.18);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.range-slider {
+  width: 100%;
+}
+
+.summary-value {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.small-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+}

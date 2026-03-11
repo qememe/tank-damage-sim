@@ -3,22 +3,25 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tank-sim/shared": "0.1.0"
+    "@react-three/fiber": "^8.17.10",
+    "@tank-sim/shared": "0.1.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "three": "^0.166.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.166.0",
+    "@vitejs/plugin-react": "^4.1.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.1.0"
   }
 }

@@ -1,6 +1,12 @@
 # Changelog
 
 ## 2026-03-11
+- Repaired the existing `packages/dev-viewer` toolchain instead of replacing it: added the missing local `typescript` and `@types/three` dev dependencies, pinned `@react-three/fiber` back to the React 18-compatible major line, and reinstalled the workspace dependencies from the repository root.
+- Fixed the dev-viewer TypeScript setup for Vite/React JSON imports and JSX by updating `packages/dev-viewer/tsconfig.json` with bundler resolution, synthetic default imports, and explicit JSON inclusion.
+- Fixed strict-mode viewer source issues with small targeted edits: typed component props and event handlers, removed remaining implicit `any` cases, guarded `timeUtils.ts` against unchecked array indexing and undefined path points, and switched the R3F buffer attribute attachment to the typed `attach="attributes-position"` form.
+- Restored the viewer HTML entrypoint by wiring `packages/dev-viewer/index.html` to `src/main.tsx`; before this fix `vite build` could succeed while producing only a blank shell.
+- Validation completed with `npm install`, `npm --workspace @tank-sim/dev-viewer run typecheck`, and `npm --workspace @tank-sim/dev-viewer run build`.
+- Remaining unfinished work: the viewer now builds and typechecks cleanly, but the production bundle still triggers Vite's large chunk warning because the dev viewer currently ships React Three Fiber and Three.js in a single client bundle.
 - Implemented the first working `packages/sim-core` pipeline: scenario loading, tank and shell lookup by id, AABB armor hit detection, impact angle and effective armor calculation, ricochet and penetration branching, fragment-based internal damage, result JSON writing, and a separate debug JSON report.
 - Added a `simulate` CLI entrypoint in `@tank-sim/sim-core` so scenarios can be executed from the workspace with explicit input and output paths.
 - Added `data/scenarios/ap_front_plate.json` and `data/scenarios/miss_test.json` as the first executable scenario fixtures.
@@ -25,3 +31,4 @@
 - Generated a root `package-lock.json` after the fix and verified that npm links `@tank-sim/shared`, `@tank-sim/sim-core`, and `@tank-sim/dev-viewer` as local workspaces.
 - Dependencies should now be installed from the repository root with `npm install`, which is the intended monorepo workflow.
 - Remaining limitation: local workspace dependency versions now need to stay in sync with the actual workspace package versions.
+- Added a React/TypeScript + React Three Fiber dev viewer under `packages/dev-viewer` that loads `SimulationResult` JSON via file picker or built-in sample, renders armor/modules/crew/shell/fragment geometry, and exposes playback controls with controls for speed, timeline, and visibility toggles.

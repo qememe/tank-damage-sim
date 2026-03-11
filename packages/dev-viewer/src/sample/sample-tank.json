@@ -1,0 +1,113 @@
+{
+  "id": "test_tank_a",
+  "name": "Test Tank A",
+  "description": "Minimal validation tank used for shared schema checks.",
+  "armorZones": [
+    {
+      "id": "hull_front",
+      "name": "Hull Front",
+      "thicknessMm": 80,
+      "material": "rolled_steel",
+      "position": {
+        "x": 0,
+        "y": 1.1,
+        "z": 2.2
+      },
+      "size": {
+        "x": 3,
+        "y": 1.4,
+        "z": 0.16
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      }
+    },
+    {
+      "id": "turret_front",
+      "name": "Turret Front",
+      "thicknessMm": 90,
+      "material": "cast_steel",
+      "position": {
+        "x": 0,
+        "y": 2,
+        "z": 0.8
+      },
+      "size": {
+        "x": 1.8,
+        "y": 1.2,
+        "z": 0.18
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      }
+    }
+  ],
+  "modules": [
+    {
+      "id": "engine",
+      "type": "engine",
+      "position": {
+        "x": 0,
+        "y": 1,
+        "z": -2
+      },
+      "size": {
+        "x": 1.2,
+        "y": 0.9,
+        "z": 1.4
+      },
+      "hp": 100
+    },
+    {
+      "id": "ammo_rack",
+      "type": "ammo_rack",
+      "position": {
+        "x": 0.5,
+        "y": 1.2,
+        "z": 0.2
+      },
+      "size": {
+        "x": 0.8,
+        "y": 0.6,
+        "z": 0.8
+      },
+      "hp": 70
+    }
+  ],
+  "crew": [
+    {
+      "id": "commander",
+      "role": "commander",
+      "position": {
+        "x": 0,
+        "y": 2.1,
+        "z": 0.3
+      },
+      "hp": 100
+    },
+    {
+      "id": "gunner",
+      "role": "gunner",
+      "position": {
+        "x": -0.4,
+        "y": 1.9,
+        "z": 0.4
+      },
+      "hp": 100
+    },
+    {
+      "id": "driver",
+      "role": "driver",
+      "position": {
+        "x": 0,
+        "y": 1.1,
+        "z": 1.4
+      },
+      "hp": 100
+    }
+  ]
+}

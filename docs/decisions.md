@@ -66,3 +66,14 @@ What changed:
 Tradeoff:
 - Rotated armor, curved surfaces, exact crew silhouettes, and true internal occlusion are not modeled yet.
 - Crew size is not authored in the shared schema, so the current fallback crew box is a deliberate approximation until the schema grows.
+
+## 2026-03-11 — Viewer timeline uses event-based heuristics
+The dev viewer animates shell trajectories and fragment lines using the `SimulationEvent.t` timestamps because the current result schema does not publish explicit durations for those paths.
+Why:
+- The shell path and fragment data arrive as positional traces without an attached clock, so we needed a simple rule to keep the UI responsive without inventing new schema fields.
+What changed:
+- The viewer derives the timeline end from the latest event (minimum 0.1 s to keep the slider usable).
+- Shell visibility is interpolated by the ratio of the current time to the timeline length, and fragment lines appear progressively after the first `internal_damage` event that mentions each fragment.
+- Event markers only show once their `t` value has passed, keeping the visualization in sync with the timeline.
+Tradeoff:
+- This heuristic will drift if future result schemas add independently-timed fragments or multiple overlapping events; we can revisit once the schema explicitly encodes path durations or per-fragment timing metadata.

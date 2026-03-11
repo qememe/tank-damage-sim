@@ -1,0 +1,178 @@
+{
+  "version": "0.1.0",
+  "seed": 101,
+  "summary": {
+    "outcome": "penetration",
+    "hitZoneId": "hull_front",
+    "effectiveArmorMm": 80,
+    "penetrationMm": 109,
+    "ricochet": false
+  },
+  "events": [
+    {
+      "t": 0.009772,
+      "type": "armor_hit",
+      "position": {
+        "x": 0.4,
+        "y": 1.2,
+        "z": 2.28
+      },
+      "targetId": "hull_front",
+      "note": "Hit armor zone Hull Front."
+    },
+    {
+      "t": 0.010772,
+      "type": "penetration",
+      "position": {
+        "x": 0.4,
+        "y": 1.2,
+        "z": 2.28
+      },
+      "targetId": "hull_front",
+      "note": "Shell penetration 109 mm exceeded effective armor 80 mm."
+    },
+    {
+      "t": 0.019772,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.398,
+        "y": 1.2,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "damage": 68,
+      "note": "fragment_1 hit module ammo_rack."
+    },
+    {
+      "t": 0.029772,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.561,
+        "y": 1.2,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "damage": 68,
+      "note": "fragment_2 hit module ammo_rack."
+    },
+    {
+      "t": 0.039772,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.3,
+        "y": 1.199,
+        "z": 1.215
+      },
+      "targetId": "driver",
+      "damage": 83,
+      "note": "fragment_3 hit crew driver."
+    },
+    {
+      "t": 0.049772,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.4,
+        "y": 1.362,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "damage": 68,
+      "note": "fragment_4 hit module ammo_rack."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": 0.4,
+      "y": 1.2,
+      "z": 10
+    },
+    {
+      "x": 0.4,
+      "y": 1.2,
+      "z": 2.28
+    },
+    {
+      "x": 0.4,
+      "y": 1.2,
+      "z": -1.72
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": 0.4,
+          "y": 1.2,
+          "z": 2.23
+        },
+        {
+          "x": 0.396,
+          "y": 1.2,
+          "z": -1.77
+        }
+      ]
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": 0.4,
+          "y": 1.2,
+          "z": 2.23
+        },
+        {
+          "x": 0.792,
+          "y": 1.2,
+          "z": -1.75
+        }
+      ]
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": 0.4,
+          "y": 1.2,
+          "z": 2.23
+        },
+        {
+          "x": 0.008,
+          "y": 1.196,
+          "z": -1.75
+        }
+      ]
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": 0.4,
+          "y": 1.2,
+          "z": 2.23
+        },
+        {
+          "x": 0.4,
+          "y": 1.596,
+          "z": -1.75
+        }
+      ]
+    }
+  ],
+  "damagedModules": [
+    {
+      "moduleId": "ammo_rack",
+      "damage": 204,
+      "remainingHp": 0,
+      "destroyed": true
+    }
+  ],
+  "crew": [
+    {
+      "crewId": "driver",
+      "damage": 83,
+      "remainingHp": 17,
+      "incapacitated": false
+    }
+  ]
+}
