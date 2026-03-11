@@ -49,3 +49,20 @@ What changed:
 
 Tradeoff:
 - The types are intentionally compile-time only for now, so malformed JSON is still possible until runtime validation is added later in sim-core or a dedicated validation layer.
+
+## 2026-03-11 — Use coarse AABB volumes for the first executable sim-core pass
+The first working simulation core resolves armor, module, and crew hits with explicit axis-aligned bounding boxes instead of meshes, rotated plates, or a physics engine.
+
+Why:
+- The milestone is to prove the JSON-driven pipeline and outcome flow first, not to finalize geometry fidelity.
+- AABB intersection is simple, deterministic, easy to debug in JSON, and keeps the implementation small enough to validate quickly.
+- The authored tank schema already provides position and size values for armor zones and modules, which makes AABB-based loading immediate.
+
+What changed:
+- Armor hit selection now uses the first ray/AABB intersection across authored armor zones.
+- Internal damage now uses fragment ray checks against module AABBs and a fixed fallback AABB size for crew.
+- The debug report records the chosen armor zone, impact angle, effective armor, penetration value, ricochet state, and final reason.
+
+Tradeoff:
+- Rotated armor, curved surfaces, exact crew silhouettes, and true internal occlusion are not modeled yet.
+- Crew size is not authored in the shared schema, so the current fallback crew box is a deliberate approximation until the schema grows.

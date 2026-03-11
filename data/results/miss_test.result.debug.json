@@ -1,0 +1,18 @@
+{
+  "outcome": "miss",
+  "hitZoneId": null,
+  "impactAngleDeg": null,
+  "effectiveArmorMm": null,
+  "shellPenetrationMm": 109,
+  "ricochet": false,
+  "reason": "No armor zone AABB was intersected by the incoming ray.",
+  "normalizedDirection": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "notes": [
+    "Armor zone intersection search returned no hit.",
+    "No ricochet or penetration checks were applied."
+  ]
+}

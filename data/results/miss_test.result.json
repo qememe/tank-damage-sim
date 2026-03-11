@@ -1,0 +1,33 @@
+{
+  "version": "0.1.0",
+  "seed": 202,
+  "summary": {
+    "outcome": "miss",
+    "hitZoneId": null,
+    "effectiveArmorMm": null,
+    "penetrationMm": 109,
+    "ricochet": false
+  },
+  "events": [
+    {
+      "t": 0,
+      "type": "miss",
+      "note": "The ray did not intersect any armor zone."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": 4,
+      "y": 3.5,
+      "z": 10
+    },
+    {
+      "x": 4,
+      "y": 3.5,
+      "z": -90
+    }
+  ],
+  "fragments": [],
+  "damagedModules": [],
+  "crew": []
+}

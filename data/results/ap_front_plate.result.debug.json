@@ -1,0 +1,19 @@
+{
+  "outcome": "penetration",
+  "hitZoneId": "hull_front",
+  "impactAngleDeg": 0,
+  "effectiveArmorMm": 80,
+  "shellPenetrationMm": 109,
+  "ricochet": false,
+  "reason": "Shell penetration 109 mm exceeded effective armor 80 mm.",
+  "normalizedDirection": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "notes": [
+    "First armor hit: hull_front.",
+    "Generated 4 fragment rays.",
+    "Damaged modules: 1. Damaged crew: 1."
+  ]
+}
