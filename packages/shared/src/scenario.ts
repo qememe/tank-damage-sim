@@ -1,4 +1,4 @@
-import type { Vec3 } from "./math";
+import type { Vec3 } from "./math.js";
 
 export interface SimulationParameters {
   allowRicochet: boolean;

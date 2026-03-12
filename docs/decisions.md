@@ -149,3 +149,37 @@ Tradeoff:
 - The exterior shell is decorative for now and does not participate in hit detection, armor solving, or damage deformation.
 - Shape variety is intentionally small, so silhouettes are still coarse and not historically accurate.
 - A future true low-poly tank workflow may replace or augment this JSON primitive layer with modeled meshes once the simulation contracts are stable.
+
+## 2026-03-12 — Keep runtime JSON validation explicit and shared
+Tank, shell, and scenario loading now use a small handwritten validator layer in `packages/shared/src/validation.ts` instead of adding a schema dependency.
+
+Why:
+- The prototype needed safer authored JSON immediately, especially clear failure messages for missing fields and invalid numbers, without introducing a second contract system or a heavy validation framework.
+- Both sim-core and the viewer already depend on `packages/shared`, so putting the validators beside the types keeps the JSON contract close to the runtime checks.
+- The project still favors simple, explicit code and a JSON-first workflow that can migrate later.
+
+What changed:
+- `packages/shared` now exports `validateTankDefinition`, `validateShellDefinition`, `validateScenarioInput`, and a `DataValidationError` that includes entity type, file path, field path, and reason.
+- `packages/sim-core/src/io.ts` validates scenario, shell, and tank JSON during load before simulation starts.
+- The validator checks required fields, enum values, duplicate ids, zero vectors, and practical numeric bounds for authored sizes, hp values, calibers, and other core fields.
+
+Tradeoff:
+- The validation rules are explicit and easy to debug, but they are still hand-maintained and must be updated when the schema changes.
+- The current checks stay local to one JSON file at a time; they do not yet validate cross-file compatibility beyond lookup by id.
+
+## 2026-03-12 — Crew hitboxes stay authored as optional box volumes for now
+Crew members can now author their own hitbox `size` and optional `shapeKind`, but the first pass keeps the runtime shape model to axis-aligned boxes.
+
+Why:
+- The existing single fallback crew box made fragment hits too uniform and disconnected from the authored tank layout.
+- The prototype needed better target fidelity immediately without replacing the coarse AABB-based sim architecture.
+- Keeping the field optional preserves backward compatibility with older or incomplete tank JSON.
+
+What changed:
+- `packages/shared/src/tank.ts` now allows crew `size` and optional `shapeKind: "box"`.
+- `packages/sim-core/src/simulate.ts` uses authored crew size for internal hit tests when present and only falls back to the legacy size otherwise.
+- The sample tank data now defines seated hitbox sizes for commander, gunner, and driver, and the dev viewer renders those authored sizes too.
+
+Tradeoff:
+- Crew are still approximated as upright axis-aligned boxes, not capsules, skeletal poses, or rotated seated silhouettes.
+- The optional `shapeKind` exists as a forward-compatibility hook, but only `box` is implemented today.

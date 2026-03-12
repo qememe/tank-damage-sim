@@ -44,52 +44,52 @@
   ],
   "damageLog": [
     {
-      "cause": "AP fragment fragment_1 hit module ammo_rack.",
-      "damage": 58,
-      "kind": "module",
+      "cause": "AP fragment fragment_1 hit crew driver.",
+      "damage": 80,
+      "kind": "crew",
       "point": {
         "x": 0.4,
-        "y": 0.948,
-        "z": 0.6
+        "y": 0.949,
+        "z": 1.71
       },
-      "targetId": "ammo_rack",
-      "targetLabel": "ammo_rack"
+      "targetId": "driver",
+      "targetLabel": "driver"
     },
     {
       "cause": "AP fragment fragment_2 hit module ammo_rack.",
-      "damage": 58,
+      "damage": 60,
       "kind": "module",
       "point": {
-        "x": 0.561,
+        "x": 0.538,
         "y": 0.95,
-        "z": 0.6
+        "z": 0.83
       },
       "targetId": "ammo_rack",
       "targetLabel": "ammo_rack"
     },
     {
       "cause": "AP fragment fragment_3 hit crew driver.",
-      "damage": 77,
+      "damage": 80,
       "kind": "crew",
       "point": {
-        "x": 0.3,
+        "x": 0.348,
         "y": 0.951,
-        "z": 1.225
+        "z": 1.71
       },
       "targetId": "driver",
       "targetLabel": "driver"
     },
     {
-      "cause": "AP fragment fragment_4 hit module ammo_rack.",
-      "damage": 58,
-      "kind": "module",
+      "cause": "AP fragment fragment_4 hit crew driver.",
+      "damage": 80,
+      "kind": "crew",
       "point": {
         "x": 0.4,
-        "y": 1.112,
-        "z": 0.6
+        "y": 1.002,
+        "z": 1.71
       },
-      "targetId": "ammo_rack",
-      "targetLabel": "ammo_rack"
+      "targetId": "driver",
+      "targetLabel": "driver"
     }
   ],
   "surfaceDamageLog": [

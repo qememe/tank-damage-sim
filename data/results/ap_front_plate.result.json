@@ -58,35 +58,35 @@
       "type": "internal_damage",
       "position": {
         "x": 0.4,
-        "y": 0.948,
-        "z": 0.6
+        "y": 0.949,
+        "z": 1.71
       },
-      "targetId": "ammo_rack",
-      "damage": 58,
-      "note": "AP fragment fragment_1 hit module ammo_rack."
+      "targetId": "driver",
+      "damage": 80,
+      "note": "AP fragment fragment_1 hit crew driver."
     },
     {
       "t": 0.029772,
       "type": "internal_damage",
       "position": {
-        "x": 0.561,
+        "x": 0.538,
         "y": 0.95,
-        "z": 0.6
+        "z": 0.83
       },
       "targetId": "ammo_rack",
-      "damage": 58,
+      "damage": 60,
       "note": "AP fragment fragment_2 hit module ammo_rack."
     },
     {
       "t": 0.039772,
       "type": "internal_damage",
       "position": {
-        "x": 0.3,
+        "x": 0.348,
         "y": 0.951,
-        "z": 1.225
+        "z": 1.71
       },
       "targetId": "driver",
-      "damage": 77,
+      "damage": 80,
       "note": "AP fragment fragment_3 hit crew driver."
     },
     {
@@ -94,12 +94,12 @@
       "type": "internal_damage",
       "position": {
         "x": 0.4,
-        "y": 1.112,
-        "z": 0.6
+        "y": 1.002,
+        "z": 1.71
       },
-      "targetId": "ammo_rack",
-      "damage": 58,
-      "note": "AP fragment fragment_4 hit module ammo_rack."
+      "targetId": "driver",
+      "damage": 80,
+      "note": "AP fragment fragment_4 hit crew driver."
     }
   ],
   "shellPath": [
@@ -240,20 +240,20 @@
     {
       "moduleId": "ammo_rack",
       "label": "ammo_rack",
-      "damage": 174,
-      "remainingHp": 0,
-      "destroyed": true,
-      "note": "AP fragment fragment_1 hit module ammo_rack. AP fragment fragment_2 hit module ammo_rack. AP fragment fragment_4 hit module ammo_rack."
+      "damage": 60,
+      "remainingHp": 10,
+      "destroyed": false,
+      "note": "AP fragment fragment_2 hit module ammo_rack."
     }
   ],
   "crew": [
     {
       "crewId": "driver",
       "label": "driver",
-      "damage": 77,
-      "remainingHp": 23,
-      "incapacitated": false,
-      "note": "AP fragment fragment_3 hit crew driver."
+      "damage": 240,
+      "remainingHp": 0,
+      "incapacitated": true,
+      "note": "AP fragment fragment_1 hit crew driver. AP fragment fragment_3 hit crew driver. AP fragment fragment_4 hit crew driver."
     }
   ]
 }

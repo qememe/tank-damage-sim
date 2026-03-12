@@ -1,5 +1,5 @@
-import type { ShellType } from "./shell";
-import type { Vec3 } from "./math";
+import type { ShellType } from "./shell.js";
+import type { Vec3 } from "./math.js";
 
 export type SimulationOutcome =
   | "penetration"

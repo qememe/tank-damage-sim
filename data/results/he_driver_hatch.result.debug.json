@@ -50,9 +50,9 @@
       "damage": 106,
       "kind": "crew",
       "point": {
-        "x": -0.012,
+        "x": -0.011,
         "y": 1.243,
-        "z": 1.7
+        "z": 1.71
       },
       "targetId": "driver",
       "targetLabel": "driver"

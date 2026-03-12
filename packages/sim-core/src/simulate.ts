@@ -176,6 +176,10 @@ const HE_FRAGMENT_DIRECTION_TEMPLATES: Vec3[] = [
   { x: 0.8, y: -1, z: 0 },
 ];
 
+function getCrewHitboxSize(crewMember: CrewMember): Vec3 {
+  return crewMember.size ?? CREW_BOX_SIZE;
+}
+
 export function runSimulation(
   request: SimulationRunRequest,
 ): SimulationRunResponse {
@@ -1388,10 +1392,11 @@ function findFirstInternalHit(
   }
 
   for (const crewMember of tank.crew) {
+    const hitboxSize = getCrewHitboxSize(crewMember);
     const hit = intersectRayWithAabb(
       origin,
       direction,
-      toAabb(crewMember.position, CREW_BOX_SIZE),
+      toAabb(crewMember.position, hitboxSize),
       maxDistance,
     );
 

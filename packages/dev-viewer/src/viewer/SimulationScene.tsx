@@ -83,6 +83,12 @@ type VisibleFragment = {
   positions: Float32Array;
 };
 
+const fallbackCrewSize: Vec3 = {
+  x: 0.32,
+  y: 0.6,
+  z: 0.32
+};
+
 interface LabelSpriteProps {
   text: string;
   position: Vec3;
@@ -125,6 +131,8 @@ const getRotationTuple = (
 
 const getExternalShapeColor = (shape: ExternalShape) =>
   shape.color ?? (shape.group ? externalGroupColorMap[shape.group] : undefined) ?? sceneColors.external;
+
+const getCrewSize = (member: CrewMember): Vec3 => member.size ?? fallbackCrewSize;
 
 const buildLabelTexture = (text: string, backgroundColor: string, textColor: string) => {
   const fontSize = 34;
@@ -539,10 +547,11 @@ function SimulationScene({
           const damage = crewDamageMap.get(member.id);
           const isDamaged = Boolean(damage);
           const label = formatTokenLabel(member.role || member.id);
+          const crewSize = getCrewSize(member);
           return (
             <group key={member.id}>
               <mesh position={toTuple(member.position)}>
-                <boxGeometry args={[0.32, 0.6, 0.32]} />
+                <boxGeometry args={[crewSize.x, crewSize.y, crewSize.z]} />
                 <meshStandardMaterial
                   color={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
                   emissive={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
@@ -553,7 +562,7 @@ function SimulationScene({
               </mesh>
               <LabelSprite
                 text={label}
-                position={withOffset(member.position, 0, 0.48, 0)}
+                position={withOffset(member.position, 0, crewSize.y / 2 + 0.18, 0)}
                 backgroundColor={isDamaged ? "rgba(89, 20, 24, 0.92)" : "rgba(11, 46, 44, 0.9)"}
               />
             </group>

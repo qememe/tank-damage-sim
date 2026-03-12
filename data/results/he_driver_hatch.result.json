@@ -57,9 +57,9 @@
       "t": 0.022323,
       "type": "he_fragment_damage",
       "position": {
-        "x": -0.012,
+        "x": -0.011,
         "y": 1.243,
-        "z": 1.7
+        "z": 1.71
       },
       "targetId": "driver",
       "damage": 106,

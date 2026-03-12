@@ -1,5 +1,11 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, resolve } from "node:path";
+import {
+  DataValidationError,
+  validateScenarioInput,
+  validateShellDefinition,
+  validateTankDefinition,
+} from "@tank-sim/shared";
 import type {
   ShellDefinition,
   SimulationResult,
@@ -58,7 +64,7 @@ export function createDefaultDebugPath(resultPath: string): string {
 export async function loadScenarioInput(
   scenarioPath: string,
 ): Promise<ScenarioInput> {
-  return readJsonFile<ScenarioInput>(scenarioPath);
+  return readValidatedJsonFile(scenarioPath, "scenario");
 }
 
 export async function loadShellDefinition(
@@ -128,7 +134,7 @@ export async function writeSimulationResult(
 async function loadDefinitionById<T extends { id: string }>(
   directory: string,
   definitionId: string,
-  label: string,
+  label: "shell" | "tank",
 ): Promise<T> {
   const entries = await readdir(directory);
 
@@ -137,7 +143,7 @@ async function loadDefinitionById<T extends { id: string }>(
       continue;
     }
 
-    const definition = await readJsonFile<T>(resolve(directory, entry));
+    const definition = await readValidatedJsonFile<T>(resolve(directory, entry), label);
 
     if (definition.id === definitionId) {
       return definition;
@@ -147,9 +153,35 @@ async function loadDefinitionById<T extends { id: string }>(
   throw new Error(`Could not find ${label} with id "${definitionId}" in ${directory}.`);
 }
 
-async function readJsonFile<T>(filePath: string): Promise<T> {
+async function readValidatedJsonFile<T>(
+  filePath: string,
+  entityType: "scenario" | "shell" | "tank",
+): Promise<T> {
   const fileContents = await readFile(filePath, "utf8");
-  return JSON.parse(fileContents) as T;
+  const rawJson = parseJsonFile(fileContents, filePath, entityType);
+
+  if (entityType === "scenario") {
+    return validateScenarioInput(rawJson, filePath) as T;
+  }
+
+  if (entityType === "shell") {
+    return validateShellDefinition(rawJson, filePath) as T;
+  }
+
+  return validateTankDefinition(rawJson, filePath) as T;
+}
+
+function parseJsonFile(
+  fileContents: string,
+  filePath: string,
+  entityType: "scenario" | "shell" | "tank",
+): unknown {
+  try {
+    return JSON.parse(fileContents) as unknown;
+  } catch (error: unknown) {
+    const reason = error instanceof Error ? error.message : "unknown JSON parse failure";
+    throw new DataValidationError(entityType, filePath, "<root>", `contains invalid JSON (${reason})`);
+  }
 }
 
 async function writeJsonFile(filePath: string, value: SimulationDebugReport | SimulationResult): Promise<void> {

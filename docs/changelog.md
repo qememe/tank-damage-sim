@@ -1,6 +1,14 @@
 # Changelog
 
 ## 2026-03-12
+- Added `packages/shared/src/validation.ts` with explicit runtime validators for tank, shell, and scenario JSON plus a `DataValidationError` format that reports entity type, file path, field path, and reason. This keeps authored JSON safer without adding a schema framework.
+- Updated `packages/sim-core/src/io.ts` to validate authored JSON during load, fail fast on malformed data, and preserve the existing CLI/file workflow.
+- Extended `packages/shared/src/tank.ts` so crew members can author `size` and optional `shapeKind`, then updated sim-core and the dev viewer to use authored crew hitbox sizes when present instead of always assuming one fixed box.
+- Revised `data/tanks/test_tank_a.json` and the bundled viewer sample tank so the prototype now has more explicit internal volumes for `engine`, `ammo_rack`, `fuel`, `gun_breech`, `sight_optics`, and seated crew hitboxes.
+- Regenerated the AP, HE, and miss result/debug fixtures after the authored hitbox changes. The AP front-plate case still penetrates and damages the driver/ammo rack path, the HE driver-hatch case still detonates and incapacitates the driver, and the HE glancing case still fails the fuse.
+- Adjusted `packages/shared` relative ESM imports/exports to `.js` specifiers so the existing `npm --workspace @tank-sim/sim-core run simulate -- ...` workflow resolves correctly under Node's module loader during validation.
+- Validation completed with `npm run typecheck`, `npm run build`, the AP/HE/miss simulate commands, and a negative-path CLI check that reported `Invalid scenario JSON at /tmp/invalid-scenario-gZZlbY.json: direction must not be the zero vector.`
+- Remaining unfinished work: crew and modules still use coarse axis-aligned boxes, validation does not yet enforce physical fit or historical correctness, and the optional crew `shapeKind` is forward-looking with only `box` implemented today.
 - Extended `packages/shared/src/tank.ts` with an optional `externalShapes` array so tank JSON can author primitive outer-shell geometry without introducing a mesh asset pipeline. The first pass supports `box` and `cylinder` shapes with `position`, optional `rotationDeg`, optional `color`, and optional `group`.
 - Authored a recognizable low-poly exterior for `data/tanks/test_tank_a.json` and mirrored it into `packages/dev-viewer/src/sample/sample-tank.json` so the default viewer load path now reads as a tank instead of only internal debug boxes.
 - Updated `packages/dev-viewer` to render the authored external hull by default, keep armor/module/crew overlays intact, add an `X-ray mode` that fades the outer shell for inspection, and expose new visibility toggles for `External hull` and `Surface damage`.

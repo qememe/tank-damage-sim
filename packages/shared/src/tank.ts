@@ -1,4 +1,4 @@
-import type { Vec3 } from "./math";
+import type { Vec3 } from "./math.js";
 
 export interface ArmorZone {
   id: string;
@@ -22,8 +22,12 @@ export interface CrewMember {
   id: string;
   role: string;
   position: Vec3;
+  size?: Vec3;
+  shapeKind?: CrewHitboxShapeKind;
   hp: number;
 }
+
+export type CrewHitboxShapeKind = "box";
 
 export type ExternalShapeKind = "box" | "cylinder";
 
