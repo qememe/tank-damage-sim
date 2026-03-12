@@ -1,6 +1,12 @@
 # Changelog
 
 ## 2026-03-12
+- Extended `packages/shared/src/tank.ts` with an optional `externalShapes` array so tank JSON can author primitive outer-shell geometry without introducing a mesh asset pipeline. The first pass supports `box` and `cylinder` shapes with `position`, optional `rotationDeg`, optional `color`, and optional `group`.
+- Authored a recognizable low-poly exterior for `data/tanks/test_tank_a.json` and mirrored it into `packages/dev-viewer/src/sample/sample-tank.json` so the default viewer load path now reads as a tank instead of only internal debug boxes.
+- Updated `packages/dev-viewer` to render the authored external hull by default, keep armor/module/crew overlays intact, add an `X-ray mode` that fades the outer shell for inspection, and expose new visibility toggles for `External hull` and `Surface damage`.
+- Adjusted surface-damage marker rendering so impact, breach, scorch, and ricochet overlays stay visible on top of the new exterior shell instead of disappearing behind it.
+- Validation completed with `npm --workspace @tank-sim/shared run build`, `npm --workspace @tank-sim/dev-viewer run typecheck`, and `npm --workspace @tank-sim/dev-viewer run build`.
+- Remaining unfinished work: primitive exterior geometry is still viewer-only and does not change hit selection, there is no wedge/trapezoid primitive yet, there is no mesh deformation or real modeled track/running gear, and true low-poly authored tanks still require a fuller mesh pipeline later.
 - Extended the shared simulation result contract with a minimal `surfaceDamage` array for viewer-facing armor marks and breach visuals. The new JSON-friendly types cover `impact_mark`, `penetration_hole`, `spall_exit`, `detonation_scorch`, `dent`, and `ricochet_scar` without changing the existing event/fragment pipeline.
 - Updated `packages/sim-core` to emit prototype AP and HE surface-damage markers in each outcome branch. AP now differentiates ricochet scars, non-penetration dents, penetration entrance marks, holes, and interior spall markers; HE now differentiates fuse-failure marks/dents from detonation scorch plus shallow breach markers on vulnerable plates.
 - Expanded the sim-core debug report with `surfaceDamageLog` so each emitted marker records its kind, source branch, linked armor zone, computed size values, heuristic summary, and emission reason.

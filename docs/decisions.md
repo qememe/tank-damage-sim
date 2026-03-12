@@ -131,3 +131,21 @@ Tradeoff:
 - These markers are descriptive overlays only. They do not deform armor, remove material, or represent real hole geometry.
 - Marker timing is still coarse because the result schema does not yet carry per-marker timestamps.
 - HE shallow breach and AP spall visuals currently come from simple authored-thickness / penetration heuristics, not a physically rigorous breakup model.
+
+## 2026-03-12 — Prototype tank exteriors use authored primitive shapes inside tank JSON
+Recognizable tank silhouettes in the dev viewer now come from an optional `externalShapes` array on `TankDefinition` instead of a separate mesh asset workflow.
+
+Why:
+- The viewer needed an outer shell that reads as a tank immediately, but the milestone still forbids GLTF/OBJ loading and any heavier asset pipeline.
+- Keeping the exterior description in tank JSON preserves the existing file-based workflow and keeps the authored viewer shell easy to diff, inspect, and migrate later.
+- Separating exterior primitives from armor/module/crew hit volumes lets us improve readability without changing sim-core hit logic.
+
+What changed:
+- `packages/shared/src/tank.ts` now supports optional `box` and `cylinder` external shapes with JSON-friendly transforms and grouping metadata.
+- `data/tanks/test_tank_a.json` and the bundled viewer sample now author a primitive hull, turret, barrel, and side guards from those shapes.
+- `packages/dev-viewer` renders the exterior by default, adds an `External hull` visibility toggle, and uses an `X-ray mode` to fade the shell while keeping internal debug geometry visible.
+
+Tradeoff:
+- The exterior shell is decorative for now and does not participate in hit detection, armor solving, or damage deformation.
+- Shape variety is intentionally small, so silhouettes are still coarse and not historically accurate.
+- A future true low-poly tank workflow may replace or augment this JSON primitive layer with modeled meshes once the simulation contracts are stable.

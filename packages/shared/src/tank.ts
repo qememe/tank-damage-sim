@@ -25,6 +25,31 @@ export interface CrewMember {
   hp: number;
 }
 
+export type ExternalShapeKind = "box" | "cylinder";
+
+interface ExternalShapeBase {
+  id: string;
+  kind: ExternalShapeKind;
+  position: Vec3;
+  rotationDeg?: Vec3;
+  color?: string;
+  group?: string;
+}
+
+export interface ExternalBoxShape extends ExternalShapeBase {
+  kind: "box";
+  size: Vec3;
+}
+
+export interface ExternalCylinderShape extends ExternalShapeBase {
+  kind: "cylinder";
+  radius: number;
+  length: number;
+  radialSegments?: number;
+}
+
+export type ExternalShape = ExternalBoxShape | ExternalCylinderShape;
+
 export interface TankDefinition {
   id: string;
   name: string;
@@ -32,4 +57,5 @@ export interface TankDefinition {
   armorZones: ArmorZone[];
   modules: ModuleDefinition[];
   crew: CrewMember[];
+  externalShapes?: ExternalShape[];
 }

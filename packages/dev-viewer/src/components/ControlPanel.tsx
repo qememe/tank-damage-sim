@@ -38,11 +38,17 @@ interface ControlPanelProps {
   toggleCrew: boolean;
   toggleShell: boolean;
   toggleFragments: boolean;
+  toggleExternalHull: boolean;
+  toggleSurfaceDamage: boolean;
+  xrayMode: boolean;
   onToggleArmor: () => void;
   onToggleModules: () => void;
   onToggleCrew: () => void;
   onToggleShell: () => void;
   onToggleFragments: () => void;
+  onToggleExternalHull: () => void;
+  onToggleSurfaceDamage: () => void;
+  onToggleXrayMode: () => void;
 }
 
 const SPEED_OPTIONS = [0.25, 0.5, 1, 2];
@@ -118,11 +124,17 @@ function ControlPanel({
   toggleCrew,
   toggleShell,
   toggleFragments,
+  toggleExternalHull,
+  toggleSurfaceDamage,
+  xrayMode,
   onToggleArmor,
   onToggleModules,
   onToggleCrew,
   onToggleShell,
-  onToggleFragments
+  onToggleFragments,
+  onToggleExternalHull,
+  onToggleSurfaceDamage,
+  onToggleXrayMode
 }: ControlPanelProps): React.JSX.Element {
   const handleFileInput = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -227,6 +239,10 @@ function ControlPanel({
       <div className="panel-section">
         <h2>Visibility</h2>
         <label>
+          <input type="checkbox" checked={toggleExternalHull} onChange={onToggleExternalHull} />
+          External hull
+        </label>
+        <label>
           <input type="checkbox" checked={toggleArmor} onChange={onToggleArmor} />
           Armor
         </label>
@@ -245,6 +261,14 @@ function ControlPanel({
         <label>
           <input type="checkbox" checked={toggleFragments} onChange={onToggleFragments} />
           Fragment paths
+        </label>
+        <label>
+          <input type="checkbox" checked={toggleSurfaceDamage} onChange={onToggleSurfaceDamage} />
+          Surface damage
+        </label>
+        <label>
+          <input type="checkbox" checked={xrayMode} onChange={onToggleXrayMode} />
+          X-ray mode
         </label>
       </div>
 

@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import type {
   ArmorZone,
   CrewMember,
+  ExternalShape,
   ModuleDefinition,
   SurfaceDamage,
   SimulationEvent,
@@ -30,11 +31,14 @@ interface SimulationSceneProps {
   tank: TankDefinition | null;
   currentTime: number;
   maxTime: number;
+  showExternalHull: boolean;
   showArmor: boolean;
   showModules: boolean;
   showCrew: boolean;
   showShellPath: boolean;
   showFragments: boolean;
+  showSurfaceDamage: boolean;
+  xrayMode: boolean;
 }
 
 const moduleColorMap: Record<string, string> = {
@@ -43,6 +47,7 @@ const moduleColorMap: Record<string, string> = {
 };
 
 const sceneColors = {
+  external: "#6b745b",
   armor: "#38bdf8",
   armorHit: "#fb923c",
   module: "#c084fc",
@@ -63,6 +68,14 @@ const surfaceDamageColors: Record<SurfaceDamage["kind"], { fill: string; accent:
   detonation_scorch: { fill: "#4b5563", accent: "#fb923c" },
   dent: { fill: "#94a3b8", accent: "#e2e8f0" },
   ricochet_scar: { fill: "#67e8f9", accent: "#0f172a" }
+};
+
+const externalGroupColorMap: Record<string, string> = {
+  hull: "#657053",
+  turret: "#758063",
+  gun: "#50565a",
+  track_guard: "#4f5a43",
+  detail: "#82876e"
 };
 
 type VisibleFragment = {
@@ -98,6 +111,20 @@ const withNormalOffset = (value: Vec3, normal: Vec3, distance = 0.02): Vec3 => (
   y: value.y + (normal.y * distance),
   z: value.z + (normal.z * distance)
 });
+
+const toRadians = (value: number) => (value * Math.PI) / 180;
+
+const getRotationTuple = (
+  rotationDeg?: Vec3,
+  baseRotation: [number, number, number] = [0, 0, 0]
+): [number, number, number] => [
+  baseRotation[0] + toRadians(rotationDeg?.x ?? 0),
+  baseRotation[1] + toRadians(rotationDeg?.y ?? 0),
+  baseRotation[2] + toRadians(rotationDeg?.z ?? 0)
+];
+
+const getExternalShapeColor = (shape: ExternalShape) =>
+  shape.color ?? (shape.group ? externalGroupColorMap[shape.group] : undefined) ?? sceneColors.external;
 
 const buildLabelTexture = (text: string, backgroundColor: string, textColor: string) => {
   const fontSize = 34;
@@ -250,6 +277,7 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
             opacity={0.9}
             side={DoubleSide}
             depthWrite={false}
+            depthTest={false}
           />
         </mesh>
         <mesh rotation={[0, 0, Math.PI / 5]}>
@@ -260,6 +288,7 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
             opacity={0.9}
             side={DoubleSide}
             depthWrite={false}
+            depthTest={false}
           />
         </mesh>
       </group>
@@ -278,6 +307,7 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
               opacity={damage.kind === "detonation_scorch" ? 0.48 : 0.36}
               side={DoubleSide}
               depthWrite={false}
+              depthTest={false}
             />
           </mesh>
           <mesh>
@@ -288,6 +318,7 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
               opacity={0.95}
               side={DoubleSide}
               depthWrite={false}
+              depthTest={false}
             />
           </mesh>
         </>
@@ -302,6 +333,7 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
               opacity={0.96}
               side={DoubleSide}
               depthWrite={false}
+              depthTest={false}
             />
           </mesh>
           <mesh position={[0, 0, 0.001]}>
@@ -312,10 +344,47 @@ function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.E
               opacity={0.98}
               side={DoubleSide}
               depthWrite={false}
+              depthTest={false}
             />
           </mesh>
         </>
       )}
+    </group>
+  );
+}
+
+function ExternalShapeMesh({
+  shape,
+  xrayMode
+}: {
+  shape: ExternalShape;
+  xrayMode: boolean;
+}): React.JSX.Element {
+  const color = getExternalShapeColor(shape);
+  const rotation = getRotationTuple(shape.rotationDeg, shape.kind === "cylinder" ? [Math.PI / 2, 0, 0] : [0, 0, 0]);
+  const opacity = xrayMode ? 0.24 : 0.92;
+
+  const materialProps = {
+    color,
+    transparent: true,
+    opacity,
+    roughness: 0.92,
+    metalness: 0.08,
+    emissive: color,
+    emissiveIntensity: xrayMode ? 0.1 : 0.04,
+    depthWrite: !xrayMode
+  } as const;
+
+  return (
+    <group position={toTuple(shape.position)} rotation={rotation}>
+      <mesh renderOrder={xrayMode ? 1 : 0}>
+        {shape.kind === "box" ? (
+          <boxGeometry args={[shape.size.x, shape.size.y, shape.size.z]} />
+        ) : (
+          <cylinderGeometry args={[shape.radius, shape.radius, shape.length, shape.radialSegments ?? 12]} />
+        )}
+        <meshStandardMaterial {...materialProps} />
+      </mesh>
     </group>
   );
 }
@@ -325,11 +394,14 @@ function SimulationScene({
   tank,
   currentTime,
   maxTime,
+  showExternalHull,
   showArmor,
   showModules,
   showCrew,
   showShellPath,
-  showFragments
+  showFragments,
+  showSurfaceDamage,
+  xrayMode
 }: SimulationSceneProps): React.JSX.Element {
   const timelineProgress = maxTime > 0 ? Math.min(currentTime / maxTime, 1) : 0;
   const shellPoints = useMemo(() => getPartialPathPoints(result?.shellPath ?? [], timelineProgress), [
@@ -379,6 +451,10 @@ function SimulationScene({
   const shellHeadPoint = shellPoints[shellPoints.length - 1] ?? shellPoints[0] ?? null;
   const firstImpactTime = result?.events?.find((event) => event.type === "armor_hit")?.t ?? 0;
   const surfaceDamageVisible = currentTime >= firstImpactTime;
+  const armorOpacity = xrayMode ? 0.32 : 0.18;
+  const hitArmorOpacity = xrayMode ? 0.6 : 0.4;
+  const moduleOpacity = xrayMode ? 0.92 : 0.68;
+  const crewOpacity = xrayMode ? 0.96 : 0.76;
 
   const impactLabelParts = [
     "Impact",
@@ -395,6 +471,10 @@ function SimulationScene({
       <directionalLight position={[5, 10, 7]} intensity={0.95} />
       <gridHelper args={[20, 20, "#274469", "#0f172a"]} />
       <axesHelper args={[4]} />
+      {showExternalHull &&
+        tank?.externalShapes?.map((shape: ExternalShape) => (
+          <ExternalShapeMesh key={shape.id} shape={shape} xrayMode={xrayMode} />
+        ))}
       {showArmor &&
         tank?.armorZones.map((zone: ArmorZone) => {
           const isHitZone = zone.id === hitZoneId;
@@ -405,7 +485,7 @@ function SimulationScene({
                 <meshStandardMaterial
                   color={isHitZone ? sceneColors.armorHit : sceneColors.armor}
                   transparent
-                  opacity={isHitZone ? 0.52 : 0.2}
+                  opacity={isHitZone ? hitArmorOpacity : armorOpacity}
                   emissive={isHitZone ? sceneColors.armorHit : sceneColors.armor}
                   emissiveIntensity={isHitZone ? 0.42 : 0.08}
                 />
@@ -424,7 +504,8 @@ function SimulationScene({
             </group>
           );
         })}
-      {surfaceDamageVisible &&
+      {showSurfaceDamage &&
+        surfaceDamageVisible &&
         result?.surfaceDamage?.map((damage) => (
           <SurfaceDamageMarker key={damage.id} damage={damage} />
         ))}
@@ -439,7 +520,7 @@ function SimulationScene({
                 <boxGeometry args={[module.size.x, module.size.y, module.size.z]} />
                 <meshStandardMaterial
                   color={color}
-                  opacity={0.9}
+                  opacity={moduleOpacity}
                   transparent
                   emissive={isDamaged ? color : "#140b2d"}
                   emissiveIntensity={isDamaged ? 0.38 : 0.12}
@@ -466,6 +547,8 @@ function SimulationScene({
                   color={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
                   emissive={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
                   emissiveIntensity={isDamaged ? 0.46 : 0.12}
+                  transparent
+                  opacity={crewOpacity}
                 />
               </mesh>
               <LabelSprite

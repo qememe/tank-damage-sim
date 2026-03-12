@@ -23,19 +23,25 @@ const sampleResultFileName = "sample-result.json";
 const sampleTankFileName = "sample-tank.json";
 
 type VisibilityState = {
+  externalHull: boolean;
   armor: boolean;
   modules: boolean;
   crew: boolean;
   shell: boolean;
   fragments: boolean;
+  surfaceDamage: boolean;
+  xrayMode: boolean;
 };
 
 const defaultVisibility: VisibilityState = {
+  externalHull: true,
   armor: true,
   modules: true,
   crew: true,
   shell: true,
-  fragments: true
+  fragments: true,
+  surfaceDamage: true,
+  xrayMode: false
 };
 
 function App(): React.JSX.Element {
@@ -124,6 +130,7 @@ function App(): React.JSX.Element {
   };
 
   const handleLoadSampleTank = () => {
+    setError(null);
     setTank(sampleTank);
     setTankFileName(sampleTankFileName);
   };
@@ -167,11 +174,14 @@ function App(): React.JSX.Element {
           tank={tank}
           currentTime={currentTime}
           maxTime={maxTime}
+          showExternalHull={visibility.externalHull}
           showArmor={visibility.armor}
           showModules={visibility.modules}
           showCrew={visibility.crew}
           showShellPath={visibility.shell}
           showFragments={visibility.fragments}
+          showSurfaceDamage={visibility.surfaceDamage}
+          xrayMode={visibility.xrayMode}
         />
         <div className="viewer-hud">
           <p className="viewer-hud-title">Inspection</p>
@@ -224,11 +234,17 @@ function App(): React.JSX.Element {
         toggleCrew={visibility.crew}
         toggleShell={visibility.shell}
         toggleFragments={visibility.fragments}
+        toggleExternalHull={visibility.externalHull}
+        toggleSurfaceDamage={visibility.surfaceDamage}
+        xrayMode={visibility.xrayMode}
         onToggleArmor={() => toggleVisibility("armor")}
         onToggleModules={() => toggleVisibility("modules")}
         onToggleCrew={() => toggleVisibility("crew")}
         onToggleShell={() => toggleVisibility("shell")}
         onToggleFragments={() => toggleVisibility("fragments")}
+        onToggleExternalHull={() => toggleVisibility("externalHull")}
+        onToggleSurfaceDamage={() => toggleVisibility("surfaceDamage")}
+        onToggleXrayMode={() => toggleVisibility("xrayMode")}
       />
     </div>
   );

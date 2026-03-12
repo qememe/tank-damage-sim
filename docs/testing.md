@@ -1,6 +1,7 @@
 # Testing
 
 ## Commands used on 2026-03-12
+- `npm --workspace @tank-sim/shared run build`
 - `npm --workspace @tank-sim/dev-viewer run typecheck`
 - `npm --workspace @tank-sim/dev-viewer run build`
 - `npm run typecheck`
@@ -39,6 +40,7 @@
 - HE damage is still a deterministic forward cone rather than a true omnidirectional blast or fragment mass model.
 - Repeated fragments can stack damage on the same crew/module AABB when multiple rays intersect the same target.
 - Surface damage markers are not yet timestamped independently from the event log, so the viewer currently reveals them after the first armor-hit event instead of with per-marker timing.
+- Primitive external hull geometry is still limited to authored boxes and cylinders, so more distinctive tank silhouettes will need additional primitives or a later mesh pipeline.
 
 ## Viewer validation
 - `npm install` completed after fixing the React / React Three Fiber version mismatch in `packages/dev-viewer/package.json`.
@@ -47,4 +49,5 @@
 - Manual check target for the current viewer pass: load a result JSON and matching tank JSON, confirm the hit armor zone highlights, impact and damage-origin markers appear when present, damaged module/crew boxes switch to their damage colors, and the event list follows the current scrubber position.
 - Manual HE check target: load `he_driver_hatch.result.json` or `he_front_plate_no_fuse.result.json` with the matching tank JSON and confirm the panel exposes shell type, fuse status, impact angle, event count, fragment count, and the current event label while scrubbing.
 - Manual surface-damage check target: confirm AP penetration shows an exterior ring + hole + interior spall marker, HE detonation shows a scorch plus shallow breach on the hatch case, and HE fuse failure shows only a dent/impact marker without fragment geometry.
+- Manual exterior-shell check target: load the sample tank or `data/tanks/test_tank_a.json`, confirm the outer shell reads as a tank in normal view, toggle `External hull` off to inspect the original debug boxes alone, toggle `X-ray mode` on to make armor/modules/crew readable through the shell, and confirm surface-damage markers remain visible on top of the shell.
 - Current note: Vite reports a large chunk warning for the dev-viewer bundle, but this is only a warning and does not block the build.

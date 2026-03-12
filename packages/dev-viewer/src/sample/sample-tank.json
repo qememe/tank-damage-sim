@@ -1,8 +1,225 @@
 {
   "id": "test_tank_a",
   "name": "Test Tank A",
-  "description": "Minimal validation tank used for shared schema checks.",
+  "description": "Minimal validation tank used for shared schema checks and primitive exterior viewer rendering.",
+  "externalShapes": [
+    {
+      "id": "lower_hull",
+      "kind": "box",
+      "group": "hull",
+      "position": {
+        "x": 0,
+        "y": 0.58,
+        "z": -0.15
+      },
+      "size": {
+        "x": 3.7,
+        "y": 0.95,
+        "z": 5.6
+      }
+    },
+    {
+      "id": "upper_hull",
+      "kind": "box",
+      "group": "hull",
+      "position": {
+        "x": 0,
+        "y": 1.2,
+        "z": 0.65
+      },
+      "size": {
+        "x": 3.15,
+        "y": 0.62,
+        "z": 3.75
+      }
+    },
+    {
+      "id": "glacis",
+      "kind": "box",
+      "group": "hull",
+      "position": {
+        "x": 0,
+        "y": 1.1,
+        "z": 2.33
+      },
+      "rotationDeg": {
+        "x": 18,
+        "y": 0,
+        "z": 0
+      },
+      "size": {
+        "x": 3.05,
+        "y": 0.92,
+        "z": 0.68
+      }
+    },
+    {
+      "id": "engine_deck",
+      "kind": "box",
+      "group": "hull",
+      "position": {
+        "x": 0,
+        "y": 1.05,
+        "z": -1.75
+      },
+      "size": {
+        "x": 3,
+        "y": 0.28,
+        "z": 1.55
+      }
+    },
+    {
+      "id": "left_track_guard",
+      "kind": "box",
+      "group": "track_guard",
+      "position": {
+        "x": -1.57,
+        "y": 0.88,
+        "z": 0.05
+      },
+      "size": {
+        "x": 0.42,
+        "y": 0.38,
+        "z": 5.05
+      }
+    },
+    {
+      "id": "right_track_guard",
+      "kind": "box",
+      "group": "track_guard",
+      "position": {
+        "x": 1.57,
+        "y": 0.88,
+        "z": 0.05
+      },
+      "size": {
+        "x": 0.42,
+        "y": 0.38,
+        "z": 5.05
+      }
+    },
+    {
+      "id": "turret_ring",
+      "kind": "box",
+      "group": "turret",
+      "position": {
+        "x": 0,
+        "y": 1.62,
+        "z": 0.32
+      },
+      "size": {
+        "x": 1.95,
+        "y": 0.22,
+        "z": 1.85
+      }
+    },
+    {
+      "id": "turret_main",
+      "kind": "box",
+      "group": "turret",
+      "position": {
+        "x": 0,
+        "y": 2.02,
+        "z": 0.38
+      },
+      "size": {
+        "x": 1.92,
+        "y": 0.88,
+        "z": 1.72
+      }
+    },
+    {
+      "id": "turret_bustle",
+      "kind": "box",
+      "group": "turret",
+      "position": {
+        "x": 0,
+        "y": 1.96,
+        "z": -0.55
+      },
+      "size": {
+        "x": 1.25,
+        "y": 0.62,
+        "z": 0.82
+      }
+    },
+    {
+      "id": "commander_cupola",
+      "kind": "box",
+      "group": "detail",
+      "position": {
+        "x": 0.42,
+        "y": 2.56,
+        "z": 0.05
+      },
+      "size": {
+        "x": 0.42,
+        "y": 0.28,
+        "z": 0.42
+      }
+    },
+    {
+      "id": "mantlet",
+      "kind": "box",
+      "group": "gun",
+      "position": {
+        "x": 0,
+        "y": 1.95,
+        "z": 1.23
+      },
+      "size": {
+        "x": 0.76,
+        "y": 0.56,
+        "z": 0.42
+      }
+    },
+    {
+      "id": "gun_barrel",
+      "kind": "cylinder",
+      "group": "gun",
+      "position": {
+        "x": 0,
+        "y": 1.98,
+        "z": 2.6
+      },
+      "radius": 0.12,
+      "length": 3.4
+    },
+    {
+      "id": "muzzle_brake",
+      "kind": "cylinder",
+      "group": "gun",
+      "position": {
+        "x": 0,
+        "y": 1.98,
+        "z": 4.23
+      },
+      "radius": 0.16,
+      "length": 0.28
+    }
+  ],
   "armorZones": [
+    {
+      "id": "driver_hatch",
+      "name": "Driver Hatch",
+      "thicknessMm": 30,
+      "material": "rolled_steel",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.32
+      },
+      "size": {
+        "x": 0.8,
+        "y": 0.4,
+        "z": 0.08
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      }
+    },
     {
       "id": "hull_front",
       "name": "Hull Front",
