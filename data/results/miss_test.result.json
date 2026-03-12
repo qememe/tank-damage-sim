@@ -8,6 +8,16 @@
     "penetrationMm": 109,
     "ricochet": false
   },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": null,
+    "impactPoint": null,
+    "impactNormal": null,
+    "impactAngleDeg": null,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": null
+  },
   "events": [
     {
       "t": 0,
@@ -28,6 +38,7 @@
     }
   ],
   "fragments": [],
+  "surfaceDamage": [],
   "damagedModules": [],
   "crew": []
 }

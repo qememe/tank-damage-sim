@@ -1,0 +1,256 @@
+{
+  "version": "0.1.0",
+  "seed": 202,
+  "summary": {
+    "outcome": "detonation",
+    "hitZoneId": "driver_hatch",
+    "effectiveArmorMm": 30,
+    "penetrationMm": 18,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "HE",
+    "shellType": "HE",
+    "hitZoneName": "Driver Hatch",
+    "impactPoint": {
+      "x": 0,
+      "y": 1.25,
+      "z": 2.36
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0,
+      "z": -1
+    },
+    "impactAngleDeg": 0,
+    "fuseStatus": "armed",
+    "damageOriginPoint": {
+      "x": 0,
+      "y": 1.25,
+      "z": 2.28
+    }
+  },
+  "events": [
+    {
+      "t": 0.012323,
+      "type": "armor_hit",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.36
+      },
+      "targetId": "driver_hatch",
+      "note": "Hit armor zone Driver Hatch."
+    },
+    {
+      "t": 0.013323,
+      "type": "he_detonation",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.28
+      },
+      "targetId": "driver_hatch",
+      "note": "HE fuse armed and detonated because projected armor resistance 30 mm met fuse sensitivity 30 mm"
+    },
+    {
+      "t": 0.022323,
+      "type": "he_fragment_damage",
+      "position": {
+        "x": -0.012,
+        "y": 1.243,
+        "z": 1.7
+      },
+      "targetId": "driver",
+      "damage": 106,
+      "note": "HE fragment fragment_1 hit crew driver."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": 0,
+      "y": 1.25,
+      "z": 10
+    },
+    {
+      "x": 0,
+      "y": 1.25,
+      "z": 2.36
+    },
+    {
+      "x": 0,
+      "y": 1.25,
+      "z": 2.28
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": -0.052,
+          "y": 1.219,
+          "z": -0.32
+        }
+      ]
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": 1.23,
+          "y": 1.398,
+          "z": -0.005
+        }
+      ]
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": -1.035,
+          "y": 1.224,
+          "z": -0.104
+        }
+      ]
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": -0.003,
+          "y": 2.1,
+          "z": -0.177
+        }
+      ]
+    },
+    {
+      "id": "fragment_5",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": -0.088,
+          "y": 0.423,
+          "z": -0.182
+        }
+      ]
+    },
+    {
+      "id": "fragment_6",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": 0.822,
+          "y": 1.705,
+          "z": -0.143
+        }
+      ]
+    },
+    {
+      "id": "fragment_7",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": -0.939,
+          "y": 1.77,
+          "z": -0.089
+        }
+      ]
+    },
+    {
+      "id": "fragment_8",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.28
+        },
+        {
+          "x": 0.523,
+          "y": 0.447,
+          "z": -0.135
+        }
+      ]
+    }
+  ],
+  "surfaceDamage": [
+    {
+      "id": "he_detonation_scorch_1",
+      "kind": "detonation_scorch",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.36
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "radius": 0.353,
+      "relatedArmorZoneId": "driver_hatch",
+      "note": "HE detonation scorch on the outer armor face."
+    },
+    {
+      "id": "he_shallow_breach_1",
+      "kind": "penetration_hole",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.28
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "radius": 0.056,
+      "depth": 0.02,
+      "relatedArmorZoneId": "driver_hatch",
+      "note": "Prototype shallow HE breach marker on a vulnerable plate."
+    }
+  ],
+  "damagedModules": [],
+  "crew": [
+    {
+      "crewId": "driver",
+      "label": "driver",
+      "damage": 106,
+      "remainingHp": 0,
+      "incapacitated": true,
+      "note": "HE fragment fragment_1 hit crew driver."
+    }
+  ]
+}

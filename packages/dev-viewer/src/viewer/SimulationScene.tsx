@@ -1,15 +1,24 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import type {
   ArmorZone,
   CrewMember,
   ModuleDefinition,
+  SurfaceDamage,
   SimulationEvent,
   SimulationResult,
   TankDefinition,
   Vec3
 } from "@tank-sim/shared";
+import { ArrowHelper, CanvasTexture, DoubleSide, Material, Quaternion, SRGBColorSpace, Vector3 } from "three";
 import ViewerOrbitControls from "./OrbitControls";
+import {
+  formatEventType,
+  formatTokenLabel,
+  getDamageOriginPoint,
+  getImpactPoint,
+  getNearestEventIndex
+} from "./inspectionUtils";
 import {
   buildLinePositions,
   getPartialPathPoints,
@@ -30,18 +39,286 @@ interface SimulationSceneProps {
 
 const moduleColorMap: Record<string, string> = {
   engine: "#ffd166",
-  ammo_rack: "#f97316"
+  ammo_rack: "#c084fc"
 };
 
-const crewColor = "#5eead4";
-const armorColor = "#38bdf8";
+const sceneColors = {
+  armor: "#38bdf8",
+  armorHit: "#fb923c",
+  module: "#c084fc",
+  moduleDamaged: "#f97316",
+  crew: "#5eead4",
+  crewDamaged: "#ef4444",
+  shell: "#ffb347",
+  fragment: "#f472b6",
+  impact: "#fde047",
+  origin: "#34d399",
+  event: "#93c5fd"
+} as const;
+
+const surfaceDamageColors: Record<SurfaceDamage["kind"], { fill: string; accent: string }> = {
+  impact_mark: { fill: "#f59e0b", accent: "#fef3c7" },
+  penetration_hole: { fill: "#111827", accent: "#f97316" },
+  spall_exit: { fill: "#dbeafe", accent: "#7dd3fc" },
+  detonation_scorch: { fill: "#4b5563", accent: "#fb923c" },
+  dent: { fill: "#94a3b8", accent: "#e2e8f0" },
+  ricochet_scar: { fill: "#67e8f9", accent: "#0f172a" }
+};
 
 type VisibleFragment = {
   id: string;
   positions: Float32Array;
 };
 
+interface LabelSpriteProps {
+  text: string;
+  position: Vec3;
+  backgroundColor: string;
+  textColor?: string;
+}
+
+interface PointMarkerProps {
+  position: Vec3;
+  color: string;
+  geometry: "sphere" | "octahedron";
+  label: string;
+  labelOffsetY?: number;
+}
+
 const toTuple = (value: Vec3) => [value.x, value.y, value.z] as const;
+
+const withOffset = (value: Vec3, x = 0, y = 0, z = 0): Vec3 => ({
+  x: value.x + x,
+  y: value.y + y,
+  z: value.z + z
+});
+
+const withNormalOffset = (value: Vec3, normal: Vec3, distance = 0.02): Vec3 => ({
+  x: value.x + (normal.x * distance),
+  y: value.y + (normal.y * distance),
+  z: value.z + (normal.z * distance)
+});
+
+const buildLabelTexture = (text: string, backgroundColor: string, textColor: string) => {
+  const fontSize = 34;
+  const paddingX = 24;
+  const paddingY = 14;
+  const deviceScale = 2;
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    const fallback = new CanvasTexture(canvas);
+    fallback.colorSpace = SRGBColorSpace;
+    return fallback;
+  }
+
+  context.font = `600 ${fontSize}px sans-serif`;
+  const textWidth = Math.ceil(context.measureText(text).width);
+  const width = textWidth + paddingX * 2;
+  const height = fontSize + paddingY * 2;
+  canvas.width = width * deviceScale;
+  canvas.height = height * deviceScale;
+
+  context.scale(deviceScale, deviceScale);
+  context.font = `600 ${fontSize}px sans-serif`;
+  context.textBaseline = "middle";
+
+  const radius = 10;
+  context.fillStyle = backgroundColor;
+  context.beginPath();
+  context.moveTo(radius, 0);
+  context.lineTo(width - radius, 0);
+  context.quadraticCurveTo(width, 0, width, radius);
+  context.lineTo(width, height - radius);
+  context.quadraticCurveTo(width, height, width - radius, height);
+  context.lineTo(radius, height);
+  context.quadraticCurveTo(0, height, 0, height - radius);
+  context.lineTo(0, radius);
+  context.quadraticCurveTo(0, 0, radius, 0);
+  context.closePath();
+  context.fill();
+
+  context.strokeStyle = "rgba(255, 255, 255, 0.22)";
+  context.lineWidth = 2;
+  context.stroke();
+
+  context.fillStyle = textColor;
+  context.fillText(text, paddingX, height / 2 + 1);
+
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+};
+
+function LabelSprite({
+  text,
+  position,
+  backgroundColor,
+  textColor = "#f8fafc"
+}: LabelSpriteProps): React.JSX.Element {
+  const texture = useMemo(() => buildLabelTexture(text, backgroundColor, textColor), [text, backgroundColor, textColor]);
+
+  useEffect(() => {
+    return () => {
+      texture.dispose();
+    };
+  }, [texture]);
+
+  const width = Math.max(1.25, text.length * 0.11);
+
+  return (
+    <sprite position={toTuple(position)} scale={[width, 0.42, 1]}>
+      <spriteMaterial map={texture} transparent depthWrite={false} depthTest={false} />
+    </sprite>
+  );
+}
+
+function PointMarker({
+  position,
+  color,
+  geometry,
+  label,
+  labelOffsetY = 0.42
+}: PointMarkerProps): React.JSX.Element {
+  return (
+    <group>
+      <mesh position={toTuple(position)}>
+        {geometry === "sphere" ? <sphereGeometry args={[0.12, 18, 18]} /> : <octahedronGeometry args={[0.16, 0]} />}
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.15} />
+      </mesh>
+      <LabelSprite
+        text={label}
+        position={withOffset(position, 0, labelOffsetY, 0)}
+        backgroundColor="rgba(8, 15, 27, 0.92)"
+      />
+    </group>
+  );
+}
+
+function ImpactNormalArrow({ origin, normal }: { origin: Vec3; normal: Vec3 }): React.JSX.Element {
+  const arrow = useMemo(() => {
+    const direction = new Vector3(normal.x, normal.y, normal.z);
+    if (direction.lengthSq() === 0) {
+      direction.set(0, 1, 0);
+    } else {
+      direction.normalize();
+    }
+    const start = new Vector3(origin.x, origin.y, origin.z);
+    return new ArrowHelper(direction, start, 0.95, sceneColors.impact, 0.22, 0.12);
+  }, [origin, normal]);
+
+  useEffect(() => {
+    return () => {
+      arrow.line.geometry.dispose();
+      (arrow.line.material as Material).dispose();
+      arrow.cone.geometry.dispose();
+      (arrow.cone.material as Material).dispose();
+    };
+  }, [arrow]);
+
+  return <primitive object={arrow} />;
+}
+
+function SurfaceDamageMarker({ damage }: { damage: SurfaceDamage }): React.JSX.Element {
+  const colors = surfaceDamageColors[damage.kind];
+  const liftedPosition = useMemo(() => withNormalOffset(damage.position, damage.normal, 0.018), [damage.normal, damage.position]);
+  const quaternion = useMemo(() => {
+    const normal = new Vector3(damage.normal.x, damage.normal.y, damage.normal.z);
+    if (normal.lengthSq() === 0) {
+      normal.set(0, 0, 1);
+    } else {
+      normal.normalize();
+    }
+
+    const orientation = new Quaternion();
+    orientation.setFromUnitVectors(new Vector3(0, 0, 1), normal);
+    return orientation;
+  }, [damage.normal]);
+  const quaternionTuple: [number, number, number, number] = [quaternion.x, quaternion.y, quaternion.z, quaternion.w];
+  const holeRadius = Math.max(damage.radius * 0.45, 0.018);
+
+  if (damage.kind === "ricochet_scar") {
+    return (
+      <group position={toTuple(liftedPosition)} quaternion={quaternionTuple}>
+        <mesh rotation={[0, 0, Math.PI / 5]}>
+          <planeGeometry args={[damage.radius * 2.1, Math.max(damage.radius * 0.38, 0.03)]} />
+          <meshBasicMaterial
+            color={colors.fill}
+            transparent
+            opacity={0.9}
+            side={DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+        <mesh rotation={[0, 0, Math.PI / 5]}>
+          <planeGeometry args={[damage.radius * 1.55, Math.max(damage.radius * 0.12, 0.018)]} />
+          <meshBasicMaterial
+            color={colors.accent}
+            transparent
+            opacity={0.9}
+            side={DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
+    );
+  }
+
+  return (
+    <group position={toTuple(liftedPosition)} quaternion={quaternionTuple}>
+      {(damage.kind === "impact_mark" || damage.kind === "detonation_scorch" || damage.kind === "dent") && (
+        <>
+          <mesh>
+            <circleGeometry args={[damage.radius, 28]} />
+            <meshBasicMaterial
+              color={colors.fill}
+              transparent
+              opacity={damage.kind === "detonation_scorch" ? 0.48 : 0.36}
+              side={DoubleSide}
+              depthWrite={false}
+            />
+          </mesh>
+          <mesh>
+            <ringGeometry args={[damage.radius * 0.74, damage.radius, 32]} />
+            <meshBasicMaterial
+              color={colors.accent}
+              transparent
+              opacity={0.95}
+              side={DoubleSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </>
+      )}
+      {(damage.kind === "penetration_hole" || damage.kind === "spall_exit") && (
+        <>
+          <mesh>
+            <ringGeometry args={[holeRadius, damage.radius, 30]} />
+            <meshBasicMaterial
+              color={colors.accent}
+              transparent
+              opacity={0.96}
+              side={DoubleSide}
+              depthWrite={false}
+            />
+          </mesh>
+          <mesh position={[0, 0, 0.001]}>
+            <circleGeometry args={[holeRadius, 22]} />
+            <meshBasicMaterial
+              color={colors.fill}
+              transparent
+              opacity={0.98}
+              side={DoubleSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </>
+      )}
+    </group>
+  );
+}
 
 function SimulationScene({
   result,
@@ -61,7 +338,21 @@ function SimulationScene({
   ]);
   const shellPositions = shellPoints.length >= 2 ? buildLinePositions(shellPoints) : null;
   const fragmentTimes = useMemo(() => mapFragmentAppearanceTimes(result?.events ?? []), [result?.events]);
-
+  const hitZoneId = result?.summary.hitZoneId ?? null;
+  const moduleDamageMap = useMemo(
+    () => new Map((result?.damagedModules ?? []).map((damage) => [damage.moduleId, damage])),
+    [result?.damagedModules]
+  );
+  const crewDamageMap = useMemo(
+    () => new Map((result?.crew ?? []).map((damage) => [damage.crewId, damage])),
+    [result?.crew]
+  );
+  const currentEventIndex = useMemo(
+    () => getNearestEventIndex(result?.events ?? [], currentTime),
+    [result?.events, currentTime]
+  );
+  const impactPoint = useMemo(() => getImpactPoint(result), [result]);
+  const damageOriginPoint = useMemo(() => getDamageOriginPoint(result), [result]);
   const visibleFragments = useMemo(() => {
     if (!result?.fragments?.length) {
       return [] as VisibleFragment[];
@@ -85,47 +376,124 @@ function SimulationScene({
       })
       .filter((fragment): fragment is VisibleFragment => fragment !== null);
   }, [currentTime, fragmentTimes, maxTime, result?.fragments]);
+  const shellHeadPoint = shellPoints[shellPoints.length - 1] ?? shellPoints[0] ?? null;
+  const firstImpactTime = result?.events?.find((event) => event.type === "armor_hit")?.t ?? 0;
+  const surfaceDamageVisible = currentTime >= firstImpactTime;
+
+  const impactLabelParts = [
+    "Impact",
+    result?.hitContext?.shellType?.toUpperCase() ?? null,
+    result?.hitContext?.fuseStatus && result.hitContext.fuseStatus !== "not_applicable"
+      ? result.hitContext.fuseStatus
+      : null
+  ].filter((value): value is string => Boolean(value));
 
   return (
     <Canvas camera={{ position: [5, 5, 10], fov: 50 }}>
       <color attach="background" args={["#02030a"]} />
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[5, 10, 7]} intensity={0.8} />
-      <gridHelper args={[20, 20, "#2b6cb0", "#0f172a"]} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[5, 10, 7]} intensity={0.95} />
+      <gridHelper args={[20, 20, "#274469", "#0f172a"]} />
       <axesHelper args={[4]} />
       {showArmor &&
-        tank?.armorZones.map((zone: ArmorZone) => (
-          <mesh key={zone.id} position={toTuple(zone.position)}>
-            <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
-            <meshStandardMaterial color={armorColor} transparent opacity={0.25} />
-          </mesh>
+        tank?.armorZones.map((zone: ArmorZone) => {
+          const isHitZone = zone.id === hitZoneId;
+          return (
+            <group key={zone.id}>
+              <mesh position={toTuple(zone.position)}>
+                <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
+                <meshStandardMaterial
+                  color={isHitZone ? sceneColors.armorHit : sceneColors.armor}
+                  transparent
+                  opacity={isHitZone ? 0.52 : 0.2}
+                  emissive={isHitZone ? sceneColors.armorHit : sceneColors.armor}
+                  emissiveIntensity={isHitZone ? 0.42 : 0.08}
+                />
+              </mesh>
+              {isHitZone && (
+                <mesh position={toTuple(zone.position)} scale={[1.03, 1.03, 1.03]}>
+                  <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
+                  <meshBasicMaterial color={sceneColors.impact} wireframe />
+                </mesh>
+              )}
+              <LabelSprite
+                text={zone.name}
+                position={withOffset(zone.position, 0, zone.size.y / 2 + 0.22, 0)}
+                backgroundColor={isHitZone ? "rgba(124, 45, 18, 0.92)" : "rgba(10, 34, 52, 0.9)"}
+              />
+            </group>
+          );
+        })}
+      {surfaceDamageVisible &&
+        result?.surfaceDamage?.map((damage) => (
+          <SurfaceDamageMarker key={damage.id} damage={damage} />
         ))}
       {showModules &&
-        tank?.modules.map((module: ModuleDefinition) => (
-          <mesh key={module.id} position={toTuple(module.position)}>
-            <boxGeometry args={[module.size.x, module.size.y, module.size.z]} />
-            <meshStandardMaterial color={moduleColorMap[module.type] ?? "#c084fc"} opacity={0.9} />
-          </mesh>
-        ))}
+        tank?.modules.map((module: ModuleDefinition) => {
+          const damage = moduleDamageMap.get(module.id);
+          const isDamaged = Boolean(damage);
+          const color = isDamaged ? sceneColors.moduleDamaged : moduleColorMap[module.type] ?? sceneColors.module;
+          return (
+            <group key={module.id}>
+              <mesh position={toTuple(module.position)}>
+                <boxGeometry args={[module.size.x, module.size.y, module.size.z]} />
+                <meshStandardMaterial
+                  color={color}
+                  opacity={0.9}
+                  transparent
+                  emissive={isDamaged ? color : "#140b2d"}
+                  emissiveIntensity={isDamaged ? 0.38 : 0.12}
+                />
+              </mesh>
+              <LabelSprite
+                text={formatTokenLabel(module.id)}
+                position={withOffset(module.position, 0, module.size.y / 2 + 0.2, 0)}
+                backgroundColor={isDamaged ? "rgba(91, 41, 16, 0.92)" : "rgba(42, 24, 67, 0.9)"}
+              />
+            </group>
+          );
+        })}
       {showCrew &&
-        tank?.crew.map((member: CrewMember) => (
-          <mesh key={member.id} position={toTuple(member.position)}>
-            <boxGeometry args={[0.32, 0.6, 0.32]} />
-            <meshStandardMaterial color={crewColor} />
-          </mesh>
-        ))}
-      {showShellPath && shellPositions && (
-        <line>
+        tank?.crew.map((member: CrewMember) => {
+          const damage = crewDamageMap.get(member.id);
+          const isDamaged = Boolean(damage);
+          const label = formatTokenLabel(member.role || member.id);
+          return (
+            <group key={member.id}>
+              <mesh position={toTuple(member.position)}>
+                <boxGeometry args={[0.32, 0.6, 0.32]} />
+                <meshStandardMaterial
+                  color={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
+                  emissive={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
+                  emissiveIntensity={isDamaged ? 0.46 : 0.12}
+                />
+              </mesh>
+              <LabelSprite
+                text={label}
+                position={withOffset(member.position, 0, 0.48, 0)}
+                backgroundColor={isDamaged ? "rgba(89, 20, 24, 0.92)" : "rgba(11, 46, 44, 0.9)"}
+              />
+            </group>
+          );
+        })}
+      {showShellPath && shellPositions && shellHeadPoint && (
+        <>
+          <line>
             <bufferGeometry>
               <bufferAttribute
                 attach="attributes-position"
                 count={shellPositions.length / 3}
                 array={shellPositions}
                 itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial color="#ffb347" />
-        </line>
+              />
+            </bufferGeometry>
+            <lineBasicMaterial color={sceneColors.shell} />
+          </line>
+          <mesh position={toTuple(shellHeadPoint)}>
+            <sphereGeometry args={[0.07, 14, 14]} />
+            <meshStandardMaterial color={sceneColors.shell} emissive={sceneColors.shell} emissiveIntensity={1} />
+          </mesh>
+        </>
       )}
       {showFragments &&
         visibleFragments.map((fragment) => (
@@ -138,18 +506,64 @@ function SimulationScene({
                 itemSize={3}
               />
             </bufferGeometry>
-            <lineBasicMaterial color="#f472b6" linewidth={1} />
+            <lineBasicMaterial color={sceneColors.fragment} linewidth={1} />
           </line>
         ))}
+      {impactPoint && (
+        <PointMarker
+          position={impactPoint}
+          color={sceneColors.impact}
+          geometry="sphere"
+          label={impactLabelParts.join(" • ")}
+          labelOffsetY={0.5}
+        />
+      )}
+      {damageOriginPoint && (
+        <PointMarker
+          position={damageOriginPoint}
+          color={sceneColors.origin}
+          geometry="octahedron"
+          label="Damage origin"
+        />
+      )}
+      {impactPoint && result?.hitContext?.impactNormal && (
+        <>
+          <ImpactNormalArrow origin={impactPoint} normal={result.hitContext.impactNormal} />
+          <LabelSprite
+            text="Impact normal"
+            position={withOffset(
+              impactPoint,
+              result.hitContext.impactNormal.x * 0.85,
+              result.hitContext.impactNormal.y * 0.85 + 0.18,
+              result.hitContext.impactNormal.z * 0.85
+            )}
+            backgroundColor="rgba(86, 71, 11, 0.9)"
+          />
+        </>
+      )}
       {result?.events?.map((event: SimulationEvent, index: number) => {
         if (!event.position || typeof event.t !== "number" || currentTime < event.t) {
           return null;
         }
+        const isActiveEvent = index === currentEventIndex;
         return (
-          <mesh key={`event-${index}`} position={toTuple(event.position)}>
-            <sphereGeometry args={[0.08, 12, 12]} />
-            <meshStandardMaterial color="#facc15" />
-          </mesh>
+          <group key={`event-${index}`}>
+            <mesh position={toTuple(event.position)}>
+              <sphereGeometry args={[isActiveEvent ? 0.1 : 0.065, 12, 12]} />
+              <meshStandardMaterial
+                color={isActiveEvent ? "#ffffff" : sceneColors.event}
+                emissive={isActiveEvent ? "#ffffff" : sceneColors.event}
+                emissiveIntensity={isActiveEvent ? 0.9 : 0.28}
+              />
+            </mesh>
+            {isActiveEvent && (
+              <LabelSprite
+                text={formatEventType(event.type)}
+                position={withOffset(event.position, 0, 0.28, 0)}
+                backgroundColor="rgba(18, 31, 55, 0.9)"
+              />
+            )}
+          </group>
         );
       })}
       <ViewerOrbitControls />

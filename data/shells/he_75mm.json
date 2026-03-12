@@ -1,0 +1,10 @@
+{
+  "id": "he_75mm",
+  "name": "75 mm HE (Prototype)",
+  "type": "HE",
+  "caliberMm": 75,
+  "velocityMps": 620,
+  "penetrationMm": 18,
+  "fuseSensitivity": 30,
+  "explosiveMassKg": 0.65
+}

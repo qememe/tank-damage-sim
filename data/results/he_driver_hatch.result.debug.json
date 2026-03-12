@@ -1,0 +1,85 @@
+{
+  "outcome": "detonation",
+  "branch": "HE",
+  "shellType": "HE",
+  "hitZoneId": "driver_hatch",
+  "hitZoneName": "Driver Hatch",
+  "impactPoint": {
+    "x": 0,
+    "y": 1.25,
+    "z": 2.36
+  },
+  "impactNormal": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "impactAngleDeg": 0,
+  "effectiveArmorMm": 30,
+  "normalImpactResistanceMm": 30,
+  "shellPenetrationMm": 18,
+  "fuseSensitivityMm": 30,
+  "explosiveMassKg": 0.65,
+  "fuseStatus": "armed",
+  "ricochet": false,
+  "damageOriginPoint": {
+    "x": 0,
+    "y": 1.25,
+    "z": 2.28
+  },
+  "reason": "HE fuse armed and detonated because projected armor resistance 30 mm met fuse sensitivity 30 mm",
+  "normalizedDirection": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "notes": [
+    "Shell type: HE.",
+    "Branch chosen: HE blast flow.",
+    "Hit zone: Driver Hatch.",
+    "Impact angle: 0 deg.",
+    "Effective armor: 30 mm.",
+    "Projected armor resistance for the fuse check: 30 mm.",
+    "Fuse status: armed. projected armor resistance 30 mm met fuse sensitivity 30 mm",
+    "Generated 8 HE fragment rays from a shallow blast origin.",
+    "Damaged modules: 0. Damaged crew: 1."
+  ],
+  "damageLog": [
+    {
+      "cause": "HE fragment fragment_1 hit crew driver.",
+      "damage": 106,
+      "kind": "crew",
+      "point": {
+        "x": -0.012,
+        "y": 1.243,
+        "z": 1.7
+      },
+      "targetId": "driver",
+      "targetLabel": "driver"
+    }
+  ],
+  "surfaceDamageLog": [
+    {
+      "id": "he_detonation_scorch_1",
+      "kind": "detonation_scorch",
+      "sourceBranch": "HE",
+      "linkedHitZoneId": "driver_hatch",
+      "radius": 0.353,
+      "depth": null,
+      "sizeHeuristic": "radius from 75 mm caliber and explosive mass 0.65 kg",
+      "reason": "A functioning HE round leaves a visible scorch / blast signature on the impact face.",
+      "note": "HE detonation scorch on the outer armor face."
+    },
+    {
+      "id": "he_shallow_breach_1",
+      "kind": "penetration_hole",
+      "sourceBranch": "HE",
+      "linkedHitZoneId": "driver_hatch",
+      "radius": 0.056,
+      "depth": 0.02,
+      "sizeHeuristic": "interior breach radius from vulnerability ratio 0.6 against zone thickness 30 mm",
+      "reason": "The hit zone is thin enough relative to the HE shell's authored penetration to justify a shallow breach marker.",
+      "note": "Prototype shallow HE breach marker on a vulnerable plate."
+    }
+  ]
+}

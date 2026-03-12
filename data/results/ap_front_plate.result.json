@@ -8,13 +8,35 @@
     "penetrationMm": 109,
     "ricochet": false
   },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Hull Front",
+    "impactPoint": {
+      "x": 0.4,
+      "y": 0.95,
+      "z": 2.28
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0,
+      "z": -1
+    },
+    "impactAngleDeg": 0,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": {
+      "x": 0.4,
+      "y": 0.95,
+      "z": 2.23
+    }
+  },
   "events": [
     {
       "t": 0.009772,
       "type": "armor_hit",
       "position": {
         "x": 0.4,
-        "y": 1.2,
+        "y": 0.95,
         "z": 2.28
       },
       "targetId": "hull_front",
@@ -25,75 +47,75 @@
       "type": "penetration",
       "position": {
         "x": 0.4,
-        "y": 1.2,
+        "y": 0.95,
         "z": 2.28
       },
       "targetId": "hull_front",
-      "note": "Shell penetration 109 mm exceeded effective armor 80 mm."
+      "note": "AP penetration 109 mm exceeded effective armor 80 mm."
     },
     {
       "t": 0.019772,
       "type": "internal_damage",
       "position": {
-        "x": 0.398,
-        "y": 1.2,
+        "x": 0.4,
+        "y": 0.948,
         "z": 0.6
       },
       "targetId": "ammo_rack",
-      "damage": 68,
-      "note": "fragment_1 hit module ammo_rack."
+      "damage": 58,
+      "note": "AP fragment fragment_1 hit module ammo_rack."
     },
     {
       "t": 0.029772,
       "type": "internal_damage",
       "position": {
         "x": 0.561,
-        "y": 1.2,
+        "y": 0.95,
         "z": 0.6
       },
       "targetId": "ammo_rack",
-      "damage": 68,
-      "note": "fragment_2 hit module ammo_rack."
+      "damage": 58,
+      "note": "AP fragment fragment_2 hit module ammo_rack."
     },
     {
       "t": 0.039772,
       "type": "internal_damage",
       "position": {
         "x": 0.3,
-        "y": 1.199,
-        "z": 1.215
+        "y": 0.951,
+        "z": 1.225
       },
       "targetId": "driver",
-      "damage": 83,
-      "note": "fragment_3 hit crew driver."
+      "damage": 77,
+      "note": "AP fragment fragment_3 hit crew driver."
     },
     {
       "t": 0.049772,
       "type": "internal_damage",
       "position": {
         "x": 0.4,
-        "y": 1.362,
+        "y": 1.112,
         "z": 0.6
       },
       "targetId": "ammo_rack",
-      "damage": 68,
-      "note": "fragment_4 hit module ammo_rack."
+      "damage": 58,
+      "note": "AP fragment fragment_4 hit module ammo_rack."
     }
   ],
   "shellPath": [
     {
       "x": 0.4,
-      "y": 1.2,
+      "y": 0.95,
       "z": 10
     },
     {
       "x": 0.4,
-      "y": 1.2,
+      "y": 0.95,
       "z": 2.28
     },
     {
       "x": 0.4,
-      "y": 1.2,
+      "y": 0.95,
       "z": -1.72
     }
   ],
@@ -103,12 +125,12 @@
       "points": [
         {
           "x": 0.4,
-          "y": 1.2,
+          "y": 0.95,
           "z": 2.23
         },
         {
-          "x": 0.396,
-          "y": 1.2,
+          "x": 0.4,
+          "y": 0.946,
           "z": -1.77
         }
       ]
@@ -118,12 +140,12 @@
       "points": [
         {
           "x": 0.4,
-          "y": 1.2,
+          "y": 0.95,
           "z": 2.23
         },
         {
           "x": 0.792,
-          "y": 1.2,
+          "y": 0.95,
           "z": -1.75
         }
       ]
@@ -133,12 +155,12 @@
       "points": [
         {
           "x": 0.4,
-          "y": 1.2,
+          "y": 0.95,
           "z": 2.23
         },
         {
-          "x": 0.008,
-          "y": 1.196,
+          "x": 0.004,
+          "y": 0.954,
           "z": -1.75
         }
       ]
@@ -148,31 +170,90 @@
       "points": [
         {
           "x": 0.4,
-          "y": 1.2,
+          "y": 0.95,
           "z": 2.23
         },
         {
           "x": 0.4,
-          "y": 1.596,
+          "y": 1.346,
           "z": -1.75
         }
       ]
     }
   ],
+  "surfaceDamage": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "position": {
+        "x": 0.4,
+        "y": 0.95,
+        "z": 2.28
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "radius": 0.141,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "position": {
+        "x": 0.4,
+        "y": 0.95,
+        "z": 2.28
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "radius": 0.053,
+      "depth": 0.043,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "position": {
+        "x": 0.4,
+        "y": 0.95,
+        "z": 2.23
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "radius": 0.103,
+      "depth": 0.018,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP interior spall cone marker."
+    }
+  ],
   "damagedModules": [
     {
       "moduleId": "ammo_rack",
-      "damage": 204,
+      "label": "ammo_rack",
+      "damage": 174,
       "remainingHp": 0,
-      "destroyed": true
+      "destroyed": true,
+      "note": "AP fragment fragment_1 hit module ammo_rack. AP fragment fragment_2 hit module ammo_rack. AP fragment fragment_4 hit module ammo_rack."
     }
   ],
   "crew": [
     {
       "crewId": "driver",
-      "damage": 83,
-      "remainingHp": 17,
-      "incapacitated": false
+      "label": "driver",
+      "damage": 77,
+      "remainingHp": 23,
+      "incapacitated": false,
+      "note": "AP fragment fragment_3 hit crew driver."
     }
   ]
 }

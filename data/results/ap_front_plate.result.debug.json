@@ -1,19 +1,130 @@
 {
   "outcome": "penetration",
+  "branch": "AP",
+  "shellType": "AP",
   "hitZoneId": "hull_front",
+  "hitZoneName": "Hull Front",
+  "impactPoint": {
+    "x": 0.4,
+    "y": 0.95,
+    "z": 2.28
+  },
+  "impactNormal": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
   "impactAngleDeg": 0,
   "effectiveArmorMm": 80,
+  "normalImpactResistanceMm": 80,
   "shellPenetrationMm": 109,
+  "fuseSensitivityMm": null,
+  "explosiveMassKg": null,
+  "fuseStatus": "not_applicable",
   "ricochet": false,
-  "reason": "Shell penetration 109 mm exceeded effective armor 80 mm.",
+  "damageOriginPoint": {
+    "x": 0.4,
+    "y": 0.95,
+    "z": 2.23
+  },
+  "reason": "AP penetration 109 mm exceeded effective armor 80 mm.",
   "normalizedDirection": {
     "x": 0,
     "y": 0,
     "z": -1
   },
   "notes": [
-    "First armor hit: hull_front.",
-    "Generated 4 fragment rays.",
+    "Shell type: AP.",
+    "Branch chosen: AP penetration flow.",
+    "Hit zone: Hull Front.",
+    "Impact angle: 0 deg.",
+    "Effective armor: 80 mm.",
+    "Generated 4 AP fragment rays from the penetration point.",
     "Damaged modules: 1. Damaged crew: 1."
+  ],
+  "damageLog": [
+    {
+      "cause": "AP fragment fragment_1 hit module ammo_rack.",
+      "damage": 58,
+      "kind": "module",
+      "point": {
+        "x": 0.4,
+        "y": 0.948,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "targetLabel": "ammo_rack"
+    },
+    {
+      "cause": "AP fragment fragment_2 hit module ammo_rack.",
+      "damage": 58,
+      "kind": "module",
+      "point": {
+        "x": 0.561,
+        "y": 0.95,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "targetLabel": "ammo_rack"
+    },
+    {
+      "cause": "AP fragment fragment_3 hit crew driver.",
+      "damage": 77,
+      "kind": "crew",
+      "point": {
+        "x": 0.3,
+        "y": 0.951,
+        "z": 1.225
+      },
+      "targetId": "driver",
+      "targetLabel": "driver"
+    },
+    {
+      "cause": "AP fragment fragment_4 hit module ammo_rack.",
+      "damage": 58,
+      "kind": "module",
+      "point": {
+        "x": 0.4,
+        "y": 1.112,
+        "z": 0.6
+      },
+      "targetId": "ammo_rack",
+      "targetLabel": "ammo_rack"
+    }
+  ],
+  "surfaceDamageLog": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "hull_front",
+      "radius": 0.141,
+      "depth": null,
+      "sizeHeuristic": "radius from 75 mm caliber and penetration margin 29 mm",
+      "reason": "AP penetration leaves an exterior impact ring around the entrance point.",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "hull_front",
+      "radius": 0.053,
+      "depth": 0.043,
+      "sizeHeuristic": "radius and depth from 75 mm caliber plus penetration margin 29 mm",
+      "reason": "AP overmatched the effective armor, so the prototype exposes a clear breach marker.",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "hull_front",
+      "radius": 0.103,
+      "depth": 0.018,
+      "sizeHeuristic": "radius from the penetration hole plus 4 recorded internal damage hits",
+      "reason": "The viewer gets an interior spall marker when the AP perforation plausibly throws fragments into the compartment.",
+      "note": "AP interior spall cone marker."
+    }
   ]
 }

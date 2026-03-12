@@ -4,6 +4,27 @@
   "description": "Minimal validation tank used for shared schema checks.",
   "armorZones": [
     {
+      "id": "driver_hatch",
+      "name": "Driver Hatch",
+      "thicknessMm": 30,
+      "material": "rolled_steel",
+      "position": {
+        "x": 0,
+        "y": 1.25,
+        "z": 2.32
+      },
+      "size": {
+        "x": 0.8,
+        "y": 0.4,
+        "z": 0.08
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      }
+    },
+    {
       "id": "hull_front",
       "name": "Hull Front",
       "thicknessMm": 80,

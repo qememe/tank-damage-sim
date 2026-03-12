@@ -1,0 +1,88 @@
+{
+  "version": "0.1.0",
+  "seed": 303,
+  "summary": {
+    "outcome": "fuse_failure",
+    "hitZoneId": "hull_front",
+    "effectiveArmorMm": 233.918,
+    "penetrationMm": 18,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "HE",
+    "shellType": "HE",
+    "hitZoneName": "Hull Front",
+    "impactPoint": {
+      "x": 1.219,
+      "y": 1.2,
+      "z": 2.28
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0,
+      "z": -1
+    },
+    "impactAngleDeg": 70.001,
+    "fuseStatus": "failed",
+    "damageOriginPoint": null
+  },
+  "events": [
+    {
+      "t": 0.036408,
+      "type": "armor_hit",
+      "position": {
+        "x": 1.219,
+        "y": 1.2,
+        "z": 2.28
+      },
+      "targetId": "hull_front",
+      "note": "Hit armor zone Hull Front."
+    },
+    {
+      "t": 0.037408,
+      "type": "he_fuse_failed",
+      "position": {
+        "x": 1.219,
+        "y": 1.2,
+        "z": 2.28
+      },
+      "targetId": "hull_front",
+      "note": "HE fuse failed: projected armor resistance 27.36 mm stayed below fuse sensitivity 30 mm"
+    }
+  ],
+  "shellPath": [
+    {
+      "x": -20,
+      "y": 1.2,
+      "z": 10
+    },
+    {
+      "x": 1.219,
+      "y": 1.2,
+      "z": 2.28
+    }
+  ],
+  "fragments": [],
+  "surfaceDamage": [
+    {
+      "id": "he_fuse_failure_1",
+      "kind": "dent",
+      "position": {
+        "x": 1.219,
+        "y": 1.2,
+        "z": 2.28
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "radius": 0.215,
+      "depth": 0.01,
+      "relatedArmorZoneId": "hull_front",
+      "note": "HE fuse failure left a shallow dent."
+    }
+  ],
+  "damagedModules": [],
+  "crew": []
+}

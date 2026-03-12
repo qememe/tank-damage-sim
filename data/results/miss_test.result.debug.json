@@ -1,10 +1,20 @@
 {
   "outcome": "miss",
+  "branch": "AP",
+  "shellType": "AP",
   "hitZoneId": null,
+  "hitZoneName": null,
+  "impactPoint": null,
+  "impactNormal": null,
   "impactAngleDeg": null,
   "effectiveArmorMm": null,
+  "normalImpactResistanceMm": null,
   "shellPenetrationMm": 109,
+  "fuseSensitivityMm": null,
+  "explosiveMassKg": null,
+  "fuseStatus": "not_applicable",
   "ricochet": false,
+  "damageOriginPoint": null,
   "reason": "No armor zone AABB was intersected by the incoming ray.",
   "normalizedDirection": {
     "x": 0,
@@ -12,7 +22,11 @@
     "z": -1
   },
   "notes": [
+    "Shell type: AP.",
+    "Branch chosen: AP.",
     "Armor zone intersection search returned no hit.",
-    "No ricochet or penetration checks were applied."
-  ]
+    "No ricochet, penetration, or fuse checks were applied."
+  ],
+  "damageLog": [],
+  "surfaceDamageLog": []
 }
