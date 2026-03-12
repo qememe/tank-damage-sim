@@ -23,13 +23,13 @@ import {
   clamp,
   degreesFromRadians,
   dotVec3,
-  intersectRayWithAabb,
+  intersectRayWithOrientedBox,
+  rotateVec3,
   normalizeVec3,
   reflectVec3,
   roundNumber,
   roundVec3,
   scaleVec3,
-  toAabb,
 } from "./math.js";
 
 export interface SimulationRunRequest {
@@ -41,10 +41,41 @@ export interface SimulationRunRequest {
 interface DebugDamageEntry {
   cause: string;
   damage: number;
+  fragmentBranch: ShellType;
+  fragmentEnergy: number;
+  fragmentId: string;
+  fragmentReach: number;
+  fragmentType: FragmentType;
+  interactionIndex: number;
   kind: "crew" | "module";
   point: Vec3;
   targetId: string;
   targetLabel: string;
+  travelDistance: number;
+}
+
+interface DebugFragmentGenerationSummary {
+  branch: ShellType;
+  continuationHeuristic: string;
+  energyHeuristic: string;
+  fragmentCount: number;
+  note: string;
+  reachHeuristic: string;
+  spreadHeuristic: string;
+}
+
+interface DebugFragmentEntry {
+  branch: ShellType;
+  energy: number;
+  fragmentType: FragmentType;
+  hitCount: number;
+  hitTargets: string[];
+  id: string;
+  maxInteractions: number;
+  note: string;
+  reach: number;
+  spread: number;
+  stoppedReason: string;
 }
 
 interface DebugSurfaceDamageEntry {
@@ -79,6 +110,8 @@ export interface SimulationDebugReport {
   reason: string;
   normalizedDirection: Vec3;
   notes: string[];
+  fragmentGeneration: DebugFragmentGenerationSummary | null;
+  fragmentLog: DebugFragmentEntry[];
   damageLog: DebugDamageEntry[];
   surfaceDamageLog: DebugSurfaceDamageEntry[];
 }
@@ -125,7 +158,30 @@ interface DamageResolution {
   damageLog: DebugDamageEntry[];
   damagedModules: ModuleDamageResult[];
   events: SimulationEvent[];
+  fragmentGeneration: DebugFragmentGenerationSummary;
+  fragmentLog: DebugFragmentEntry[];
   fragments: FragmentPath[];
+}
+
+type FragmentType = NonNullable<FragmentPath["fragmentType"]>;
+
+interface FragmentModel {
+  fragmentGeneration: DebugFragmentGenerationSummary;
+  specs: FragmentSpec[];
+}
+
+interface FragmentSpec {
+  branch: ShellType;
+  continuationEnergyFactor: number;
+  continuationReachFactor: number;
+  direction: Vec3;
+  energy: number;
+  fragmentType: FragmentType;
+  id: string;
+  maxInteractions: number;
+  note: string;
+  reach: number;
+  spread: number;
 }
 
 interface SurfaceDamageEmission {
@@ -151,29 +207,40 @@ const CREW_BOX_SIZE: Vec3 = {
   y: 1,
   z: 0.6,
 };
-const FRAGMENT_LENGTH_METERS_AP = 4;
-const FRAGMENT_LENGTH_METERS_HE = 2.6;
 const INTERNAL_SHELL_TRAVEL_METERS = 4;
 const INTERNAL_START_OFFSET_METERS = 0.05;
 const HE_DAMAGE_ORIGIN_OFFSET_METERS = 0.08;
 const RICOCHET_ANGLE_DEGREES = 70;
-const AP_FRAGMENT_DIRECTION_TEMPLATES: Vec3[] = [
+const FRAGMENT_CONTINUATION_OFFSET_METERS = 0.04;
+const AP_CORE_DIRECTION_TEMPLATES: Vec3[] = [
   { x: 0, y: 0, z: 0 },
-  { x: 0.8, y: 0, z: 0 },
-  { x: -0.8, y: 0, z: 0 },
-  { x: 0, y: 0.8, z: 0 },
-  { x: 0, y: -0.8, z: 0 },
-  { x: 0.5, y: 0.5, z: 0 },
+  { x: 0.06, y: 0.02, z: 0 },
+  { x: -0.05, y: -0.025, z: 0 },
+  { x: 0.025, y: -0.05, z: 0 },
 ];
-const HE_FRAGMENT_DIRECTION_TEMPLATES: Vec3[] = [
+const AP_SPALL_DIRECTION_TEMPLATES: Vec3[] = [
+  { x: 0.36, y: 0.08, z: 0 },
+  { x: -0.34, y: 0.12, z: 0 },
+  { x: 0.18, y: 0.32, z: 0 },
+  { x: -0.18, y: -0.3, z: 0 },
+  { x: 0.26, y: -0.18, z: 0 },
+  { x: -0.24, y: 0.22, z: 0 },
+];
+const HE_BLAST_DIRECTION_TEMPLATES: Vec3[] = [
   { x: 0, y: 0, z: 0 },
-  { x: 1.6, y: 0, z: 0 },
-  { x: -1.6, y: 0, z: 0 },
-  { x: 0, y: 1.2, z: 0 },
-  { x: 0, y: -1.2, z: 0 },
-  { x: 1.1, y: 0.8, z: 0 },
-  { x: -1.1, y: 0.8, z: 0 },
-  { x: 0.8, y: -1, z: 0 },
+  { x: 0.55, y: 0.08, z: 0 },
+  { x: -0.52, y: -0.06, z: 0 },
+  { x: 0.12, y: 0.48, z: 0 },
+  { x: -0.1, y: -0.44, z: 0 },
+  { x: 0.42, y: 0.34, z: 0 },
+  { x: -0.4, y: 0.32, z: 0 },
+  { x: 0.32, y: -0.4, z: 0 },
+];
+const HE_SPALL_DIRECTION_TEMPLATES: Vec3[] = [
+  { x: 0.22, y: 0.12, z: 0 },
+  { x: -0.2, y: 0.14, z: 0 },
+  { x: 0.14, y: -0.22, z: 0 },
+  { x: -0.16, y: -0.18, z: 0 },
 ];
 
 function getCrewHitboxSize(crewMember: CrewMember): Vec3 {
@@ -216,7 +283,7 @@ function analyzeImpact(
   scenario: ScenarioInput,
   shell: ShellDefinition,
 ): ImpactAnalysis {
-  const zoneNormal = normalizeVec3(armorHit.zone.normal);
+  const zoneNormal = getArmorZoneNormal(armorHit.zone);
   const cosine = clamp(
     Math.abs(dotVec3(direction, zoneNormal)),
     0.001,
@@ -315,7 +382,7 @@ function createMissResponse(
       fuseStatus: "not_applicable",
       ricochet: false,
       damageOriginPoint: null,
-      reason: "No armor zone AABB was intersected by the incoming ray.",
+      reason: "No authored armor volume was intersected by the incoming ray.",
       normalizedDirection: direction,
       notes: [
         `Shell type: ${shell.type}.`,
@@ -323,6 +390,8 @@ function createMissResponse(
         "Armor zone intersection search returned no hit.",
         "No ricochet, penetration, or fuse checks were applied.",
       ],
+      fragmentGeneration: null,
+      fragmentLog: [],
       damageLog: [],
       surfaceDamageLog: [],
     },
@@ -658,6 +727,8 @@ function createApResponse(args: {
           "Outcome chosen: ricochet.",
           "Fuse logic is not used for AP.",
         ],
+        fragmentGeneration: null,
+        fragmentLog: [],
         damageLog: [],
         surfaceDamageLog: surfaceDamage.debugEntries,
       },
@@ -726,6 +797,8 @@ function createApResponse(args: {
           "Outcome chosen: no penetration.",
           "Armor defeated the AP shot before any internal fragment generation.",
         ],
+        fragmentGeneration: null,
+        fragmentLog: [],
         damageLog: [],
         surfaceDamageLog: surfaceDamage.debugEntries,
       },
@@ -738,31 +811,33 @@ function createApResponse(args: {
       scaleVec3(impact.direction, INTERNAL_START_OFFSET_METERS),
     ),
   );
+  const fragmentModel = createApFragmentModel({
+    fragmentCountMultiplier: scenario.simulation.fragmentCountMultiplier,
+    penetrationMarginMm: shell.penetrationMm - impact.effectiveArmorMm,
+    randomness: scenario.simulation.randomness,
+    seed: scenario.seed,
+    travelDirection: impact.direction,
+  });
   const damage = resolveFragmentDamage({
     damageOriginPoint,
     emptyEventType: "internal_damage_none",
     emptyNote: "AP penetration occurred but no fragment intersected crew or modules.",
     eventType: "internal_damage",
     eventTypeNotePrefix: "AP fragment",
-    fragmentCount: getApFragmentCount(
-      scenario.simulation.fragmentCountMultiplier,
-      shell.penetrationMm - impact.effectiveArmorMm,
-    ),
-    fragmentLengthMeters: FRAGMENT_LENGTH_METERS_AP,
-    fragmentTemplates: AP_FRAGMENT_DIRECTION_TEMPLATES,
-    getDamage: (targetType, hitDistance) => getApInternalDamage(
+    fragmentGeneration: fragmentModel.fragmentGeneration,
+    fragmentSpecs: fragmentModel.specs,
+    getDamage: (targetType, hitDistance, travelDistance, fragment, interactionIndex) => getApInternalDamage(
       shell,
       impact.effectiveArmorMm,
       targetType,
       hitDistance,
+      travelDistance,
+      fragment,
+      interactionIndex,
     ),
     allowRepeatedTargetHits: true,
     hitTimeSeconds: impact.hitTimeSeconds,
-    randomness: scenario.simulation.randomness,
-    seed: scenario.seed,
-    shell,
     tank,
-    travelDirection: impact.direction,
   });
   const reason = `AP penetration ${shell.penetrationMm} mm exceeded effective armor ${impact.effectiveArmorMm} mm.`;
   const hitContext = createHitContext({
@@ -834,9 +909,15 @@ function createApResponse(args: {
       normalizedDirection: impact.direction,
       notes: [
         ...commonNotes,
-        `Generated ${damage.fragments.length} AP fragment rays from the penetration point.`,
+        `Generated ${damage.fragments.length} AP fragments from the penetration point.`,
+        `Spread heuristic: ${damage.fragmentGeneration.spreadHeuristic}`,
+        `Energy heuristic: ${damage.fragmentGeneration.energyHeuristic}`,
+        `Reach heuristic: ${damage.fragmentGeneration.reachHeuristic}`,
+        `Continuation heuristic: ${damage.fragmentGeneration.continuationHeuristic}`,
         `Damaged modules: ${damage.damagedModules.length}. Damaged crew: ${damage.crew.length}.`,
       ],
+      fragmentGeneration: damage.fragmentGeneration,
+      fragmentLog: damage.fragmentLog,
       damageLog: damage.damageLog,
       surfaceDamageLog: surfaceDamage.debugEntries,
     },
@@ -928,6 +1009,8 @@ function createHeResponse(args: {
           "Outcome chosen: fuse failure.",
           "No HE fragment or spall rays were generated.",
         ],
+        fragmentGeneration: null,
+        fragmentLog: [],
         damageLog: [],
         surfaceDamageLog: surfaceDamage.debugEntries,
       },
@@ -940,30 +1023,32 @@ function createHeResponse(args: {
       scaleVec3(impact.direction, HE_DAMAGE_ORIGIN_OFFSET_METERS),
     ),
   );
+  const fragmentModel = createHeFragmentModel({
+    explosiveMassKg: shell.explosiveMassKg ?? 0,
+    fragmentCountMultiplier: scenario.simulation.fragmentCountMultiplier,
+    randomness: scenario.simulation.randomness,
+    seed: scenario.seed,
+    travelDirection: impact.direction,
+  });
   const damage = resolveFragmentDamage({
     damageOriginPoint,
     emptyEventType: "he_fragment_damage_none",
     emptyNote: "HE detonated but no fragment ray reached crew or modules.",
     eventType: "he_fragment_damage",
     eventTypeNotePrefix: "HE fragment",
-    fragmentCount: getHeFragmentCount(
-      scenario.simulation.fragmentCountMultiplier,
-      shell.explosiveMassKg ?? 0,
-    ),
-    fragmentLengthMeters: FRAGMENT_LENGTH_METERS_HE,
-    fragmentTemplates: HE_FRAGMENT_DIRECTION_TEMPLATES,
-    getDamage: (targetType, hitDistance) => getHeInternalDamage(
+    fragmentGeneration: fragmentModel.fragmentGeneration,
+    fragmentSpecs: fragmentModel.specs,
+    getDamage: (targetType, hitDistance, travelDistance, fragment, interactionIndex) => getHeInternalDamage(
       shell,
       targetType,
       hitDistance,
+      travelDistance,
+      fragment,
+      interactionIndex,
     ),
     allowRepeatedTargetHits: false,
     hitTimeSeconds: impact.hitTimeSeconds,
-    randomness: scenario.simulation.randomness,
-    seed: scenario.seed,
-    shell,
     tank,
-    travelDirection: impact.direction,
   });
   const reason = `HE fuse armed and detonated because ${fuseStatus.reason}`;
   const hitContext = createHitContext({
@@ -1029,9 +1114,15 @@ function createHeResponse(args: {
       notes: [
         ...commonNotes,
         `Fuse status: armed. ${fuseStatus.reason}`,
-        `Generated ${damage.fragments.length} HE fragment rays from a shallow blast origin.`,
+        `Generated ${damage.fragments.length} HE fragments from a shallow blast origin.`,
+        `Spread heuristic: ${damage.fragmentGeneration.spreadHeuristic}`,
+        `Energy heuristic: ${damage.fragmentGeneration.energyHeuristic}`,
+        `Reach heuristic: ${damage.fragmentGeneration.reachHeuristic}`,
+        `Continuation heuristic: ${damage.fragmentGeneration.continuationHeuristic}`,
         `Damaged modules: ${damage.damagedModules.length}. Damaged crew: ${damage.crew.length}.`,
       ],
+      fragmentGeneration: damage.fragmentGeneration,
+      fragmentLog: damage.fragmentLog,
       damageLog: damage.damageLog,
       surfaceDamageLog: surfaceDamage.debugEntries,
     },
@@ -1064,17 +1155,18 @@ function resolveFragmentDamage(args: {
   emptyNote: string;
   eventType: string;
   eventTypeNotePrefix: string;
-  fragmentCount: number;
-  fragmentLengthMeters: number;
-  fragmentTemplates: Vec3[];
-  getDamage: (targetType: "crew" | "module", hitDistance: number) => number;
+  fragmentGeneration: DebugFragmentGenerationSummary;
+  fragmentSpecs: FragmentSpec[];
+  getDamage: (
+    targetType: "crew" | "module",
+    hitDistance: number,
+    travelDistance: number,
+    fragment: FragmentSpec,
+    interactionIndex: number,
+  ) => number;
   allowRepeatedTargetHits: boolean;
   hitTimeSeconds: number;
-  randomness: number;
-  seed: number;
-  shell: ShellDefinition;
   tank: TankDefinition;
-  travelDirection: Vec3;
 }): DamageResolution {
   const {
     damageOriginPoint,
@@ -1082,88 +1174,164 @@ function resolveFragmentDamage(args: {
     emptyNote,
     eventType,
     eventTypeNotePrefix,
-    fragmentCount,
-    fragmentLengthMeters,
-    fragmentTemplates,
+    fragmentGeneration,
+    fragmentSpecs,
     getDamage,
     allowRepeatedTargetHits,
     hitTimeSeconds,
-    randomness,
-    seed,
-    shell,
     tank,
-    travelDirection,
   } = args;
-  const rng = createDeterministicRng(seed + shell.caliberMm);
   const damageByModule = new Map<string, DamageAccumulator>();
   const damageByCrew = new Map<string, DamageAccumulator>();
   const damagedTargetIds = new Set<string>();
   const fragments: FragmentPath[] = [];
   const events: SimulationEvent[] = [];
   const damageLog: DebugDamageEntry[] = [];
+  const fragmentLog: DebugFragmentEntry[] = [];
 
-  for (let index = 0; index < fragmentCount; index += 1) {
-    const fragmentId = `fragment_${index + 1}`;
-    const fragmentDirection = createFragmentDirection(
-      shell.type,
-      index,
-      randomness,
-      rng,
-      fragmentTemplates,
-      travelDirection,
-    );
-    const fragmentEnd = roundVec3(
+  for (let index = 0; index < fragmentSpecs.length; index += 1) {
+    const fragment = fragmentSpecs[index];
+
+    if (fragment === undefined) {
+      continue;
+    }
+
+    const fragmentPoints: Vec3[] = [damageOriginPoint];
+    const fragmentHitTargets: string[] = [];
+    const localIgnoredTargetIds = new Set<string>();
+    let searchOrigin = damageOriginPoint;
+    let remainingReach = fragment.reach;
+    let currentEnergy = fragment.energy;
+    let cumulativeTravelDistance = 0;
+    let interactionIndex = 0;
+    let stoppedReason = `No internal target intersected within ${roundNumber(fragment.reach, 3)} m of fragment reach.`;
+
+    while (
+      interactionIndex < fragment.maxInteractions
+      && remainingReach > 0.08
+      && currentEnergy > 0.08
+    ) {
+      const ignoredTargetIds = !allowRepeatedTargetHits
+        ? mergeIgnoredTargetIds(localIgnoredTargetIds, damagedTargetIds)
+        : localIgnoredTargetIds;
+      const internalHit = findFirstInternalHit(
+        tank,
+        searchOrigin,
+        fragment.direction,
+        remainingReach,
+        ignoredTargetIds,
+      );
+
+      if (internalHit === null) {
+        stoppedReason = interactionIndex === 0
+          ? `No internal target intersected within ${roundNumber(remainingReach, 3)} m of remaining reach.`
+          : `Fragment spent its remaining ${roundNumber(remainingReach, 3)} m of reach after ${interactionIndex} interaction(s).`;
+        break;
+      }
+
+      localIgnoredTargetIds.add(internalHit.id);
+      fragmentHitTargets.push(`${internalHit.kind}:${internalHit.id}`);
+      fragmentPoints.push(roundVec3(internalHit.point));
+      cumulativeTravelDistance += internalHit.distance;
+
+      const damage = getDamage(
+        internalHit.kind,
+        internalHit.distance,
+        cumulativeTravelDistance,
+        fragment,
+        interactionIndex,
+      );
+      const note = `${eventTypeNotePrefix} ${fragment.id} (${fragment.fragmentType}, energy ${roundNumber(currentEnergy, 3)}, reach ${roundNumber(remainingReach, 3)} m) hit ${internalHit.kind} ${internalHit.id} at ${roundNumber(cumulativeTravelDistance, 3)} m because its ${fragment.fragmentType} path intersected the target hitbox before the fragment ran out of reach.`;
+      addDamage(
+        internalHit.kind === "module" ? damageByModule : damageByCrew,
+        internalHit.id,
+        internalHit.label,
+        damage,
+        note,
+      );
+      damageLog.push({
+        cause: note,
+        damage,
+        fragmentBranch: fragment.branch,
+        fragmentEnergy: roundNumber(currentEnergy, 3),
+        fragmentId: fragment.id,
+        fragmentReach: roundNumber(remainingReach, 3),
+        fragmentType: fragment.fragmentType,
+        interactionIndex,
+        kind: internalHit.kind,
+        point: internalHit.point,
+        targetId: internalHit.id,
+        targetLabel: internalHit.label,
+        travelDistance: roundNumber(cumulativeTravelDistance, 3),
+      });
+      damagedTargetIds.add(internalHit.id);
+      events.push({
+        t: roundNumber(hitTimeSeconds + 0.01 + (index * 0.01) + (interactionIndex * 0.003), 6),
+        type: eventType,
+        position: internalHit.point,
+        targetId: internalHit.id,
+        damage,
+        note,
+      });
+
+      remainingReach = Math.max(0, remainingReach - internalHit.distance);
+      interactionIndex += 1;
+
+      if (interactionIndex >= fragment.maxInteractions) {
+        stoppedReason = `Fragment reached its configured interaction cap of ${fragment.maxInteractions}.`;
+        break;
+      }
+
+      const continuedReach = remainingReach * fragment.continuationReachFactor;
+      const continuedEnergy = currentEnergy * fragment.continuationEnergyFactor;
+
+      if (continuedReach <= 0.12 || continuedEnergy <= 0.12) {
+        stoppedReason = `Fragment lost too much energy after impact and could not continue (energy ${roundNumber(continuedEnergy, 3)}, reach ${roundNumber(continuedReach, 3)} m).`;
+        break;
+      }
+
+      searchOrigin = addVec3(
+        internalHit.point,
+        scaleVec3(fragment.direction, FRAGMENT_CONTINUATION_OFFSET_METERS),
+      );
+      remainingReach = Math.max(0, continuedReach - FRAGMENT_CONTINUATION_OFFSET_METERS);
+      currentEnergy = continuedEnergy;
+    }
+
+    const finalPoint = roundVec3(
       addVec3(
-        damageOriginPoint,
-        scaleVec3(fragmentDirection, fragmentLengthMeters),
+        fragmentPoints[fragmentPoints.length - 1] ?? damageOriginPoint,
+        scaleVec3(fragment.direction, remainingReach),
       ),
     );
 
+    if (
+      fragmentPoints.length === 1
+      || !areVec3Equal(fragmentPoints[fragmentPoints.length - 1] ?? damageOriginPoint, finalPoint)
+    ) {
+      fragmentPoints.push(finalPoint);
+    }
+
     fragments.push({
-      id: fragmentId,
-      points: [damageOriginPoint, fragmentEnd],
+      id: fragment.id,
+      points: fragmentPoints,
+      sourceBranch: fragment.branch,
+      fragmentType: fragment.fragmentType,
+      energy: roundNumber(fragment.energy, 3),
+      reach: roundNumber(fragment.reach, 3),
     });
-
-    const internalHit = findFirstInternalHit(
-      tank,
-      damageOriginPoint,
-      fragmentDirection,
-      fragmentLengthMeters,
-    );
-
-    if (internalHit === null) {
-      continue;
-    }
-
-    if (!allowRepeatedTargetHits && damagedTargetIds.has(internalHit.id)) {
-      continue;
-    }
-
-    const damage = getDamage(internalHit.kind, internalHit.distance);
-    const note = `${eventTypeNotePrefix} ${fragmentId} hit ${internalHit.kind} ${internalHit.id}.`;
-    addDamage(
-      internalHit.kind === "module" ? damageByModule : damageByCrew,
-      internalHit.id,
-      internalHit.label,
-      damage,
-      note,
-    );
-    damageLog.push({
-      cause: note,
-      damage,
-      kind: internalHit.kind,
-      point: internalHit.point,
-      targetId: internalHit.id,
-      targetLabel: internalHit.label,
-    });
-    damagedTargetIds.add(internalHit.id);
-    events.push({
-      t: roundNumber(hitTimeSeconds + 0.01 + (index * 0.01), 6),
-      type: eventType,
-      position: internalHit.point,
-      targetId: internalHit.id,
-      damage,
-      note,
+    fragmentLog.push({
+      branch: fragment.branch,
+      energy: roundNumber(fragment.energy, 3),
+      fragmentType: fragment.fragmentType,
+      hitCount: fragmentHitTargets.length,
+      hitTargets: fragmentHitTargets,
+      id: fragment.id,
+      maxInteractions: fragment.maxInteractions,
+      note: fragment.note,
+      reach: roundNumber(fragment.reach, 3),
+      spread: roundNumber(fragment.spread, 3),
+      stoppedReason,
     });
   }
 
@@ -1180,6 +1348,8 @@ function resolveFragmentDamage(args: {
     damageLog,
     damagedModules: buildModuleDamageResults(tank.modules, damageByModule),
     events,
+    fragmentGeneration,
+    fragmentLog,
     fragments,
   };
 }
@@ -1305,12 +1475,17 @@ function createDeterministicRng(seed: number): () => number {
   };
 }
 
+function randomBetween(rng: () => number, min: number, max: number): number {
+  return min + ((max - min) * rng());
+}
+
 function createFragmentDirection(
-  shellType: ShellType,
-  index: number,
-  randomness: number,
+  directionBias: Vec3,
+  spread: number,
+  jitter: number,
   rng: () => number,
   templates: Vec3[],
+  index: number,
   travelDirection: Vec3,
 ): Vec3 {
   const fallbackTemplate = templates[templates.length - 1];
@@ -1320,18 +1495,187 @@ function createFragmentDirection(
   }
 
   const template = templates[index] ?? fallbackTemplate;
-  const spreadScale = shellType === "HE"
-    ? 0.28 + (Math.max(0, randomness) * 0.16)
-    : 0.12 + (Math.max(0, randomness) * 0.08);
-  const jitterScale = shellType === "HE"
-    ? 0.12 + (Math.max(0, randomness) * 0.08)
-    : Math.max(0, randomness) * 0.05;
 
   return normalizeVec3({
-    x: travelDirection.x + ((template.x * spreadScale) + ((rng() - 0.5) * jitterScale)),
-    y: travelDirection.y + ((template.y * spreadScale) + ((rng() - 0.5) * jitterScale)),
-    z: travelDirection.z + ((template.z * spreadScale) + ((rng() - 0.5) * jitterScale)),
+    x: travelDirection.x + (directionBias.x * spread) + (template.x * spread) + randomBetween(rng, -jitter, jitter),
+    y: travelDirection.y + (directionBias.y * spread) + (template.y * spread) + randomBetween(rng, -jitter, jitter),
+    z: travelDirection.z + (directionBias.z * spread * 0.35) + (template.z * spread * 0.35) + randomBetween(rng, -(jitter * 0.2), jitter * 0.2),
   });
+}
+
+function createApFragmentModel(args: {
+  fragmentCountMultiplier: number;
+  penetrationMarginMm: number;
+  randomness: number;
+  seed: number;
+  travelDirection: Vec3;
+}): FragmentModel {
+  const {
+    fragmentCountMultiplier,
+    penetrationMarginMm,
+    randomness,
+    seed,
+    travelDirection,
+  } = args;
+  const fragmentCount = getApFragmentCount(fragmentCountMultiplier, penetrationMarginMm);
+  const rng = createDeterministicRng(seed + 101);
+  const normalizedMargin = clamp(penetrationMarginMm / 80, 0, 1.2);
+  const coreCount = clamp(2 + (penetrationMarginMm >= 40 ? 1 : 0), 2, Math.max(2, fragmentCount - 1));
+  const specs: FragmentSpec[] = [];
+
+  for (let index = 0; index < fragmentCount; index += 1) {
+    const isCore = index < coreCount;
+    const fragmentType: FragmentType = isCore
+      ? "core"
+      : index % 2 === 0
+        ? "spall"
+        : "side";
+    const spread = isCore
+      ? randomBetween(rng, 0.025, 0.055) + (Math.max(0, randomness) * 0.05)
+      : randomBetween(rng, 0.15, 0.28) + (Math.max(0, randomness) * 0.11);
+    const jitter = isCore
+      ? 0.008 + (Math.max(0, randomness) * 0.03)
+      : 0.025 + (Math.max(0, randomness) * 0.055);
+    const energy = isCore
+      ? randomBetween(rng, 1.05, 1.35) + (normalizedMargin * 0.18)
+      : randomBetween(rng, 0.42, 0.78) + (normalizedMargin * 0.08);
+    const reach = isCore
+      ? randomBetween(rng, 3.3, 4.4) + (normalizedMargin * 0.3)
+      : randomBetween(rng, 1.35, 2.45) + (normalizedMargin * 0.15);
+    const direction = createFragmentDirection(
+      { x: 0, y: 0, z: 0 },
+      spread,
+      jitter,
+      rng,
+      isCore ? AP_CORE_DIRECTION_TEMPLATES : AP_SPALL_DIRECTION_TEMPLATES,
+      isCore ? index : index - coreCount,
+      travelDirection,
+    );
+
+    specs.push({
+      id: `fragment_${index + 1}`,
+      branch: "AP",
+      continuationEnergyFactor: isCore ? 0.58 : 0,
+      continuationReachFactor: isCore ? 0.52 : 0,
+      direction,
+      energy,
+      fragmentType,
+      maxInteractions: isCore ? 2 : 1,
+      note: isCore
+        ? "Forward-biased AP core fragment with higher retained energy."
+        : "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      reach,
+      spread,
+    });
+  }
+
+  return {
+    fragmentGeneration: {
+      branch: "AP",
+      continuationHeuristic: "Core AP fragments may continue through one major interaction at reduced energy/reach; side and spall fragments stop after the first impact.",
+      energyHeuristic: `Core fragments use higher energy from penetration margin ${roundNumber(penetrationMarginMm, 3)} mm; side/spall fragments are scaled down.`,
+      fragmentCount,
+      note: `Built ${coreCount} forward core fragments plus ${Math.max(0, fragmentCount - coreCount)} secondary AP spall/side fragments.`,
+      reachHeuristic: "Core AP fragments travel deeper (roughly 3.3-4.7 m) while side/spall fragments fall off earlier (roughly 1.3-2.6 m).",
+      spreadHeuristic: `AP keeps a narrow cone for core fragments and a wider lateral spread for secondary fragments; authored randomness ${roundNumber(randomness, 3)} widens both slightly.`,
+    },
+    specs,
+  };
+}
+
+function createHeFragmentModel(args: {
+  explosiveMassKg: number;
+  fragmentCountMultiplier: number;
+  randomness: number;
+  seed: number;
+  travelDirection: Vec3;
+}): FragmentModel {
+  const {
+    explosiveMassKg,
+    fragmentCountMultiplier,
+    randomness,
+    seed,
+    travelDirection,
+  } = args;
+  const fragmentCount = getHeFragmentCount(fragmentCountMultiplier, explosiveMassKg);
+  const rng = createDeterministicRng(seed + 211);
+  const massScale = clamp(0.85 + (explosiveMassKg * 0.9), 0.85, 1.7);
+  const blastCount = clamp(
+    4 + Math.round(explosiveMassKg * 2.5),
+    4,
+    Math.max(4, fragmentCount - 1),
+  );
+  const specs: FragmentSpec[] = [];
+
+  for (let index = 0; index < fragmentCount; index += 1) {
+    const isBlast = index < blastCount;
+    const fragmentType: FragmentType = isBlast ? "blast" : "spall";
+    const spread = isBlast
+      ? randomBetween(rng, 0.28, 0.5) + (Math.max(0, randomness) * 0.16)
+      : randomBetween(rng, 0.16, 0.3) + (Math.max(0, randomness) * 0.1);
+    const jitter = isBlast
+      ? 0.045 + (Math.max(0, randomness) * 0.08)
+      : 0.025 + (Math.max(0, randomness) * 0.05);
+    const energy = isBlast
+      ? randomBetween(rng, 0.42, 0.78) * massScale
+      : randomBetween(rng, 0.5, 0.9) * (0.9 + (massScale * 0.35));
+    const reach = isBlast
+      ? randomBetween(rng, 0.9, 1.75) * massScale
+      : randomBetween(rng, 1.1, 2.05) * Math.min(1.2, 0.85 + (massScale * 0.2));
+    const direction = createFragmentDirection(
+      isBlast ? { x: 0, y: 0, z: 0 } : { x: 0, y: 0, z: 0.05 },
+      spread,
+      jitter,
+      rng,
+      isBlast ? HE_BLAST_DIRECTION_TEMPLATES : HE_SPALL_DIRECTION_TEMPLATES,
+      isBlast ? index : index - blastCount,
+      travelDirection,
+    );
+
+    specs.push({
+      id: `fragment_${index + 1}`,
+      branch: "HE",
+      continuationEnergyFactor: 0,
+      continuationReachFactor: 0,
+      direction,
+      energy,
+      fragmentType,
+      maxInteractions: 1,
+      note: isBlast
+        ? "Short-range HE blast fragment with wide local spread."
+        : "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
+      reach,
+      spread,
+    });
+  }
+
+  return {
+    fragmentGeneration: {
+      branch: "HE",
+      continuationHeuristic: "HE fragments do not continue after a major interaction in the prototype; damage is front-loaded near the detonation point.",
+      energyHeuristic: `Explosive mass ${roundNumber(explosiveMassKg, 3)} kg scales both fragment count and local fragment energy, with blast fragments weaker than AP core fragments.`,
+      fragmentCount,
+      note: `Built ${blastCount} short-range HE blast fragments plus ${Math.max(0, fragmentCount - blastCount)} shallow spall fragments.`,
+      reachHeuristic: "HE fragments are intentionally short-lived (roughly 0.9-2.1 m) so damage clusters near the blast origin instead of traveling deep like AP spall.",
+      spreadHeuristic: `HE uses a wider cone and higher local jitter than AP; authored randomness ${roundNumber(randomness, 3)} further opens the cone.`,
+    },
+    specs,
+  };
+}
+
+function mergeIgnoredTargetIds(
+  left: ReadonlySet<string>,
+  right: ReadonlySet<string>,
+): Set<string> {
+  return new Set<string>([...left, ...right]);
+}
+
+function areVec3Equal(left: Vec3, right: Vec3): boolean {
+  return left.x === right.x && left.y === right.y && left.z === right.z;
+}
+
+function getArmorZoneNormal(zone: ArmorZone): Vec3 {
+  return normalizeVec3(rotateVec3(zone.normal, zone.rotationDeg));
 }
 
 function findFirstArmorHit(
@@ -1342,7 +1686,13 @@ function findFirstArmorHit(
   let closestHit: ArmorHit | null = null;
 
   for (const zone of tank.armorZones) {
-    const hit = intersectRayWithAabb(origin, direction, toAabb(zone.position, zone.size));
+    const hit = intersectRayWithOrientedBox(
+      origin,
+      direction,
+      zone.position,
+      zone.size,
+      zone.rotationDeg,
+    );
 
     if (hit === null) {
       continue;
@@ -1365,15 +1715,22 @@ function findFirstInternalHit(
   origin: Vec3,
   direction: Vec3,
   maxDistance: number,
+  ignoredTargetIds: ReadonlySet<string> = new Set<string>(),
 ): InternalTargetHit | null {
   let closestHit: InternalTargetHit | null = null;
   let closestDistance = Number.POSITIVE_INFINITY;
 
   for (const module of tank.modules) {
-    const hit = intersectRayWithAabb(
+    if (ignoredTargetIds.has(module.id)) {
+      continue;
+    }
+
+    const hit = intersectRayWithOrientedBox(
       origin,
       direction,
-      toAabb(module.position, module.size),
+      module.position,
+      module.size,
+      module.rotationDeg,
       maxDistance,
     );
 
@@ -1392,11 +1749,17 @@ function findFirstInternalHit(
   }
 
   for (const crewMember of tank.crew) {
+    if (ignoredTargetIds.has(crewMember.id)) {
+      continue;
+    }
+
     const hitboxSize = getCrewHitboxSize(crewMember);
-    const hit = intersectRayWithAabb(
+    const hit = intersectRayWithOrientedBox(
       origin,
       direction,
-      toAabb(crewMember.position, hitboxSize),
+      crewMember.position,
+      hitboxSize,
+      crewMember.rotationDeg,
       maxDistance,
     );
 
@@ -1421,20 +1784,21 @@ function getApFragmentCount(
   fragmentCountMultiplier: number,
   penetrationMarginMm: number,
 ): number {
-  const baselineCount = Math.max(1, Math.round(3 * fragmentCountMultiplier));
+  const baselineCount = Math.max(4, Math.round(5 * fragmentCountMultiplier));
   const marginBonus = penetrationMarginMm >= 25 ? 1 : 0;
+  const overmatchBonus = penetrationMarginMm >= 55 ? 1 : 0;
 
-  return clamp(baselineCount + marginBonus, 1, 6);
+  return clamp(baselineCount + marginBonus + overmatchBonus, 4, 8);
 }
 
 function getHeFragmentCount(
   fragmentCountMultiplier: number,
   explosiveMassKg: number,
 ): number {
-  const baselineCount = Math.max(3, Math.round(4 * fragmentCountMultiplier));
-  const explosiveBonus = explosiveMassKg >= 0.6 ? 2 : 1;
+  const baselineCount = Math.max(5, Math.round(6 * fragmentCountMultiplier));
+  const explosiveBonus = explosiveMassKg >= 0.6 ? 2 : explosiveMassKg >= 0.25 ? 1 : 0;
 
-  return clamp(baselineCount + explosiveBonus, 3, 8);
+  return clamp(baselineCount + explosiveBonus, 5, 12);
 }
 
 function getApInternalDamage(
@@ -1442,14 +1806,30 @@ function getApInternalDamage(
   effectiveArmorMm: number,
   targetType: "crew" | "module",
   hitDistance: number,
+  travelDistance: number,
+  fragment: FragmentSpec,
+  interactionIndex: number,
 ): number {
-  const baseDamage = 30 + Math.round(shell.caliberMm * 0.45);
+  const baseDamage = 18 + Math.round(shell.caliberMm * 0.28);
   const surplusBonus = Math.max(
     0,
-    Math.round((shell.penetrationMm - effectiveArmorMm) * 0.15),
+    Math.round((shell.penetrationMm - effectiveArmorMm) * 0.11),
   );
-  const rangePenalty = Math.round(hitDistance * 6);
-  const totalDamage = baseDamage + surplusBonus + (targetType === "crew" ? 15 : 0) - rangePenalty;
+  const energyBonus = Math.round(fragment.energy * 22);
+  const typeBonus = fragment.fragmentType === "core"
+    ? 14
+    : fragment.fragmentType === "spall"
+      ? 7
+      : 3;
+  const rangePenalty = Math.round((hitDistance * 4) + (travelDistance * 5.5));
+  const continuationPenalty = interactionIndex * 10;
+  const totalDamage = baseDamage
+    + surplusBonus
+    + energyBonus
+    + typeBonus
+    + (targetType === "crew" ? 12 : 0)
+    - rangePenalty
+    - continuationPenalty;
 
   return Math.max(1, totalDamage);
 }
@@ -1458,12 +1838,18 @@ function getHeInternalDamage(
   shell: ShellDefinition,
   targetType: "crew" | "module",
   hitDistance: number,
+  travelDistance: number,
+  fragment: FragmentSpec,
+  interactionIndex: number,
 ): number {
   const explosiveMassKg = shell.explosiveMassKg ?? 0.1;
-  const baseDamage = Math.round((explosiveMassKg * 125) + (shell.caliberMm * 0.3));
-  const rangePenalty = Math.round(hitDistance * 18);
-  const crewBonus = targetType === "crew" ? 12 : 0;
-  const totalDamage = baseDamage + crewBonus - rangePenalty;
+  const baseDamage = Math.round((explosiveMassKg * 62) + (shell.caliberMm * 0.16));
+  const energyBonus = Math.round(fragment.energy * 18);
+  const proximityBonus = fragment.fragmentType === "blast" ? 10 : 6;
+  const rangePenalty = Math.round((hitDistance * 10) + (travelDistance * 16));
+  const crewBonus = targetType === "crew" ? 9 : 0;
+  const continuationPenalty = interactionIndex * 8;
+  const totalDamage = baseDamage + energyBonus + proximityBonus + crewBonus - rangePenalty - continuationPenalty;
 
   return Math.max(1, totalDamage);
 }

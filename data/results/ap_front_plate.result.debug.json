@@ -7,16 +7,16 @@
   "impactPoint": {
     "x": 0.4,
     "y": 0.95,
-    "z": 2.28
+    "z": 2.235
   },
   "impactNormal": {
     "x": 0,
-    "y": 0,
-    "z": -1
+    "y": 0.309,
+    "z": -0.951
   },
-  "impactAngleDeg": 0,
-  "effectiveArmorMm": 80,
-  "normalImpactResistanceMm": 80,
+  "impactAngleDeg": 18.01,
+  "effectiveArmorMm": 84.122,
+  "normalImpactResistanceMm": 76.08,
   "shellPenetrationMm": 109,
   "fuseSensitivityMm": null,
   "explosiveMassKg": null,
@@ -25,9 +25,9 @@
   "damageOriginPoint": {
     "x": 0.4,
     "y": 0.95,
-    "z": 2.23
+    "z": 2.185
   },
-  "reason": "AP penetration 109 mm exceeded effective armor 80 mm.",
+  "reason": "AP penetration 109 mm exceeded effective armor 84.122 mm.",
   "normalizedDirection": {
     "x": 0,
     "y": 0,
@@ -37,59 +37,236 @@
     "Shell type: AP.",
     "Branch chosen: AP penetration flow.",
     "Hit zone: Hull Front.",
-    "Impact angle: 0 deg.",
-    "Effective armor: 80 mm.",
-    "Generated 4 AP fragment rays from the penetration point.",
+    "Impact angle: 18.01 deg.",
+    "Effective armor: 84.122 mm.",
+    "Generated 5 AP fragments from the penetration point.",
+    "Spread heuristic: AP keeps a narrow cone for core fragments and a wider lateral spread for secondary fragments; authored randomness 0.05 widens both slightly.",
+    "Energy heuristic: Core fragments use higher energy from penetration margin 24.878 mm; side/spall fragments are scaled down.",
+    "Reach heuristic: Core AP fragments travel deeper (roughly 3.3-4.7 m) while side/spall fragments fall off earlier (roughly 1.3-2.6 m).",
+    "Continuation heuristic: Core AP fragments may continue through one major interaction at reduced energy/reach; side and spall fragments stop after the first impact.",
     "Damaged modules: 1. Damaged crew: 1."
+  ],
+  "fragmentGeneration": {
+    "branch": "AP",
+    "continuationHeuristic": "Core AP fragments may continue through one major interaction at reduced energy/reach; side and spall fragments stop after the first impact.",
+    "energyHeuristic": "Core fragments use higher energy from penetration margin 24.878 mm; side/spall fragments are scaled down.",
+    "fragmentCount": 5,
+    "note": "Built 2 forward core fragments plus 3 secondary AP spall/side fragments.",
+    "reachHeuristic": "Core AP fragments travel deeper (roughly 3.3-4.7 m) while side/spall fragments fall off earlier (roughly 1.3-2.6 m).",
+    "spreadHeuristic": "AP keeps a narrow cone for core fragments and a wider lateral spread for secondary fragments; authored randomness 0.05 widens both slightly."
+  },
+  "fragmentLog": [
+    {
+      "branch": "AP",
+      "energy": 1.286,
+      "fragmentType": "core",
+      "hitCount": 2,
+      "hitTargets": [
+        "crew:driver",
+        "module:ammo_rack"
+      ],
+      "id": "fragment_1",
+      "maxInteractions": 2,
+      "note": "Forward-biased AP core fragment with higher retained energy.",
+      "reach": 3.537,
+      "spread": 0.037,
+      "stoppedReason": "Fragment reached its configured interaction cap of 2."
+    },
+    {
+      "branch": "AP",
+      "energy": 1.317,
+      "fragmentType": "core",
+      "hitCount": 2,
+      "hitTargets": [
+        "crew:driver",
+        "module:ammo_rack"
+      ],
+      "id": "fragment_2",
+      "maxInteractions": 2,
+      "note": "Forward-biased AP core fragment with higher retained energy.",
+      "reach": 3.688,
+      "spread": 0.04,
+      "stoppedReason": "Fragment reached its configured interaction cap of 2."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.5,
+      "fragmentType": "spall",
+      "hitCount": 1,
+      "hitTargets": [
+        "module:ammo_rack"
+      ],
+      "id": "fragment_3",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 1.538,
+      "spread": 0.278,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.724,
+      "fragmentType": "side",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:driver"
+      ],
+      "id": "fragment_4",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 1.534,
+      "spread": 0.246,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.629,
+      "fragmentType": "spall",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:driver"
+      ],
+      "id": "fragment_5",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 1.449,
+      "spread": 0.25,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    }
   ],
   "damageLog": [
     {
-      "cause": "AP fragment fragment_1 hit crew driver.",
-      "damage": 80,
+      "cause": "AP fragment fragment_1 (core, energy 1.286, reach 3.537 m) hit crew driver at 0.4 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 92,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 1.286,
+      "fragmentId": "fragment_1",
+      "fragmentReach": 3.537,
+      "fragmentType": "core",
+      "interactionIndex": 0,
       "kind": "crew",
       "point": {
-        "x": 0.4,
-        "y": 0.949,
-        "z": 1.71
+        "x": 0.397,
+        "y": 0.947,
+        "z": 1.785
       },
       "targetId": "driver",
-      "targetLabel": "driver"
+      "targetLabel": "driver",
+      "travelDistance": 0.4
     },
     {
-      "cause": "AP fragment fragment_2 hit module ammo_rack.",
-      "damage": 60,
+      "cause": "AP fragment fragment_1 (core, energy 0.746, reach 1.591 m) hit module ammo_rack at 1.335 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 63,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.746,
+      "fragmentId": "fragment_1",
+      "fragmentReach": 1.591,
+      "fragmentType": "core",
+      "interactionIndex": 1,
       "kind": "module",
       "point": {
-        "x": 0.538,
-        "y": 0.95,
-        "z": 0.83
+        "x": 0.39,
+        "y": 0.938,
+        "z": 0.81
       },
       "targetId": "ammo_rack",
-      "targetLabel": "ammo_rack"
+      "targetLabel": "ammo_rack",
+      "travelDistance": 1.335
     },
     {
-      "cause": "AP fragment fragment_3 hit crew driver.",
-      "damage": 80,
+      "cause": "AP fragment fragment_2 (core, energy 1.317, reach 3.688 m) hit crew driver at 0.407 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 93,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 1.317,
+      "fragmentId": "fragment_2",
+      "fragmentReach": 3.688,
+      "fragmentType": "core",
+      "interactionIndex": 0,
       "kind": "crew",
       "point": {
-        "x": 0.348,
-        "y": 0.951,
-        "z": 1.71
+        "x": 0.398,
+        "y": 0.95,
+        "z": 1.779
       },
       "targetId": "driver",
-      "targetLabel": "driver"
+      "targetLabel": "driver",
+      "travelDistance": 0.407
     },
     {
-      "cause": "AP fragment fragment_4 hit crew driver.",
-      "damage": 80,
+      "cause": "AP fragment fragment_2 (core, energy 0.764, reach 1.666 m) hit module ammo_rack at 1.335 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 64,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.764,
+      "fragmentId": "fragment_2",
+      "fragmentReach": 1.666,
+      "fragmentType": "core",
+      "interactionIndex": 1,
+      "kind": "module",
+      "point": {
+        "x": 0.394,
+        "y": 0.95,
+        "z": 0.811
+      },
+      "targetId": "ammo_rack",
+      "targetLabel": "ammo_rack",
+      "travelDistance": 1.335
+    },
+    {
+      "cause": "AP fragment fragment_3 (spall, energy 0.5, reach 1.538 m) hit module ammo_rack at 1.344 m because its spall path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 47,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.5,
+      "fragmentId": "fragment_3",
+      "fragmentReach": 1.538,
+      "fragmentType": "spall",
+      "interactionIndex": 0,
+      "kind": "module",
+      "point": {
+        "x": 0.545,
+        "y": 0.99,
+        "z": 0.849
+      },
+      "targetId": "ammo_rack",
+      "targetLabel": "ammo_rack",
+      "travelDistance": 1.344
+    },
+    {
+      "cause": "AP fragment fragment_4 (side, energy 0.724, reach 1.534 m) hit crew driver at 0.395 m because its side path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 69,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.724,
+      "fragmentId": "fragment_4",
+      "fragmentReach": 1.534,
+      "fragmentType": "side",
+      "interactionIndex": 0,
       "kind": "crew",
       "point": {
-        "x": 0.4,
-        "y": 1.002,
-        "z": 1.71
+        "x": 0.361,
+        "y": 0.968,
+        "z": 1.793
       },
       "targetId": "driver",
-      "targetLabel": "driver"
+      "targetLabel": "driver",
+      "travelDistance": 0.395
+    },
+    {
+      "cause": "AP fragment fragment_5 (spall, energy 0.629, reach 1.449 m) hit crew driver at 0.574 m because its spall path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 70,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.629,
+      "fragmentId": "fragment_5",
+      "fragmentReach": 1.449,
+      "fragmentType": "spall",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.427,
+        "y": 0.981,
+        "z": 1.613
+      },
+      "targetId": "driver",
+      "targetLabel": "driver",
+      "travelDistance": 0.574
     }
   ],
   "surfaceDamageLog": [
@@ -98,9 +275,9 @@
       "kind": "impact_mark",
       "sourceBranch": "AP",
       "linkedHitZoneId": "hull_front",
-      "radius": 0.141,
+      "radius": 0.14,
       "depth": null,
-      "sizeHeuristic": "radius from 75 mm caliber and penetration margin 29 mm",
+      "sizeHeuristic": "radius from 75 mm caliber and penetration margin 24.878 mm",
       "reason": "AP penetration leaves an exterior impact ring around the entrance point.",
       "note": "AP impact mark around the perforation point."
     },
@@ -109,9 +286,9 @@
       "kind": "penetration_hole",
       "sourceBranch": "AP",
       "linkedHitZoneId": "hull_front",
-      "radius": 0.053,
-      "depth": 0.043,
-      "sizeHeuristic": "radius and depth from 75 mm caliber plus penetration margin 29 mm",
+      "radius": 0.052,
+      "depth": 0.041,
+      "sizeHeuristic": "radius and depth from 75 mm caliber plus penetration margin 24.878 mm",
       "reason": "AP overmatched the effective armor, so the prototype exposes a clear breach marker.",
       "note": "AP entrance hole through the armor plate."
     },
@@ -120,9 +297,9 @@
       "kind": "spall_exit",
       "sourceBranch": "AP",
       "linkedHitZoneId": "hull_front",
-      "radius": 0.103,
+      "radius": 0.102,
       "depth": 0.018,
-      "sizeHeuristic": "radius from the penetration hole plus 4 recorded internal damage hits",
+      "sizeHeuristic": "radius from the penetration hole plus 7 recorded internal damage hits",
       "reason": "The viewer gets an interior spall marker when the AP perforation plausibly throws fragments into the compartment.",
       "note": "AP interior spall cone marker."
     }

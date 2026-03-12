@@ -205,6 +205,7 @@ function parseArmorZone(
   field: string,
 ): ArmorZone {
   const root = expectObject(value, context, field);
+  const rotationDeg = parseOptionalVec3(root.rotationDeg, context, `${field}.rotationDeg`);
 
   return {
     id: expectString(root.id, context, `${field}.id`),
@@ -215,6 +216,7 @@ function parseArmorZone(
     material: expectString(root.material, context, `${field}.material`),
     position: expectVec3(root.position, context, `${field}.position`),
     size: expectVec3(root.size, context, `${field}.size`, { requirePositive: true }),
+    ...(rotationDeg === undefined ? {} : { rotationDeg }),
     normal: expectVec3(root.normal, context, `${field}.normal`, {
       requireNonZero: true,
     }),
@@ -227,12 +229,14 @@ function parseModuleDefinition(
   field: string,
 ): ModuleDefinition {
   const root = expectObject(value, context, field);
+  const rotationDeg = parseOptionalVec3(root.rotationDeg, context, `${field}.rotationDeg`);
 
   return {
     id: expectString(root.id, context, `${field}.id`),
     type: expectString(root.type, context, `${field}.type`),
     position: expectVec3(root.position, context, `${field}.position`),
     size: expectVec3(root.size, context, `${field}.size`, { requirePositive: true }),
+    ...(rotationDeg === undefined ? {} : { rotationDeg }),
     hp: expectNumber(root.hp, context, `${field}.hp`, { min: 0.001 }),
   };
 }
@@ -246,6 +250,7 @@ function parseCrewMember(
   const size = parseOptionalVec3(root.size, context, `${field}.size`, {
     requirePositive: true,
   });
+  const rotationDeg = parseOptionalVec3(root.rotationDeg, context, `${field}.rotationDeg`);
   const shapeKind = expectOptionalEnum(
     root.shapeKind,
     context,
@@ -264,6 +269,7 @@ function parseCrewMember(
     hp: expectNumber(root.hp, context, `${field}.hp`, { min: 0.001 }),
     ...(size === undefined ? {} : { size }),
     ...(shapeKind === undefined ? {} : { shapeKind }),
+    ...(rotationDeg === undefined ? {} : { rotationDeg }),
   };
 }
 

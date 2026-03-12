@@ -4,7 +4,7 @@
   "summary": {
     "outcome": "detonation",
     "hitZoneId": "driver_hatch",
-    "effectiveArmorMm": 30,
+    "effectiveArmorMm": 33.649,
     "penetrationMm": 18,
     "ricochet": false
   },
@@ -15,55 +15,67 @@
     "impactPoint": {
       "x": 0,
       "y": 1.25,
-      "z": 2.36
+      "z": 2.362
     },
     "impactNormal": {
       "x": 0,
-      "y": 0,
-      "z": -1
+      "y": 0.309,
+      "z": -0.951
     },
-    "impactAngleDeg": 0,
+    "impactAngleDeg": 18.01,
     "fuseStatus": "armed",
     "damageOriginPoint": {
       "x": 0,
       "y": 1.25,
-      "z": 2.28
+      "z": 2.282
     }
   },
   "events": [
     {
-      "t": 0.012323,
+      "t": 0.012319,
       "type": "armor_hit",
       "position": {
         "x": 0,
         "y": 1.25,
-        "z": 2.36
+        "z": 2.362
       },
       "targetId": "driver_hatch",
       "note": "Hit armor zone Driver Hatch."
     },
     {
-      "t": 0.013323,
+      "t": 0.013319,
       "type": "he_detonation",
       "position": {
         "x": 0,
         "y": 1.25,
-        "z": 2.28
+        "z": 2.282
       },
       "targetId": "driver_hatch",
-      "note": "HE fuse armed and detonated because projected armor resistance 30 mm met fuse sensitivity 30 mm"
+      "note": "HE fuse armed and detonated because projected armor resistance 30.432 mm met fuse sensitivity 30 mm"
     },
     {
-      "t": 0.022323,
+      "t": 0.022319,
       "type": "he_fragment_damage",
       "position": {
-        "x": -0.011,
-        "y": 1.243,
-        "z": 1.71
+        "x": 0.03,
+        "y": 1.259,
+        "z": 1.638
       },
       "targetId": "driver",
-      "damage": 106,
-      "note": "HE fragment fragment_1 hit crew driver."
+      "damage": 72,
+      "note": "HE fragment fragment_1 (blast, energy 0.985, reach 2.028 m) hit crew driver at 0.644 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.032319,
+      "type": "he_fragment_damage",
+      "position": {
+        "x": 0.278,
+        "y": 1.245,
+        "z": 0.782
+      },
+      "targetId": "ammo_rack",
+      "damage": 33,
+      "note": "HE fragment fragment_2 (blast, energy 0.608, reach 2.032 m) hit module ammo_rack at 1.526 m because its blast path intersected the target hitbox before the fragment ran out of reach."
     }
   ],
   "shellPath": [
@@ -75,12 +87,12 @@
     {
       "x": 0,
       "y": 1.25,
-      "z": 2.36
+      "z": 2.362
     },
     {
       "x": 0,
       "y": 1.25,
-      "z": 2.28
+      "z": 2.282
     }
   ],
   "fragments": [
@@ -90,14 +102,23 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": -0.052,
-          "y": 1.219,
-          "z": -0.32
+          "x": 0.03,
+          "y": 1.259,
+          "z": 1.638
+        },
+        {
+          "x": 0.095,
+          "y": 1.278,
+          "z": 0.255
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.985,
+      "reach": 2.028
     },
     {
       "id": "fragment_2",
@@ -105,14 +126,23 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": 1.23,
-          "y": 1.398,
-          "z": -0.005
+          "x": 0.278,
+          "y": 1.245,
+          "z": 0.782
+        },
+        {
+          "x": 0.37,
+          "y": 1.243,
+          "z": 0.284
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.608,
+      "reach": 2.032
     },
     {
       "id": "fragment_3",
@@ -120,14 +150,18 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": -1.035,
-          "y": 1.224,
-          "z": -0.104
+          "x": -0.341,
+          "y": 1.297,
+          "z": 0.654
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 1.112,
+      "reach": 1.664
     },
     {
       "id": "fragment_4",
@@ -135,14 +169,18 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": -0.003,
-          "y": 2.1,
-          "z": -0.177
+          "x": 0.249,
+          "y": 1.695,
+          "z": -0.107
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 1.06,
+      "reach": 2.443
     },
     {
       "id": "fragment_5",
@@ -150,14 +188,18 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": -0.088,
-          "y": 0.423,
-          "z": -0.182
+          "x": -0.092,
+          "y": 1,
+          "z": 0.393
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.982,
+      "reach": 1.908
     },
     {
       "id": "fragment_6",
@@ -165,14 +207,18 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": 0.822,
-          "y": 1.705,
-          "z": -0.143
+          "x": 0.243,
+          "y": 1.344,
+          "z": 0.745
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.648,
+      "reach": 1.558
     },
     {
       "id": "fragment_7",
@@ -180,14 +226,18 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": -0.939,
-          "y": 1.77,
-          "z": -0.089
+          "x": 0.031,
+          "y": 1.303,
+          "z": 0.995
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.071,
+      "reach": 1.289
     },
     {
       "id": "fragment_8",
@@ -195,14 +245,56 @@
         {
           "x": 0,
           "y": 1.25,
-          "z": 2.28
+          "z": 2.282
         },
         {
-          "x": 0.523,
-          "y": 0.447,
-          "z": -0.135
+          "x": -0.065,
+          "y": 1.27,
+          "z": 0.486
         }
-      ]
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.082,
+      "reach": 1.797
+    },
+    {
+      "id": "fragment_9",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.282
+        },
+        {
+          "x": 0.03,
+          "y": 1.189,
+          "z": 0.421
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.125,
+      "reach": 1.863
+    },
+    {
+      "id": "fragment_10",
+      "points": [
+        {
+          "x": 0,
+          "y": 1.25,
+          "z": 2.282
+        },
+        {
+          "x": -0.037,
+          "y": 1.175,
+          "z": 0.997
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 0.935,
+      "reach": 1.288
     }
   ],
   "surfaceDamage": [
@@ -212,12 +304,12 @@
       "position": {
         "x": 0,
         "y": 1.25,
-        "z": 2.36
+        "z": 2.362
       },
       "normal": {
         "x": 0,
-        "y": 0,
-        "z": -1
+        "y": 0.309,
+        "z": -0.951
       },
       "radius": 0.353,
       "relatedArmorZoneId": "driver_hatch",
@@ -229,28 +321,37 @@
       "position": {
         "x": 0,
         "y": 1.25,
-        "z": 2.28
+        "z": 2.282
       },
       "normal": {
         "x": 0,
-        "y": 0,
-        "z": 1
+        "y": -0.309,
+        "z": 0.951
       },
-      "radius": 0.056,
+      "radius": 0.055,
       "depth": 0.02,
       "relatedArmorZoneId": "driver_hatch",
       "note": "Prototype shallow HE breach marker on a vulnerable plate."
     }
   ],
-  "damagedModules": [],
+  "damagedModules": [
+    {
+      "moduleId": "ammo_rack",
+      "label": "ammo_rack",
+      "damage": 33,
+      "remainingHp": 37,
+      "destroyed": false,
+      "note": "HE fragment fragment_2 (blast, energy 0.608, reach 2.032 m) hit module ammo_rack at 1.526 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
   "crew": [
     {
       "crewId": "driver",
       "label": "driver",
-      "damage": 106,
-      "remainingHp": 0,
-      "incapacitated": true,
-      "note": "HE fragment fragment_1 hit crew driver."
+      "damage": 72,
+      "remainingHp": 28,
+      "incapacitated": false,
+      "note": "HE fragment fragment_1 (blast, energy 0.985, reach 2.028 m) hit crew driver at 0.644 m because its blast path intersected the target hitbox before the fragment ran out of reach."
     }
   ]
 }

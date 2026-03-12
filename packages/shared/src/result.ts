@@ -42,6 +42,10 @@ export interface SimulationEvent {
 export interface FragmentPath {
   id: string;
   points: Vec3[];
+  sourceBranch?: ShellType;
+  fragmentType?: "core" | "side" | "blast" | "spall";
+  energy?: number;
+  reach?: number;
 }
 
 export type SurfaceDamageKind =

@@ -7,6 +7,7 @@ export interface ArmorZone {
   material: string;
   position: Vec3;
   size: Vec3;
+  rotationDeg?: Vec3;
   normal: Vec3;
 }
 
@@ -15,6 +16,7 @@ export interface ModuleDefinition {
   type: string;
   position: Vec3;
   size: Vec3;
+  rotationDeg?: Vec3;
   hp: number;
 }
 
@@ -24,6 +26,7 @@ export interface CrewMember {
   position: Vec3;
   size?: Vec3;
   shapeKind?: CrewHitboxShapeKind;
+  rotationDeg?: Vec3;
   hp: number;
 }
 

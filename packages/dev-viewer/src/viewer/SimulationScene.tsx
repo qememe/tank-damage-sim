@@ -134,6 +134,37 @@ const getExternalShapeColor = (shape: ExternalShape) =>
 
 const getCrewSize = (member: CrewMember): Vec3 => member.size ?? fallbackCrewSize;
 
+const rotateVec3 = (value: Vec3, rotationDeg?: Vec3): Vec3 => {
+  if (!rotationDeg) {
+    return value;
+  }
+
+  const xRadians = toRadians(rotationDeg.x);
+  const yRadians = toRadians(rotationDeg.y);
+  const zRadians = toRadians(rotationDeg.z);
+  const afterX = {
+    x: value.x,
+    y: (value.y * Math.cos(xRadians)) - (value.z * Math.sin(xRadians)),
+    z: (value.y * Math.sin(xRadians)) + (value.z * Math.cos(xRadians))
+  };
+  const afterY = {
+    x: (afterX.x * Math.cos(yRadians)) + (afterX.z * Math.sin(yRadians)),
+    y: afterX.y,
+    z: (-afterX.x * Math.sin(yRadians)) + (afterX.z * Math.cos(yRadians))
+  };
+
+  return {
+    x: (afterY.x * Math.cos(zRadians)) - (afterY.y * Math.sin(zRadians)),
+    y: (afterY.x * Math.sin(zRadians)) + (afterY.y * Math.cos(zRadians)),
+    z: afterY.z
+  };
+};
+
+const offsetByLocalRotation = (position: Vec3, localOffset: Vec3, rotationDeg?: Vec3): Vec3 => {
+  const rotatedOffset = rotateVec3(localOffset, rotationDeg);
+  return withOffset(position, rotatedOffset.x, rotatedOffset.y, rotatedOffset.z);
+};
+
 const buildLabelTexture = (text: string, backgroundColor: string, textColor: string) => {
   const fontSize = 34;
   const paddingX = 24;
@@ -486,27 +517,35 @@ function SimulationScene({
       {showArmor &&
         tank?.armorZones.map((zone: ArmorZone) => {
           const isHitZone = zone.id === hitZoneId;
+          const rotation = getRotationTuple(zone.rotationDeg);
+          const labelPosition = offsetByLocalRotation(
+            zone.position,
+            { x: 0, y: zone.size.y / 2 + 0.22, z: 0 },
+            zone.rotationDeg
+          );
           return (
             <group key={zone.id}>
-              <mesh position={toTuple(zone.position)}>
-                <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
-                <meshStandardMaterial
-                  color={isHitZone ? sceneColors.armorHit : sceneColors.armor}
-                  transparent
-                  opacity={isHitZone ? hitArmorOpacity : armorOpacity}
-                  emissive={isHitZone ? sceneColors.armorHit : sceneColors.armor}
-                  emissiveIntensity={isHitZone ? 0.42 : 0.08}
-                />
-              </mesh>
-              {isHitZone && (
-                <mesh position={toTuple(zone.position)} scale={[1.03, 1.03, 1.03]}>
+              <group position={toTuple(zone.position)} rotation={rotation}>
+                <mesh>
                   <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
-                  <meshBasicMaterial color={sceneColors.impact} wireframe />
+                  <meshStandardMaterial
+                    color={isHitZone ? sceneColors.armorHit : sceneColors.armor}
+                    transparent
+                    opacity={isHitZone ? hitArmorOpacity : armorOpacity}
+                    emissive={isHitZone ? sceneColors.armorHit : sceneColors.armor}
+                    emissiveIntensity={isHitZone ? 0.42 : 0.08}
+                  />
                 </mesh>
-              )}
+                {isHitZone && (
+                  <mesh scale={[1.03, 1.03, 1.03]}>
+                    <boxGeometry args={[zone.size.x, zone.size.y, zone.size.z]} />
+                    <meshBasicMaterial color={sceneColors.impact} wireframe />
+                  </mesh>
+                )}
+              </group>
               <LabelSprite
                 text={zone.name}
-                position={withOffset(zone.position, 0, zone.size.y / 2 + 0.22, 0)}
+                position={labelPosition}
                 backgroundColor={isHitZone ? "rgba(124, 45, 18, 0.92)" : "rgba(10, 34, 52, 0.9)"}
               />
             </group>
@@ -522,21 +561,29 @@ function SimulationScene({
           const damage = moduleDamageMap.get(module.id);
           const isDamaged = Boolean(damage);
           const color = isDamaged ? sceneColors.moduleDamaged : moduleColorMap[module.type] ?? sceneColors.module;
+          const rotation = getRotationTuple(module.rotationDeg);
+          const labelPosition = offsetByLocalRotation(
+            module.position,
+            { x: 0, y: module.size.y / 2 + 0.2, z: 0 },
+            module.rotationDeg
+          );
           return (
             <group key={module.id}>
-              <mesh position={toTuple(module.position)}>
-                <boxGeometry args={[module.size.x, module.size.y, module.size.z]} />
-                <meshStandardMaterial
-                  color={color}
-                  opacity={moduleOpacity}
-                  transparent
-                  emissive={isDamaged ? color : "#140b2d"}
-                  emissiveIntensity={isDamaged ? 0.38 : 0.12}
-                />
-              </mesh>
+              <group position={toTuple(module.position)} rotation={rotation}>
+                <mesh>
+                  <boxGeometry args={[module.size.x, module.size.y, module.size.z]} />
+                  <meshStandardMaterial
+                    color={color}
+                    opacity={moduleOpacity}
+                    transparent
+                    emissive={isDamaged ? color : "#140b2d"}
+                    emissiveIntensity={isDamaged ? 0.38 : 0.12}
+                  />
+                </mesh>
+              </group>
               <LabelSprite
                 text={formatTokenLabel(module.id)}
-                position={withOffset(module.position, 0, module.size.y / 2 + 0.2, 0)}
+                position={labelPosition}
                 backgroundColor={isDamaged ? "rgba(91, 41, 16, 0.92)" : "rgba(42, 24, 67, 0.9)"}
               />
             </group>
@@ -548,21 +595,29 @@ function SimulationScene({
           const isDamaged = Boolean(damage);
           const label = formatTokenLabel(member.role || member.id);
           const crewSize = getCrewSize(member);
+          const rotation = getRotationTuple(member.rotationDeg);
+          const labelPosition = offsetByLocalRotation(
+            member.position,
+            { x: 0, y: crewSize.y / 2 + 0.18, z: 0 },
+            member.rotationDeg
+          );
           return (
             <group key={member.id}>
-              <mesh position={toTuple(member.position)}>
-                <boxGeometry args={[crewSize.x, crewSize.y, crewSize.z]} />
-                <meshStandardMaterial
-                  color={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
-                  emissive={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
-                  emissiveIntensity={isDamaged ? 0.46 : 0.12}
-                  transparent
-                  opacity={crewOpacity}
-                />
-              </mesh>
+              <group position={toTuple(member.position)} rotation={rotation}>
+                <mesh>
+                  <boxGeometry args={[crewSize.x, crewSize.y, crewSize.z]} />
+                  <meshStandardMaterial
+                    color={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
+                    emissive={isDamaged ? sceneColors.crewDamaged : sceneColors.crew}
+                    emissiveIntensity={isDamaged ? 0.46 : 0.12}
+                    transparent
+                    opacity={crewOpacity}
+                  />
+                </mesh>
+              </group>
               <LabelSprite
                 text={label}
-                position={withOffset(member.position, 0, crewSize.y / 2 + 0.18, 0)}
+                position={labelPosition}
                 backgroundColor={isDamaged ? "rgba(89, 20, 24, 0.92)" : "rgba(11, 46, 44, 0.9)"}
               />
             </group>

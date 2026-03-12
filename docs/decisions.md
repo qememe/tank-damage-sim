@@ -183,3 +183,40 @@ What changed:
 Tradeoff:
 - Crew are still approximated as upright axis-aligned boxes, not capsules, skeletal poses, or rotated seated silhouettes.
 - The optional `shapeKind` exists as a forward-compatibility hook, but only `box` is implemented today.
+
+## 2026-03-12 — Keep fragment/spall modeling heuristic, seeded, and branch-specific
+AP and HE internal damage now use different seeded fragment models instead of one shared flat fan of near-identical rays.
+
+Why:
+- The old internal damage pattern was too uniform, which made AP and HE feel too similar and made debug output less believable.
+- We needed better post-impact variation while preserving the existing JSON-first pipeline, AABB target tests, and deterministic replay by seed.
+- The prototype still does not justify a full physics or fragment-mass solver.
+
+What changed:
+- AP now generates a small group of forward-biased high-energy `core` fragments plus wider, weaker `spall` / `side` fragments.
+- HE now generates a wider short-range `blast` cloud plus a smaller `spall` set, both scaled by `explosiveMassKg`.
+- Core AP fragments can continue through one extra major interaction at reduced energy/reach; HE fragments stop after the first major interaction.
+- Result JSON now carries optional per-fragment metadata (`sourceBranch`, `fragmentType`, `energy`, `reach`) and sim-core debug JSON now includes `fragmentGeneration` and `fragmentLog`.
+
+Tradeoff:
+- The model is more believable than the old uniform fan, but it is still heuristic. It does not solve fragment mass, armor breakup, blast pressure, or real target shielding.
+- HE and AP branch differences are encoded by tuned rules and seeded jitter rather than empirical ballistics data.
+
+## 2026-03-12 — Rotate authored hit volumes instead of forcing axis alignment
+Armor zones, modules, and crew hitboxes now stay box-shaped, but they can carry optional Euler `rotationDeg` values and are resolved as oriented boxes in sim-core and the dev viewer.
+
+Why:
+- The previous axis-aligned limitation made frontal plates, breech blocks, and seated crew layouts look and behave less believable than the authored tank JSON already implied.
+- We needed a minimal geometry upgrade that preserved the JSON-first pipeline, existing result format, and understandable prototype code without introducing meshes, CSG, or a physics engine.
+- Transforming rays into local box space keeps the math small and debuggable while still giving us sloped-plate behavior for impact angle, effective armor, ricochet, and surface-damage orientation.
+
+What changed:
+- `packages/shared/src/tank.ts` now allows optional `rotationDeg` on `ArmorZone`, `ModuleDefinition`, and `CrewMember`, and `packages/shared/src/validation.ts` parses it as an optional `Vec3`.
+- `packages/sim-core/src/math.ts` now transforms rays into each box's local space for intersection, and `packages/sim-core/src/simulate.ts` rotates authored armor normals before computing impact angle, effective armor, fuse checks, ricochet, and surface-damage markers.
+- `packages/dev-viewer/src/viewer/SimulationScene.tsx` now renders armor/module/crew boxes with authored rotations and rotates label offsets with those same transforms.
+- `data/tanks/test_tank_a.json` and the bundled viewer sample now include a sloped front hull/hatch and several angled internal hit volumes to exercise the new path.
+
+Tradeoff:
+- The runtime shape model is still box-only. Rotated boxes improve plausibility, but they do not represent wedges, curved cast armor, or cutout-heavy geometry.
+- Euler-degree rotation is JSON-friendly and easy to author, but it can still produce overlapping or physically awkward layouts if the tank data is authored carelessly.
+- This supersedes the strict axis-aligned part of the 2026-03-11 AABB decision while keeping the same box-first prototype boundary and avoiding a mesh collision system.
