@@ -1,0 +1,10 @@
+{
+  "id": "he_105mm",
+  "name": "105 mm HE Shell (Prototype)",
+  "type": "HE",
+  "caliberMm": 105,
+  "velocityMps": 470,
+  "penetrationMm": 28,
+  "fuseSensitivity": 18,
+  "explosiveMassKg": 1.85
+}

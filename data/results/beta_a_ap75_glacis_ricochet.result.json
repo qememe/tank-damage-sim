@@ -1,0 +1,93 @@
+{
+  "version": "0.1.0",
+  "seed": 4404,
+  "summary": {
+    "outcome": "ricochet",
+    "hitZoneId": "hull_front",
+    "effectiveArmorMm": 255.07,
+    "penetrationMm": 104.2,
+    "ricochet": true
+  },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Upper Glacis",
+    "impactPoint": {
+      "x": 1.095,
+      "y": 1.12,
+      "z": 2.325
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0.342,
+      "z": -0.94
+    },
+    "impactAngleDeg": 71.248,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": null
+  },
+  "events": [
+    {
+      "t": 0.028406,
+      "type": "armor_hit",
+      "position": {
+        "x": 1.095,
+        "y": 1.12,
+        "z": 2.325
+      },
+      "targetId": "hull_front",
+      "note": "Hit armor zone Upper Glacis."
+    },
+    {
+      "t": 0.029406,
+      "type": "ricochet",
+      "position": {
+        "x": 1.095,
+        "y": 1.12,
+        "z": 2.325
+      },
+      "targetId": "hull_front",
+      "note": "AP ricocheted because impact angle 71.248 deg reached the 70 deg threshold."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": -20,
+      "y": 1.12,
+      "z": 10
+    },
+    {
+      "x": 1.095,
+      "y": 1.12,
+      "z": 2.325
+    },
+    {
+      "x": 3.915,
+      "y": 0.46,
+      "z": 3.111
+    }
+  ],
+  "fragments": [],
+  "surfaceDamage": [
+    {
+      "id": "ap_ricochet_scar_1",
+      "kind": "ricochet_scar",
+      "position": {
+        "x": 1.095,
+        "y": 1.12,
+        "z": 2.325
+      },
+      "normal": {
+        "x": 0,
+        "y": 0.342,
+        "z": -0.94
+      },
+      "radius": 0.223,
+      "depth": 0.008,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP ricochet scar on the outer armor face."
+    }
+  ],
+  "damagedModules": [],
+  "crew": []
+}

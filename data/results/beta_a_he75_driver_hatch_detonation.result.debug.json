@@ -5,29 +5,29 @@
   "hitZoneId": "driver_hatch",
   "hitZoneName": "Driver Hatch",
   "impactPoint": {
-    "x": 0,
-    "y": 1.25,
-    "z": 2.362
+    "x": -0.12,
+    "y": 1.28,
+    "z": 2.393
   },
   "impactNormal": {
     "x": 0,
-    "y": 0.309,
-    "z": -0.951
+    "y": 0.342,
+    "z": -0.94
   },
-  "impactAngleDeg": 18.01,
-  "effectiveArmorMm": 33.649,
-  "normalImpactResistanceMm": 30.432,
+  "impactAngleDeg": 19.948,
+  "effectiveArmorMm": 37.234,
+  "normalImpactResistanceMm": 32.9,
   "shellPenetrationMm": 18,
   "fuseSensitivityMm": 30,
   "explosiveMassKg": 0.65,
   "fuseStatus": "armed",
   "ricochet": false,
   "damageOriginPoint": {
-    "x": 0,
-    "y": 1.25,
-    "z": 2.282
+    "x": -0.12,
+    "y": 1.28,
+    "z": 2.313
   },
-  "reason": "HE fuse armed and detonated because projected armor resistance 30.432 mm met fuse sensitivity 30 mm",
+  "reason": "HE fuse armed and detonated because projected armor resistance 32.9 mm met fuse sensitivity 30 mm",
   "normalizedDirection": {
     "x": 0,
     "y": 0,
@@ -37,10 +37,10 @@
     "Shell type: HE.",
     "Branch chosen: HE blast flow.",
     "Hit zone: Driver Hatch.",
-    "Impact angle: 18.01 deg.",
-    "Effective armor: 33.649 mm.",
-    "Projected armor resistance for the fuse check: 30.432 mm.",
-    "Fuse status: armed. projected armor resistance 30.432 mm met fuse sensitivity 30 mm",
+    "Impact angle: 19.948 deg.",
+    "Effective armor: 37.234 mm.",
+    "Projected armor resistance for the fuse check: 32.9 mm.",
+    "Fuse status: armed. projected armor resistance 32.9 mm met fuse sensitivity 30 mm",
     "Generated 10 HE fragments from a shallow blast origin.",
     "Spread heuristic: HE uses a wider cone and higher local jitter than AP; authored randomness 0.08 further opens the cone.",
     "Energy heuristic: Explosive mass 0.65 kg scales both fragment count and local fragment energy, with blast fragments weaker than AP core fragments.",
@@ -60,7 +60,7 @@
   "fragmentLog": [
     {
       "branch": "HE",
-      "energy": 0.985,
+      "energy": 0.889,
       "fragmentType": "blast",
       "hitCount": 1,
       "hitTargets": [
@@ -69,168 +69,168 @@
       "id": "fragment_1",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 2.028,
-      "spread": 0.38,
+      "reach": 1.825,
+      "spread": 0.501,
       "stoppedReason": "Fragment reached its configured interaction cap of 1."
     },
     {
       "branch": "HE",
-      "energy": 0.608,
+      "energy": 0.925,
       "fragmentType": "blast",
-      "hitCount": 1,
-      "hitTargets": [
-        "module:ammo_rack"
-      ],
+      "hitCount": 0,
+      "hitTargets": [],
       "id": "fragment_2",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 2.032,
-      "spread": 0.372,
-      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+      "reach": 1.862,
+      "spread": 0.405,
+      "stoppedReason": "No internal target intersected within 1.862 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 1.112,
+      "energy": 0.735,
       "fragmentType": "blast",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_3",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 1.664,
-      "spread": 0.305,
-      "stoppedReason": "No internal target intersected within 1.664 m of remaining reach."
+      "reach": 2.038,
+      "spread": 0.403,
+      "stoppedReason": "No internal target intersected within 2.038 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 1.06,
+      "energy": 0.607,
       "fragmentType": "blast",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_4",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 2.443,
-      "spread": 0.447,
-      "stoppedReason": "No internal target intersected within 2.443 m of remaining reach."
+      "reach": 1.647,
+      "spread": 0.301,
+      "stoppedReason": "No internal target intersected within 1.647 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 0.982,
+      "energy": 1.108,
       "fragmentType": "blast",
-      "hitCount": 0,
-      "hitTargets": [],
+      "hitCount": 1,
+      "hitTargets": [
+        "module:transmission"
+      ],
       "id": "fragment_5",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 1.908,
-      "spread": 0.402,
-      "stoppedReason": "No internal target intersected within 1.908 m of remaining reach."
+      "reach": 2.284,
+      "spread": 0.312,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
     },
     {
       "branch": "HE",
-      "energy": 0.648,
+      "energy": 0.901,
       "fragmentType": "blast",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_6",
       "maxInteractions": 1,
       "note": "Short-range HE blast fragment with wide local spread.",
-      "reach": 1.558,
-      "spread": 0.298,
-      "stoppedReason": "No internal target intersected within 1.558 m of remaining reach."
+      "reach": 1.863,
+      "spread": 0.389,
+      "stoppedReason": "No internal target intersected within 1.863 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 1.071,
+      "energy": 1.074,
       "fragmentType": "spall",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_7",
       "maxInteractions": 1,
       "note": "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
-      "reach": 1.289,
-      "spread": 0.22,
-      "stoppedReason": "No internal target intersected within 1.289 m of remaining reach."
+      "reach": 2.139,
+      "spread": 0.262,
+      "stoppedReason": "No internal target intersected within 2.139 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 1.082,
+      "energy": 1.236,
       "fragmentType": "spall",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_8",
       "maxInteractions": 1,
       "note": "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
-      "reach": 1.797,
-      "spread": 0.267,
-      "stoppedReason": "No internal target intersected within 1.797 m of remaining reach."
+      "reach": 1.504,
+      "spread": 0.174,
+      "stoppedReason": "No internal target intersected within 1.504 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 1.125,
+      "energy": 0.76,
       "fragmentType": "spall",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_9",
       "maxInteractions": 1,
       "note": "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
-      "reach": 1.863,
-      "spread": 0.212,
-      "stoppedReason": "No internal target intersected within 1.863 m of remaining reach."
+      "reach": 2.166,
+      "spread": 0.277,
+      "stoppedReason": "No internal target intersected within 2.166 m of remaining reach."
     },
     {
       "branch": "HE",
-      "energy": 0.935,
+      "energy": 1.262,
       "fragmentType": "spall",
       "hitCount": 0,
       "hitTargets": [],
       "id": "fragment_10",
       "maxInteractions": 1,
       "note": "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
-      "reach": 1.288,
-      "spread": 0.23,
-      "stoppedReason": "No internal target intersected within 1.288 m of remaining reach."
+      "reach": 2.027,
+      "spread": 0.225,
+      "stoppedReason": "No internal target intersected within 2.027 m of remaining reach."
     }
   ],
   "damageLog": [
     {
-      "cause": "HE fragment fragment_1 (blast, energy 0.985, reach 2.028 m) hit crew driver at 0.644 m because its blast path intersected the target hitbox before the fragment ran out of reach.",
-      "damage": 72,
+      "cause": "HE fragment fragment_1 (blast, energy 0.889, reach 1.825 m) hit crew driver at 0.712 m because its blast path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 68,
       "fragmentBranch": "HE",
-      "fragmentEnergy": 0.985,
+      "fragmentEnergy": 0.889,
       "fragmentId": "fragment_1",
-      "fragmentReach": 2.028,
+      "fragmentReach": 1.825,
       "fragmentType": "blast",
       "interactionIndex": 0,
       "kind": "crew",
       "point": {
-        "x": 0.03,
-        "y": 1.259,
-        "z": 1.638
+        "x": -0.155,
+        "y": 1.28,
+        "z": 1.602
       },
       "targetId": "driver",
       "targetLabel": "driver",
-      "travelDistance": 0.644
+      "travelDistance": 0.712
     },
     {
-      "cause": "HE fragment fragment_2 (blast, energy 0.608, reach 2.032 m) hit module ammo_rack at 1.526 m because its blast path intersected the target hitbox before the fragment ran out of reach.",
-      "damage": 33,
+      "cause": "HE fragment fragment_5 (blast, energy 1.108, reach 2.284 m) hit module transmission at 1.053 m because its blast path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 55,
       "fragmentBranch": "HE",
-      "fragmentEnergy": 0.608,
-      "fragmentId": "fragment_2",
-      "fragmentReach": 2.032,
+      "fragmentEnergy": 1.108,
+      "fragmentId": "fragment_5",
+      "fragmentReach": 2.284,
       "fragmentType": "blast",
       "interactionIndex": 0,
       "kind": "module",
       "point": {
-        "x": 0.278,
-        "y": 1.245,
-        "z": 0.782
+        "x": -0.129,
+        "y": 1.12,
+        "z": 1.273
       },
-      "targetId": "ammo_rack",
-      "targetLabel": "ammo_rack",
-      "travelDistance": 1.526
+      "targetId": "transmission",
+      "targetLabel": "transmission",
+      "travelDistance": 1.053
     }
   ],
   "surfaceDamageLog": [
@@ -244,17 +244,6 @@
       "sizeHeuristic": "radius from 75 mm caliber and explosive mass 0.65 kg",
       "reason": "A functioning HE round leaves a visible scorch / blast signature on the impact face.",
       "note": "HE detonation scorch on the outer armor face."
-    },
-    {
-      "id": "he_shallow_breach_1",
-      "kind": "penetration_hole",
-      "sourceBranch": "HE",
-      "linkedHitZoneId": "driver_hatch",
-      "radius": 0.055,
-      "depth": 0.02,
-      "sizeHeuristic": "interior breach radius from vulnerability ratio 0.563 against zone thickness 32 mm",
-      "reason": "The hit zone is thin enough relative to the HE shell's authored penetration to justify a shallow breach marker.",
-      "note": "Prototype shallow HE breach marker on a vulnerable plate."
     }
   ]
 }

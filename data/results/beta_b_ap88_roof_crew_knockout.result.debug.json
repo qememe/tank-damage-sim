@@ -1,0 +1,396 @@
+{
+  "outcome": "penetration",
+  "branch": "AP",
+  "shellType": "AP",
+  "hitZoneId": "casemate_roof",
+  "hitZoneName": "Casemate Roof",
+  "impactPoint": {
+    "x": 0.04,
+    "y": 2.1,
+    "z": 0.78
+  },
+  "impactNormal": {
+    "x": 0,
+    "y": 1,
+    "z": 0
+  },
+  "impactAngleDeg": 0,
+  "effectiveArmorMm": 18,
+  "normalImpactResistanceMm": 18,
+  "shellPenetrationMm": 155.2,
+  "fuseSensitivityMm": null,
+  "explosiveMassKg": null,
+  "fuseStatus": "not_applicable",
+  "ricochet": false,
+  "damageOriginPoint": {
+    "x": 0.04,
+    "y": 2.05,
+    "z": 0.78
+  },
+  "reason": "AP penetration 155.2 mm exceeded effective armor 18 mm.",
+  "normalizedDirection": {
+    "x": 0,
+    "y": -1,
+    "z": 0
+  },
+  "notes": [
+    "Shell type: AP.",
+    "Branch chosen: AP penetration flow.",
+    "Hit zone: Casemate Roof.",
+    "Impact angle: 0 deg.",
+    "Effective armor: 18 mm.",
+    "Range-adjusted AP penetration: 155.2 mm at 320 m from a base 168 mm with 4 mm loss per 100 m.",
+    "Generated 7 AP fragments from the penetration point.",
+    "Spread heuristic: AP keeps a narrow cone for core fragments and a wider lateral spread for secondary fragments; authored randomness 0.03 widens both slightly.",
+    "Energy heuristic: Core fragments use higher energy from penetration margin 137.2 mm; side/spall fragments are scaled down.",
+    "Reach heuristic: Core AP fragments travel deeper (roughly 3.3-4.7 m) while side/spall fragments fall off earlier (roughly 1.3-2.6 m).",
+    "Continuation heuristic: Core AP fragments may continue through one major interaction at reduced energy/reach; side and spall fragments stop after the first impact.",
+    "Damaged modules: 1. Damaged crew: 1."
+  ],
+  "fragmentGeneration": {
+    "branch": "AP",
+    "continuationHeuristic": "Core AP fragments may continue through one major interaction at reduced energy/reach; side and spall fragments stop after the first impact.",
+    "energyHeuristic": "Core fragments use higher energy from penetration margin 137.2 mm; side/spall fragments are scaled down.",
+    "fragmentCount": 7,
+    "note": "Built 3 forward core fragments plus 4 secondary AP spall/side fragments.",
+    "reachHeuristic": "Core AP fragments travel deeper (roughly 3.3-4.7 m) while side/spall fragments fall off earlier (roughly 1.3-2.6 m).",
+    "spreadHeuristic": "AP keeps a narrow cone for core fragments and a wider lateral spread for secondary fragments; authored randomness 0.03 widens both slightly."
+  },
+  "fragmentLog": [
+    {
+      "branch": "AP",
+      "energy": 1.292,
+      "fragmentType": "core",
+      "hitCount": 2,
+      "hitTargets": [
+        "crew:gunner",
+        "module:gun_breech"
+      ],
+      "id": "fragment_1",
+      "maxInteractions": 2,
+      "note": "Forward-biased AP core fragment with higher retained energy.",
+      "reach": 3.837,
+      "spread": 0.031,
+      "stoppedReason": "Fragment reached its configured interaction cap of 2."
+    },
+    {
+      "branch": "AP",
+      "energy": 1.426,
+      "fragmentType": "core",
+      "hitCount": 2,
+      "hitTargets": [
+        "crew:gunner",
+        "module:gun_breech"
+      ],
+      "id": "fragment_2",
+      "maxInteractions": 2,
+      "note": "Forward-biased AP core fragment with higher retained energy.",
+      "reach": 4.587,
+      "spread": 0.053,
+      "stoppedReason": "Fragment reached its configured interaction cap of 2."
+    },
+    {
+      "branch": "AP",
+      "energy": 1.287,
+      "fragmentType": "core",
+      "hitCount": 2,
+      "hitTargets": [
+        "crew:gunner",
+        "module:gun_breech"
+      ],
+      "id": "fragment_3",
+      "maxInteractions": 2,
+      "note": "Forward-biased AP core fragment with higher retained energy.",
+      "reach": 3.916,
+      "spread": 0.053,
+      "stoppedReason": "Fragment reached its configured interaction cap of 2."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.578,
+      "fragmentType": "side",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:gunner"
+      ],
+      "id": "fragment_4",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 1.769,
+      "spread": 0.274,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.792,
+      "fragmentType": "spall",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:gunner"
+      ],
+      "id": "fragment_5",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 2.273,
+      "spread": 0.156,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.677,
+      "fragmentType": "side",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:gunner"
+      ],
+      "id": "fragment_6",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 1.587,
+      "spread": 0.207,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "AP",
+      "energy": 0.627,
+      "fragmentType": "spall",
+      "hitCount": 1,
+      "hitTargets": [
+        "crew:gunner"
+      ],
+      "id": "fragment_7",
+      "maxInteractions": 1,
+      "note": "Secondary AP spall/side fragment with wider lateral spread and shorter reach.",
+      "reach": 2.457,
+      "spread": 0.24,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    }
+  ],
+  "damageLog": [
+    {
+      "cause": "AP fragment fragment_1 (core, energy 1.292, reach 3.837 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 111,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 1.292,
+      "fragmentId": "fragment_1",
+      "fragmentReach": 3.837,
+      "fragmentType": "core",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.04,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    },
+    {
+      "cause": "AP fragment fragment_1 (core, energy 0.75, reach 1.898 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 88,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.75,
+      "fragmentId": "fragment_1",
+      "fragmentReach": 1.898,
+      "fragmentType": "core",
+      "interactionIndex": 1,
+      "kind": "module",
+      "point": {
+        "x": 0.04,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "targetLabel": "breech",
+      "travelDistance": 0.21
+    },
+    {
+      "cause": "AP fragment fragment_2 (core, energy 1.426, reach 4.587 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 114,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 1.426,
+      "fragmentId": "fragment_2",
+      "fragmentReach": 4.587,
+      "fragmentType": "core",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.041,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    },
+    {
+      "cause": "AP fragment fragment_2 (core, energy 0.827, reach 2.288 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 91,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.827,
+      "fragmentId": "fragment_2",
+      "fragmentReach": 2.288,
+      "fragmentType": "core",
+      "interactionIndex": 1,
+      "kind": "module",
+      "point": {
+        "x": 0.042,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "targetLabel": "breech",
+      "travelDistance": 0.21
+    },
+    {
+      "cause": "AP fragment fragment_3 (core, energy 1.287, reach 3.916 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 111,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 1.287,
+      "fragmentId": "fragment_3",
+      "fragmentReach": 3.916,
+      "fragmentType": "core",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.039,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    },
+    {
+      "cause": "AP fragment fragment_3 (core, energy 0.746, reach 1.939 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 88,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.746,
+      "fragmentId": "fragment_3",
+      "fragmentReach": 1.939,
+      "fragmentType": "core",
+      "interactionIndex": 1,
+      "kind": "module",
+      "point": {
+        "x": 0.038,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "targetLabel": "breech",
+      "travelDistance": 0.21
+    },
+    {
+      "cause": "AP fragment fragment_4 (side, energy 0.578, reach 1.769 m) hit crew gunner at 0.111 m because its side path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 85,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.578,
+      "fragmentId": "fragment_4",
+      "fragmentReach": 1.769,
+      "fragmentType": "side",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.053,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.111
+    },
+    {
+      "cause": "AP fragment fragment_5 (spall, energy 0.792, reach 2.273 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 93,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.792,
+      "fragmentId": "fragment_5",
+      "fragmentReach": 2.273,
+      "fragmentType": "spall",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.036,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    },
+    {
+      "cause": "AP fragment fragment_6 (side, energy 0.677, reach 1.587 m) hit crew gunner at 0.11 m because its side path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 87,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.677,
+      "fragmentId": "fragment_6",
+      "fragmentReach": 1.587,
+      "fragmentType": "side",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.046,
+        "y": 1.94,
+        "z": 0.781
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    },
+    {
+      "cause": "AP fragment fragment_7 (spall, energy 0.627, reach 2.457 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 90,
+      "fragmentBranch": "AP",
+      "fragmentEnergy": 0.627,
+      "fragmentId": "fragment_7",
+      "fragmentReach": 2.457,
+      "fragmentType": "spall",
+      "interactionIndex": 0,
+      "kind": "crew",
+      "point": {
+        "x": 0.037,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "targetLabel": "gunner",
+      "travelDistance": 0.11
+    }
+  ],
+  "surfaceDamageLog": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "casemate_roof",
+      "radius": 0.186,
+      "depth": null,
+      "sizeHeuristic": "radius from 88 mm caliber and penetration margin 137.2 mm",
+      "reason": "AP penetration leaves an exterior impact ring around the entrance point.",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "casemate_roof",
+      "radius": 0.076,
+      "depth": 0.065,
+      "sizeHeuristic": "radius and depth from 88 mm caliber plus penetration margin 137.2 mm",
+      "reason": "AP overmatched the effective armor, so the prototype exposes a clear breach marker.",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "casemate_roof",
+      "radius": 0.126,
+      "depth": 0.018,
+      "sizeHeuristic": "radius from the penetration hole plus 10 recorded internal damage hits",
+      "reason": "The viewer gets an interior spall marker when the AP perforation plausibly throws fragments into the compartment.",
+      "note": "AP interior spall cone marker."
+    }
+  ]
+}

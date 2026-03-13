@@ -8,15 +8,12 @@ import {
 } from "@tank-sim/shared";
 import type {
   ShellDefinition,
+  SimulationDebugReport,
   SimulationResult,
   ScenarioInput,
   TankDefinition,
 } from "@tank-sim/shared";
-import type {
-  SimulationDebugReport,
-  SimulationRunRequest,
-  SimulationRunResponse,
-} from "./simulate.js";
+import type { SimulationRunRequest, SimulationRunResponse } from "./simulate.js";
 import { runSimulation } from "./simulate.js";
 
 export interface DataDirectories {

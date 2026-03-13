@@ -7,6 +7,7 @@ export interface ShellDefinition {
   caliberMm: number;
   velocityMps: number;
   penetrationMm: number;
+  penetrationLossPer100m?: number;
   fuseSensitivity?: number;
   explosiveMassKg?: number;
 }

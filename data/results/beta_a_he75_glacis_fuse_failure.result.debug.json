@@ -3,27 +3,27 @@
   "branch": "HE",
   "shellType": "HE",
   "hitZoneId": "hull_front",
-  "hitZoneName": "Hull Front",
+  "hitZoneName": "Upper Glacis",
   "impactPoint": {
-    "x": 1.118,
-    "y": 1.2,
-    "z": 2.317
+    "x": 1.065,
+    "y": 1.15,
+    "z": 2.336
   },
   "impactNormal": {
     "x": 0,
-    "y": 0.309,
-    "z": -0.951
+    "y": 0.342,
+    "z": -0.94
   },
-  "impactAngleDeg": 71.02,
-  "effectiveArmorMm": 245.971,
-  "normalImpactResistanceMm": 26.019,
+  "impactAngleDeg": 71.248,
+  "effectiveArmorMm": 255.07,
+  "normalImpactResistanceMm": 26.361,
   "shellPenetrationMm": 18,
   "fuseSensitivityMm": 30,
   "explosiveMassKg": 0.65,
   "fuseStatus": "failed",
   "ricochet": false,
   "damageOriginPoint": null,
-  "reason": "HE fuse failed: projected armor resistance 26.019 mm stayed below fuse sensitivity 30 mm",
+  "reason": "HE fuse failed: projected armor resistance 26.361 mm stayed below fuse sensitivity 30 mm",
   "normalizedDirection": {
     "x": 0.94,
     "y": 0,
@@ -32,11 +32,11 @@
   "notes": [
     "Shell type: HE.",
     "Branch chosen: HE blast flow.",
-    "Hit zone: Hull Front.",
-    "Impact angle: 71.02 deg.",
-    "Effective armor: 245.971 mm.",
-    "Projected armor resistance for the fuse check: 26.019 mm.",
-    "Fuse status: failed. projected armor resistance 26.019 mm stayed below fuse sensitivity 30 mm",
+    "Hit zone: Upper Glacis.",
+    "Impact angle: 71.248 deg.",
+    "Effective armor: 255.07 mm.",
+    "Projected armor resistance for the fuse check: 26.361 mm.",
+    "Fuse status: failed. projected armor resistance 26.361 mm stayed below fuse sensitivity 30 mm",
     "Outcome chosen: fuse failure.",
     "No HE fragment or spall rays were generated."
   ],

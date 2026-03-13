@@ -1,0 +1,339 @@
+{
+  "version": "0.1.0",
+  "seed": 4202,
+  "summary": {
+    "outcome": "detonation",
+    "hitZoneId": "driver_hatch",
+    "effectiveArmorMm": 37.234,
+    "penetrationMm": 18,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "HE",
+    "shellType": "HE",
+    "hitZoneName": "Driver Hatch",
+    "impactPoint": {
+      "x": -0.12,
+      "y": 1.28,
+      "z": 2.393
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0.342,
+      "z": -0.94
+    },
+    "impactAngleDeg": 19.948,
+    "fuseStatus": "armed",
+    "damageOriginPoint": {
+      "x": -0.12,
+      "y": 1.28,
+      "z": 2.313
+    }
+  },
+  "events": [
+    {
+      "t": 0.01227,
+      "type": "armor_hit",
+      "position": {
+        "x": -0.12,
+        "y": 1.28,
+        "z": 2.393
+      },
+      "targetId": "driver_hatch",
+      "note": "Hit armor zone Driver Hatch."
+    },
+    {
+      "t": 0.01327,
+      "type": "he_detonation",
+      "position": {
+        "x": -0.12,
+        "y": 1.28,
+        "z": 2.313
+      },
+      "targetId": "driver_hatch",
+      "note": "HE fuse armed and detonated because projected armor resistance 32.9 mm met fuse sensitivity 30 mm"
+    },
+    {
+      "t": 0.02227,
+      "type": "he_fragment_damage",
+      "position": {
+        "x": -0.155,
+        "y": 1.28,
+        "z": 1.602
+      },
+      "targetId": "driver",
+      "damage": 68,
+      "note": "HE fragment fragment_1 (blast, energy 0.889, reach 1.825 m) hit crew driver at 0.712 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.06227,
+      "type": "he_fragment_damage",
+      "position": {
+        "x": -0.129,
+        "y": 1.12,
+        "z": 1.273
+      },
+      "targetId": "transmission",
+      "damage": 55,
+      "note": "HE fragment fragment_5 (blast, energy 1.108, reach 2.284 m) hit module transmission at 1.053 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": -0.12,
+      "y": 1.28,
+      "z": 10
+    },
+    {
+      "x": -0.12,
+      "y": 1.28,
+      "z": 2.393
+    },
+    {
+      "x": -0.12,
+      "y": 1.28,
+      "z": 2.313
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.155,
+          "y": 1.28,
+          "z": 1.602
+        },
+        {
+          "x": -0.21,
+          "y": 1.28,
+          "z": 0.49
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.889,
+      "reach": 1.825
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": 0.215,
+          "y": 1.261,
+          "z": 0.481
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.925,
+      "reach": 1.862
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.558,
+          "y": 1.247,
+          "z": 0.323
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.735,
+      "reach": 2.038
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.094,
+          "y": 1.456,
+          "z": 0.676
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.607,
+      "reach": 1.647
+    },
+    {
+      "id": "fragment_5",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.129,
+          "y": 1.12,
+          "z": 1.273
+        },
+        {
+          "x": -0.14,
+          "y": 0.933,
+          "z": 0.057
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 1.108,
+      "reach": 2.284
+    },
+    {
+      "id": "fragment_6",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": 0.158,
+          "y": 1.541,
+          "z": 0.489
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "blast",
+      "energy": 0.901,
+      "reach": 1.863
+    },
+    {
+      "id": "fragment_7",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.041,
+          "y": 1.378,
+          "z": 0.178
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.074,
+      "reach": 2.139
+    },
+    {
+      "id": "fragment_8",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.197,
+          "y": 1.274,
+          "z": 0.811
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.236,
+      "reach": 1.504
+    },
+    {
+      "id": "fragment_9",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.027,
+          "y": 1.146,
+          "z": 0.153
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 0.76,
+      "reach": 2.166
+    },
+    {
+      "id": "fragment_10",
+      "points": [
+        {
+          "x": -0.12,
+          "y": 1.28,
+          "z": 2.313
+        },
+        {
+          "x": -0.161,
+          "y": 1.166,
+          "z": 0.29
+        }
+      ],
+      "sourceBranch": "HE",
+      "fragmentType": "spall",
+      "energy": 1.262,
+      "reach": 2.027
+    }
+  ],
+  "surfaceDamage": [
+    {
+      "id": "he_detonation_scorch_1",
+      "kind": "detonation_scorch",
+      "position": {
+        "x": -0.12,
+        "y": 1.28,
+        "z": 2.393
+      },
+      "normal": {
+        "x": 0,
+        "y": 0.342,
+        "z": -0.94
+      },
+      "radius": 0.353,
+      "relatedArmorZoneId": "driver_hatch",
+      "note": "HE detonation scorch on the outer armor face."
+    }
+  ],
+  "damagedModules": [
+    {
+      "moduleId": "transmission",
+      "label": "transmission",
+      "damage": 55,
+      "remainingHp": 17,
+      "destroyed": false,
+      "note": "HE fragment fragment_5 (blast, energy 1.108, reach 2.284 m) hit module transmission at 1.053 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "crew": [
+    {
+      "crewId": "driver",
+      "label": "driver",
+      "damage": 68,
+      "remainingHp": 32,
+      "incapacitated": false,
+      "note": "HE fragment fragment_1 (blast, energy 0.889, reach 1.825 m) hit crew driver at 0.712 m because its blast path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ]
+}

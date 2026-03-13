@@ -1,7 +1,7 @@
 {
   "id": "test_tank_a",
-  "name": "Test Tank A",
-  "description": "Minimal validation tank used for shared schema checks and primitive exterior viewer rendering.",
+  "name": "Showcase Tank A",
+  "description": "Beta showcase medium tank with a readable sloped glacis, a vulnerable driver hatch, and a roomy turret that supports distinct crew and module damage stories.",
   "externalShapes": [
     {
       "id": "lower_hull",
@@ -9,14 +9,15 @@
       "group": "hull",
       "position": {
         "x": 0,
-        "y": 0.58,
-        "z": -0.15
+        "y": 0.56,
+        "z": -0.18
       },
       "size": {
-        "x": 3.7,
-        "y": 0.95,
-        "z": 5.6
-      }
+        "x": 3.68,
+        "y": 0.92,
+        "z": 5.7
+      },
+      "color": "#6c7455"
     },
     {
       "id": "upper_hull",
@@ -24,14 +25,15 @@
       "group": "hull",
       "position": {
         "x": 0,
-        "y": 1.2,
-        "z": 0.65
+        "y": 1.18,
+        "z": 0.56
       },
       "size": {
-        "x": 3.15,
+        "x": 3.08,
         "y": 0.62,
-        "z": 3.75
-      }
+        "z": 3.86
+      },
+      "color": "#74805c"
     },
     {
       "id": "glacis",
@@ -40,33 +42,35 @@
       "position": {
         "x": 0,
         "y": 1.1,
-        "z": 2.33
+        "z": 2.36
       },
       "rotationDeg": {
-        "x": 18,
+        "x": 20,
         "y": 0,
         "z": 0
       },
       "size": {
-        "x": 3.05,
-        "y": 0.92,
-        "z": 0.68
-      }
+        "x": 3.02,
+        "y": 0.96,
+        "z": 0.7
+      },
+      "color": "#7b8562"
     },
     {
-      "id": "engine_deck",
+      "id": "rear_deck",
       "kind": "box",
       "group": "hull",
       "position": {
         "x": 0,
-        "y": 1.05,
-        "z": -1.75
+        "y": 1.02,
+        "z": -1.9
       },
       "size": {
-        "x": 3,
-        "y": 0.28,
-        "z": 1.55
-      }
+        "x": 2.92,
+        "y": 0.26,
+        "z": 1.72
+      },
+      "color": "#687253"
     },
     {
       "id": "left_track_guard",
@@ -74,13 +78,13 @@
       "group": "track_guard",
       "position": {
         "x": -1.57,
-        "y": 0.88,
-        "z": 0.05
+        "y": 0.86,
+        "z": 0.02
       },
       "size": {
         "x": 0.42,
-        "y": 0.38,
-        "z": 5.05
+        "y": 0.34,
+        "z": 5.12
       }
     },
     {
@@ -89,13 +93,13 @@
       "group": "track_guard",
       "position": {
         "x": 1.57,
-        "y": 0.88,
-        "z": 0.05
+        "y": 0.86,
+        "z": 0.02
       },
       "size": {
         "x": 0.42,
-        "y": 0.38,
-        "z": 5.05
+        "y": 0.34,
+        "z": 5.12
       }
     },
     {
@@ -104,13 +108,13 @@
       "group": "turret",
       "position": {
         "x": 0,
-        "y": 1.62,
-        "z": 0.32
+        "y": 1.6,
+        "z": 0.34
       },
       "size": {
-        "x": 1.95,
+        "x": 1.94,
         "y": 0.22,
-        "z": 1.85
+        "z": 1.88
       }
     },
     {
@@ -119,13 +123,13 @@
       "group": "turret",
       "position": {
         "x": 0,
-        "y": 2.02,
-        "z": 0.38
+        "y": 2,
+        "z": 0.34
       },
       "size": {
-        "x": 1.92,
-        "y": 0.88,
-        "z": 1.72
+        "x": 1.96,
+        "y": 0.86,
+        "z": 1.84
       }
     },
     {
@@ -135,12 +139,12 @@
       "position": {
         "x": 0,
         "y": 1.96,
-        "z": -0.55
+        "z": -0.62
       },
       "size": {
-        "x": 1.25,
-        "y": 0.62,
-        "z": 0.82
+        "x": 1.28,
+        "y": 0.6,
+        "z": 0.88
       }
     },
     {
@@ -148,9 +152,9 @@
       "kind": "box",
       "group": "detail",
       "position": {
-        "x": 0.42,
-        "y": 2.56,
-        "z": 0.05
+        "x": 0.38,
+        "y": 2.54,
+        "z": 0.02
       },
       "size": {
         "x": 0.42,
@@ -159,18 +163,18 @@
       }
     },
     {
-      "id": "mantlet",
+      "id": "mantlet_shell",
       "kind": "box",
       "group": "gun",
       "position": {
         "x": 0,
-        "y": 1.95,
-        "z": 1.23
+        "y": 1.94,
+        "z": 1.22
       },
       "size": {
-        "x": 0.76,
+        "x": 0.78,
         "y": 0.56,
-        "z": 0.42
+        "z": 0.44
       }
     },
     {
@@ -179,11 +183,11 @@
       "group": "gun",
       "position": {
         "x": 0,
-        "y": 1.98,
-        "z": 2.6
+        "y": 1.97,
+        "z": 2.64
       },
       "radius": 0.12,
-      "length": 3.4
+      "length": 3.46
     },
     {
       "id": "muzzle_brake",
@@ -191,8 +195,8 @@
       "group": "gun",
       "position": {
         "x": 0,
-        "y": 1.98,
-        "z": 4.23
+        "y": 1.97,
+        "z": 4.3
       },
       "radius": 0.16,
       "length": 0.28
@@ -202,20 +206,20 @@
     {
       "id": "driver_hatch",
       "name": "Driver Hatch",
-      "thicknessMm": 32,
+      "thicknessMm": 35,
       "material": "rolled_steel",
       "position": {
-        "x": 0,
-        "y": 1.25,
-        "z": 2.32
+        "x": -0.12,
+        "y": 1.28,
+        "z": 2.35
       },
       "size": {
-        "x": 0.8,
-        "y": 0.4,
+        "x": 0.76,
+        "y": 0.38,
         "z": 0.08
       },
       "rotationDeg": {
-        "x": 18,
+        "x": 20,
         "y": 0,
         "z": 0
       },
@@ -227,23 +231,44 @@
     },
     {
       "id": "hull_front",
-      "name": "Hull Front",
-      "thicknessMm": 80,
+      "name": "Upper Glacis",
+      "thicknessMm": 82,
       "material": "rolled_steel",
       "position": {
         "x": 0,
-        "y": 1.1,
-        "z": 2.2
+        "y": 1.12,
+        "z": 2.24
       },
       "size": {
-        "x": 3,
-        "y": 1.4,
+        "x": 3.08,
+        "y": 1.44,
         "z": 0.16
       },
       "rotationDeg": {
-        "x": 18,
+        "x": 20,
         "y": 0,
         "z": 0
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      }
+    },
+    {
+      "id": "mantlet",
+      "name": "Gun Mantlet",
+      "thicknessMm": 120,
+      "material": "cast_steel",
+      "position": {
+        "x": 0,
+        "y": 1.95,
+        "z": 1.18
+      },
+      "size": {
+        "x": 0.74,
+        "y": 0.54,
+        "z": 0.4
       },
       "normal": {
         "x": 0,
@@ -254,20 +279,20 @@
     {
       "id": "turret_front",
       "name": "Turret Front",
-      "thicknessMm": 90,
+      "thicknessMm": 96,
       "material": "cast_steel",
       "position": {
         "x": 0,
-        "y": 2,
-        "z": 0.8
+        "y": 2.02,
+        "z": 0.82
       },
       "size": {
-        "x": 1.8,
-        "y": 1.2,
+        "x": 1.86,
+        "y": 1.08,
         "z": 0.18
       },
       "rotationDeg": {
-        "x": 8,
+        "x": 10,
         "y": 0,
         "z": 0
       },
@@ -276,40 +301,103 @@
         "y": 0,
         "z": -1
       }
+    },
+    {
+      "id": "hull_side_left",
+      "name": "Left Hull Side",
+      "thicknessMm": 46,
+      "material": "rolled_steel",
+      "position": {
+        "x": -1.39,
+        "y": 1,
+        "z": -0.12
+      },
+      "size": {
+        "x": 0.12,
+        "y": 1.04,
+        "z": 4.96
+      },
+      "normal": {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "hull_side_right",
+      "name": "Right Hull Side",
+      "thicknessMm": 42,
+      "material": "rolled_steel",
+      "position": {
+        "x": 1.39,
+        "y": 1,
+        "z": -0.12
+      },
+      "size": {
+        "x": 0.12,
+        "y": 1.04,
+        "z": 4.96
+      },
+      "normal": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "rear_plate",
+      "name": "Rear Plate",
+      "thicknessMm": 32,
+      "material": "rolled_steel",
+      "position": {
+        "x": 0,
+        "y": 0.98,
+        "z": -2.54
+      },
+      "size": {
+        "x": 2.88,
+        "y": 0.92,
+        "z": 0.12
+      },
+      "normal": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      }
     }
   ],
   "modules": [
     {
-      "id": "engine",
-      "type": "engine",
+      "id": "transmission",
+      "type": "transmission",
       "position": {
         "x": 0,
-        "y": 0.95,
-        "z": -1.95
+        "y": 0.84,
+        "z": 1.34
       },
       "size": {
-        "x": 1.25,
-        "y": 0.72,
-        "z": 1.35
+        "x": 0.86,
+        "y": 0.56,
+        "z": 0.72
       },
-      "hp": 100
+      "hp": 72
     },
     {
       "id": "ammo_rack",
       "type": "ammo_rack",
       "position": {
-        "x": 0.52,
-        "y": 1.04,
-        "z": 0.42
+        "x": -0.54,
+        "y": 0.96,
+        "z": 0.12
       },
       "size": {
         "x": 0.56,
-        "y": 0.46,
-        "z": 0.82
+        "y": 0.42,
+        "z": 0.9
       },
       "rotationDeg": {
         "x": 0,
-        "y": -14,
+        "y": 12,
         "z": 0
       },
       "hp": 70
@@ -318,47 +406,62 @@
       "id": "fuel_tank",
       "type": "fuel",
       "position": {
-        "x": -0.62,
+        "x": 0.68,
         "y": 0.9,
-        "z": -0.7
+        "z": -0.86
       },
       "size": {
-        "x": 0.48,
-        "y": 0.52,
-        "z": 0.86
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.94
       },
       "rotationDeg": {
         "x": 0,
-        "y": 16,
+        "y": -12,
         "z": 0
       },
       "hp": 60
     },
     {
+      "id": "engine",
+      "type": "engine",
+      "position": {
+        "x": 0,
+        "y": 0.92,
+        "z": -1.96
+      },
+      "size": {
+        "x": 1.28,
+        "y": 0.74,
+        "z": 1.42
+      },
+      "hp": 100
+    },
+    {
       "id": "gun_breech",
       "type": "breech",
       "position": {
-        "x": 0,
-        "y": 1.94,
+        "x": -0.02,
+        "y": 1.96,
         "z": 0.96
       },
       "size": {
-        "x": 0.52,
+        "x": 0.56,
         "y": 0.42,
-        "z": 0.58
+        "z": 0.62
       },
       "rotationDeg": {
-        "x": -10,
-        "y": 10,
+        "x": -8,
+        "y": 8,
         "z": 0
       },
-      "hp": 80
+      "hp": 82
     },
     {
       "id": "sight_optics",
       "type": "optics",
       "position": {
-        "x": 0.08,
+        "x": -0.18,
         "y": 2.12,
         "z": 1.08
       },
@@ -376,8 +479,8 @@
       "role": "commander",
       "position": {
         "x": 0.34,
-        "y": 2.14,
-        "z": 0.08
+        "y": 2.16,
+        "z": 0.02
       },
       "size": {
         "x": 0.46,
@@ -387,7 +490,7 @@
       "shapeKind": "box",
       "rotationDeg": {
         "x": 0,
-        "y": 12,
+        "y": 10,
         "z": 0
       },
       "hp": 100
@@ -396,9 +499,9 @@
       "id": "gunner",
       "role": "gunner",
       "position": {
-        "x": -0.32,
-        "y": 1.92,
-        "z": 0.44
+        "x": -0.38,
+        "y": 1.95,
+        "z": 0.42
       },
       "size": {
         "x": 0.44,
@@ -408,7 +511,28 @@
       "shapeKind": "box",
       "rotationDeg": {
         "x": 0,
-        "y": -14,
+        "y": -12,
+        "z": 0
+      },
+      "hp": 100
+    },
+    {
+      "id": "loader",
+      "role": "loader",
+      "position": {
+        "x": 0.54,
+        "y": 1.92,
+        "z": -0.02
+      },
+      "size": {
+        "x": 0.46,
+        "y": 0.8,
+        "z": 0.42
+      },
+      "shapeKind": "box",
+      "rotationDeg": {
+        "x": 0,
+        "y": 18,
         "z": 0
       },
       "hp": 100
@@ -417,19 +541,19 @@
       "id": "driver",
       "role": "driver",
       "position": {
-        "x": 0.16,
-        "y": 1.06,
-        "z": 1.46
+        "x": -0.12,
+        "y": 1.04,
+        "z": 1.42
       },
       "size": {
-        "x": 0.58,
+        "x": 0.56,
         "y": 0.84,
         "z": 0.5
       },
       "shapeKind": "box",
       "rotationDeg": {
         "x": -18,
-        "y": -10,
+        "y": -8,
         "z": 0
       },
       "hp": 100

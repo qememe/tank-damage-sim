@@ -1,0 +1,454 @@
+{
+  "version": "0.1.0",
+  "seed": 4814,
+  "summary": {
+    "outcome": "penetration",
+    "hitZoneId": "casemate_roof",
+    "effectiveArmorMm": 18,
+    "penetrationMm": 155.2,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Casemate Roof",
+    "impactPoint": {
+      "x": 0.04,
+      "y": 2.1,
+      "z": 0.78
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "impactAngleDeg": 0,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": {
+      "x": 0.04,
+      "y": 2.05,
+      "z": 0.78
+    }
+  },
+  "events": [
+    {
+      "t": 0.010761,
+      "type": "armor_hit",
+      "position": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.78
+      },
+      "targetId": "casemate_roof",
+      "note": "Hit armor zone Casemate Roof."
+    },
+    {
+      "t": 0.011761,
+      "type": "penetration",
+      "position": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.78
+      },
+      "targetId": "casemate_roof",
+      "note": "AP penetration 155.2 mm exceeded effective armor 18 mm."
+    },
+    {
+      "t": 0.020761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.04,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 111,
+      "note": "AP fragment fragment_1 (core, energy 1.292, reach 3.837 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.023761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.04,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "damage": 88,
+      "note": "AP fragment fragment_1 (core, energy 0.75, reach 1.898 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.030761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.041,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 114,
+      "note": "AP fragment fragment_2 (core, energy 1.426, reach 4.587 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.033761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.042,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "damage": 91,
+      "note": "AP fragment fragment_2 (core, energy 0.827, reach 2.288 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.040761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.039,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 111,
+      "note": "AP fragment fragment_3 (core, energy 1.287, reach 3.916 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.043761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.038,
+        "y": 1.8,
+        "z": 0.78
+      },
+      "targetId": "gun_breech",
+      "damage": 88,
+      "note": "AP fragment fragment_3 (core, energy 0.746, reach 1.939 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.050761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.053,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 85,
+      "note": "AP fragment fragment_4 (side, energy 0.578, reach 1.769 m) hit crew gunner at 0.111 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.060761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.036,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 93,
+      "note": "AP fragment fragment_5 (spall, energy 0.792, reach 2.273 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.070761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.046,
+        "y": 1.94,
+        "z": 0.781
+      },
+      "targetId": "gunner",
+      "damage": 87,
+      "note": "AP fragment fragment_6 (side, energy 0.677, reach 1.587 m) hit crew gunner at 0.11 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.080761,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.037,
+        "y": 1.94,
+        "z": 0.78
+      },
+      "targetId": "gunner",
+      "damage": 90,
+      "note": "AP fragment fragment_7 (spall, energy 0.627, reach 2.457 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": 0.04,
+      "y": 12,
+      "z": 0.78
+    },
+    {
+      "x": 0.04,
+      "y": 2.1,
+      "z": 0.78
+    },
+    {
+      "x": 0.04,
+      "y": -1.9,
+      "z": 0.78
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.04,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": 0.04,
+          "y": 1.8,
+          "z": 0.78
+        },
+        {
+          "x": 0.044,
+          "y": 0.002,
+          "z": 0.78
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.292,
+      "reach": 3.837
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.041,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": 0.042,
+          "y": 1.8,
+          "z": 0.78
+        },
+        {
+          "x": 0.066,
+          "y": -0.388,
+          "z": 0.78
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.426,
+      "reach": 4.587
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.039,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": 0.038,
+          "y": 1.8,
+          "z": 0.78
+        },
+        {
+          "x": 0.029,
+          "y": -0.039,
+          "z": 0.776
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.287,
+      "reach": 3.916
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.053,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": 0.25,
+          "y": 0.293,
+          "z": 0.783
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.578,
+      "reach": 1.769
+    },
+    {
+      "id": "fragment_5",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.036,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": -0.048,
+          "y": -0.221,
+          "z": 0.774
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.792,
+      "reach": 2.273
+    },
+    {
+      "id": "fragment_6",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.046,
+          "y": 1.94,
+          "z": 0.781
+        },
+        {
+          "x": 0.127,
+          "y": 0.467,
+          "z": 0.788
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.677,
+      "reach": 1.587
+    },
+    {
+      "id": "fragment_7",
+      "points": [
+        {
+          "x": 0.04,
+          "y": 2.05,
+          "z": 0.78
+        },
+        {
+          "x": 0.037,
+          "y": 1.94,
+          "z": 0.78
+        },
+        {
+          "x": -0.033,
+          "y": -0.407,
+          "z": 0.782
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.627,
+      "reach": 2.457
+    }
+  ],
+  "surfaceDamage": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "position": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.78
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 0.186,
+      "relatedArmorZoneId": "casemate_roof",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "position": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.78
+      },
+      "normal": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "radius": 0.076,
+      "depth": 0.065,
+      "relatedArmorZoneId": "casemate_roof",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "position": {
+        "x": 0.04,
+        "y": 2.05,
+        "z": 0.78
+      },
+      "normal": {
+        "x": 0,
+        "y": -1,
+        "z": 0
+      },
+      "radius": 0.126,
+      "depth": 0.018,
+      "relatedArmorZoneId": "casemate_roof",
+      "note": "AP interior spall cone marker."
+    }
+  ],
+  "damagedModules": [
+    {
+      "moduleId": "gun_breech",
+      "label": "breech",
+      "damage": 267,
+      "remainingHp": 0,
+      "destroyed": true,
+      "note": "AP fragment fragment_1 (core, energy 0.75, reach 1.898 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 0.827, reach 2.288 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_3 (core, energy 0.746, reach 1.939 m) hit module gun_breech at 0.21 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "crew": [
+    {
+      "crewId": "gunner",
+      "label": "gunner",
+      "damage": 691,
+      "remainingHp": 0,
+      "incapacitated": true,
+      "note": "AP fragment fragment_1 (core, energy 1.292, reach 3.837 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 1.426, reach 4.587 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_3 (core, energy 1.287, reach 3.916 m) hit crew gunner at 0.11 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_4 (side, energy 0.578, reach 1.769 m) hit crew gunner at 0.111 m because its side path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_5 (spall, energy 0.792, reach 2.273 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_6 (side, energy 0.677, reach 1.587 m) hit crew gunner at 0.11 m because its side path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_7 (spall, energy 0.627, reach 2.457 m) hit crew gunner at 0.11 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ]
+}

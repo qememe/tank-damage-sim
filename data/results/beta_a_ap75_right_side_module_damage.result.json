@@ -1,0 +1,489 @@
+{
+  "version": "0.1.0",
+  "seed": 4505,
+  "summary": {
+    "outcome": "penetration",
+    "hitZoneId": "hull_side_right",
+    "effectiveArmorMm": 42,
+    "penetrationMm": 106.3,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Right Hull Side",
+    "impactPoint": {
+      "x": 1.45,
+      "y": 0.92,
+      "z": -1.28
+    },
+    "impactNormal": {
+      "x": -1,
+      "y": 0,
+      "z": 0
+    },
+    "impactAngleDeg": 0,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": {
+      "x": 1.4,
+      "y": 0.92,
+      "z": -1.28
+    }
+  },
+  "events": [
+    {
+      "t": 0.007025,
+      "type": "armor_hit",
+      "position": {
+        "x": 1.45,
+        "y": 0.92,
+        "z": -1.28
+      },
+      "targetId": "hull_side_right",
+      "note": "Hit armor zone Right Hull Side."
+    },
+    {
+      "t": 0.008025,
+      "type": "penetration",
+      "position": {
+        "x": 1.45,
+        "y": 0.92,
+        "z": -1.28
+      },
+      "targetId": "hull_side_right",
+      "note": "AP penetration 106.3 mm exceeded effective armor 42 mm."
+    },
+    {
+      "t": 0.017025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.965,
+        "y": 0.917,
+        "z": -1.28
+      },
+      "targetId": "fuel_tank",
+      "damage": 83,
+      "note": "AP fragment fragment_1 (core, energy 1.213, reach 4.186 m) hit module fuel_tank at 0.435 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.020025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.64,
+        "y": 0.915,
+        "z": -1.28
+      },
+      "targetId": "engine",
+      "damage": 72,
+      "note": "AP fragment fragment_1 (core, energy 0.703, reach 1.91 m) hit module engine at 0.72 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.027025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.968,
+        "y": 0.922,
+        "z": -1.279
+      },
+      "targetId": "fuel_tank",
+      "damage": 85,
+      "note": "AP fragment fragment_2 (core, energy 1.327, reach 4.256 m) hit module fuel_tank at 0.431 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.030025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.64,
+        "y": 0.923,
+        "z": -1.278
+      },
+      "targetId": "engine",
+      "damage": 74,
+      "note": "AP fragment fragment_2 (core, energy 0.77, reach 1.949 m) hit module engine at 0.719 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.037025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.963,
+        "y": 0.917,
+        "z": -1.28
+      },
+      "targetId": "fuel_tank",
+      "damage": 89,
+      "note": "AP fragment fragment_3 (core, energy 1.482, reach 4.289 m) hit module fuel_tank at 0.437 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.040025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.64,
+        "y": 0.914,
+        "z": -1.28
+      },
+      "targetId": "engine",
+      "damage": 78,
+      "note": "AP fragment fragment_3 (core, energy 0.859, reach 1.963 m) hit module engine at 0.72 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.047025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.967,
+        "y": 0.929,
+        "z": -1.28
+      },
+      "targetId": "fuel_tank",
+      "damage": 57,
+      "note": "AP fragment fragment_4 (side, energy 0.541, reach 2.209 m) hit module fuel_tank at 0.433 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.057025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.965,
+        "y": 0.935,
+        "z": -1.28
+      },
+      "targetId": "fuel_tank",
+      "damage": 62,
+      "note": "AP fragment fragment_5 (spall, energy 0.573, reach 2.003 m) hit module fuel_tank at 0.436 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.067025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.972,
+        "y": 0.953,
+        "z": -1.278
+      },
+      "targetId": "fuel_tank",
+      "damage": 60,
+      "note": "AP fragment fragment_6 (side, energy 0.67, reach 1.897 m) hit module fuel_tank at 0.429 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.077025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.968,
+        "y": 0.877,
+        "z": -1.279
+      },
+      "targetId": "fuel_tank",
+      "damage": 62,
+      "note": "AP fragment fragment_7 (spall, energy 0.596, reach 1.715 m) hit module fuel_tank at 0.433 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.087025,
+      "type": "internal_damage",
+      "position": {
+        "x": 0.972,
+        "y": 0.911,
+        "z": -1.278
+      },
+      "targetId": "fuel_tank",
+      "damage": 59,
+      "note": "AP fragment fragment_8 (side, energy 0.618, reach 2.343 m) hit module fuel_tank at 0.427 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": 7,
+      "y": 0.92,
+      "z": -1.28
+    },
+    {
+      "x": 1.45,
+      "y": 0.92,
+      "z": -1.28
+    },
+    {
+      "x": -2.55,
+      "y": 0.92,
+      "z": -1.28
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.965,
+          "y": 0.917,
+          "z": -1.28
+        },
+        {
+          "x": 0.64,
+          "y": 0.915,
+          "z": -1.28
+        },
+        {
+          "x": -0.985,
+          "y": 0.904,
+          "z": -1.28
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.213,
+      "reach": 4.186
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.968,
+          "y": 0.922,
+          "z": -1.279
+        },
+        {
+          "x": 0.64,
+          "y": 0.923,
+          "z": -1.278
+        },
+        {
+          "x": -1.021,
+          "y": 0.93,
+          "z": -1.275
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.327,
+      "reach": 4.256
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.963,
+          "y": 0.917,
+          "z": -1.28
+        },
+        {
+          "x": 0.64,
+          "y": 0.914,
+          "z": -1.28
+        },
+        {
+          "x": -1.04,
+          "y": 0.901,
+          "z": -1.282
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.482,
+      "reach": 4.289
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.967,
+          "y": 0.929,
+          "z": -1.28
+        },
+        {
+          "x": -0.809,
+          "y": 0.966,
+          "z": -1.278
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.541,
+      "reach": 2.209
+    },
+    {
+      "id": "fragment_5",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.965,
+          "y": 0.935,
+          "z": -1.28
+        },
+        {
+          "x": -0.6,
+          "y": 0.99,
+          "z": -1.28
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.573,
+      "reach": 2.003
+    },
+    {
+      "id": "fragment_6",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.972,
+          "y": 0.953,
+          "z": -1.278
+        },
+        {
+          "x": -0.492,
+          "y": 1.066,
+          "z": -1.272
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.67,
+      "reach": 1.897
+    },
+    {
+      "id": "fragment_7",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.968,
+          "y": 0.877,
+          "z": -1.279
+        },
+        {
+          "x": -0.307,
+          "y": 0.749,
+          "z": -1.276
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.596,
+      "reach": 1.715
+    },
+    {
+      "id": "fragment_8",
+      "points": [
+        {
+          "x": 1.4,
+          "y": 0.92,
+          "z": -1.28
+        },
+        {
+          "x": 0.972,
+          "y": 0.911,
+          "z": -1.278
+        },
+        {
+          "x": -0.944,
+          "y": 0.869,
+          "z": -1.27
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.618,
+      "reach": 2.343
+    }
+  ],
+  "surfaceDamage": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "position": {
+        "x": 1.45,
+        "y": 0.92,
+        "z": -1.28
+      },
+      "normal": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 0.154,
+      "relatedArmorZoneId": "hull_side_right",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "position": {
+        "x": 1.45,
+        "y": 0.92,
+        "z": -1.28
+      },
+      "normal": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 0.059,
+      "depth": 0.059,
+      "relatedArmorZoneId": "hull_side_right",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "position": {
+        "x": 1.4,
+        "y": 0.92,
+        "z": -1.28
+      },
+      "normal": {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 0.109,
+      "depth": 0.018,
+      "relatedArmorZoneId": "hull_side_right",
+      "note": "AP interior spall cone marker."
+    }
+  ],
+  "damagedModules": [
+    {
+      "moduleId": "fuel_tank",
+      "label": "fuel",
+      "damage": 557,
+      "remainingHp": 0,
+      "destroyed": true,
+      "note": "AP fragment fragment_1 (core, energy 1.213, reach 4.186 m) hit module fuel_tank at 0.435 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 1.327, reach 4.256 m) hit module fuel_tank at 0.431 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_3 (core, energy 1.482, reach 4.289 m) hit module fuel_tank at 0.437 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_4 (side, energy 0.541, reach 2.209 m) hit module fuel_tank at 0.433 m because its side path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_5 (spall, energy 0.573, reach 2.003 m) hit module fuel_tank at 0.436 m because its spall path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_6 (side, energy 0.67, reach 1.897 m) hit module fuel_tank at 0.429 m because its side path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_7 (spall, energy 0.596, reach 1.715 m) hit module fuel_tank at 0.433 m because its spall path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_8 (side, energy 0.618, reach 2.343 m) hit module fuel_tank at 0.427 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "moduleId": "engine",
+      "label": "engine",
+      "damage": 224,
+      "remainingHp": 0,
+      "destroyed": true,
+      "note": "AP fragment fragment_1 (core, energy 0.703, reach 1.91 m) hit module engine at 0.72 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 0.77, reach 1.949 m) hit module engine at 0.719 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_3 (core, energy 0.859, reach 1.963 m) hit module engine at 0.72 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "crew": []
+}

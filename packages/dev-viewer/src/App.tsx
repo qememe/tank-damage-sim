@@ -1,11 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { SimulationResult, TankDefinition } from "@tank-sim/shared";
+import type { SimulationDebugReport, SimulationResult, TankDefinition } from "@tank-sim/shared";
 import ControlPanel from "./components/ControlPanel";
-import SimulationScene from "./viewer/SimulationScene";
-import sampleResultData from "./sample/sample-result.json";
-import sampleTankData from "./sample/sample-tank.json";
-import { getMaxEventTime } from "./loaders/timeUtils";
+import {
+  getFileNameFromPath,
+  loadBundledFallback,
+  loadBetaManifest,
+  loadBetaScenario,
+  type BetaContentManifest
+} from "./content/betaContent";
 import { usePlayback } from "./hooks/usePlayback";
+import { getMaxEventTime } from "./loaders/timeUtils";
+import SimulationScene from "./viewer/SimulationScene";
 import {
   formatEventType,
   getDamagedCrew,
@@ -17,11 +22,6 @@ import {
   getSurfaceDamageKinds
 } from "./viewer/inspectionUtils";
 
-const sampleResult = sampleResultData as SimulationResult;
-const sampleTank = sampleTankData as TankDefinition;
-const sampleResultFileName = "sample-result.json";
-const sampleTankFileName = "sample-tank.json";
-
 type VisibilityState = {
   externalHull: boolean;
   armor: boolean;
@@ -32,6 +32,8 @@ type VisibilityState = {
   surfaceDamage: boolean;
   xrayMode: boolean;
 };
+
+type ContentMode = "curated" | "manual" | "sample";
 
 const defaultVisibility: VisibilityState = {
   externalHull: true,
@@ -50,10 +52,19 @@ function App(): React.JSX.Element {
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [debugReport, setDebugReport] = useState<SimulationDebugReport | null>(null);
   const [visibility, setVisibility] = useState(defaultVisibility);
   const [error, setError] = useState<string | null>(null);
   const [resultFileName, setResultFileName] = useState<string | null>(null);
   const [tankFileName, setTankFileName] = useState<string | null>(null);
+  const [scenarioFileName, setScenarioFileName] = useState<string | null>(null);
+  const [shellFileName, setShellFileName] = useState<string | null>(null);
+  const [debugFileName, setDebugFileName] = useState<string | null>(null);
+  const [betaManifest, setBetaManifest] = useState<BetaContentManifest | null>(null);
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(null);
+  const [contentMode, setContentMode] = useState<ContentMode>("curated");
+  const [loadingScenarioId, setLoadingScenarioId] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const maxTime = useMemo(() => getMaxEventTime(result), [result]);
   const handlePlaybackFinish = useCallback(() => setIsPlaying(false), []);
@@ -66,13 +77,6 @@ function App(): React.JSX.Element {
     setTime: setCurrentTime,
     onFinish: handlePlaybackFinish
   });
-
-  useEffect(() => {
-    setResult(sampleResult);
-    setTank(sampleTank);
-    setResultFileName(sampleResultFileName);
-    setTankFileName(sampleTankFileName);
-  }, []);
 
   useEffect(() => {
     setCurrentTime(0);
@@ -95,18 +99,118 @@ function App(): React.JSX.Element {
     });
   }, []);
 
+  const resetCuratedSelection = useCallback((mode: ContentMode) => {
+    setSelectedScenarioId(null);
+    setScenarioFileName(null);
+    setShellFileName(null);
+    setDebugFileName(null);
+    setContentMode(mode);
+  }, []);
+
+  const loadBundledSamplePair = useCallback(
+    async (clearError: boolean) => {
+      if (clearError) {
+        setError(null);
+      }
+
+      const bundled = await loadBundledFallback();
+      setResult(bundled.result);
+      setTank(bundled.tank);
+      setDebugReport(bundled.debugReport);
+      setResultFileName(bundled.resultFileName);
+      setTankFileName(bundled.tankFileName);
+      setScenarioFileName(bundled.scenarioFileName);
+      setShellFileName(bundled.shellFileName);
+      setDebugFileName(bundled.debugFileName);
+      setSelectedScenarioId(null);
+      setContentMode("sample");
+    },
+    []
+  );
+
+  const handleLoadCuratedScenario = useCallback(
+    async (scenarioId: string, manifestOverride?: BetaContentManifest) => {
+      const manifest = manifestOverride ?? betaManifest;
+
+      if (!manifest) {
+        return;
+      }
+
+      setError(null);
+      setLoadingScenarioId(scenarioId);
+
+      try {
+        const loaded = await loadBetaScenario(manifest, scenarioId);
+        const linkedTank = manifest.tanks.find((item) => item.id === loaded.scenario.tankId);
+        const linkedShell = manifest.shells.find((item) => item.id === loaded.scenario.shellId);
+
+        setResult(loaded.result);
+        setTank(loaded.tank);
+        setDebugReport(loaded.debugReport);
+        setSelectedScenarioId(scenarioId);
+        setContentMode("curated");
+        setResultFileName(getFileNameFromPath(loaded.scenario.resultPath));
+        setTankFileName(getFileNameFromPath(linkedTank?.path));
+        setScenarioFileName(getFileNameFromPath(loaded.scenario.scenarioPath));
+        setShellFileName(getFileNameFromPath(linkedShell?.path));
+        setDebugFileName(getFileNameFromPath(loaded.scenario.debugPath));
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoadingScenarioId(null);
+      }
+    },
+    [betaManifest]
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const initializeBetaContent = async () => {
+      try {
+        const manifest = await loadBetaManifest();
+
+        if (cancelled) {
+          return;
+        }
+
+        setBetaManifest(manifest);
+        await handleLoadCuratedScenario(manifest.defaultScenarioId, manifest);
+      } catch (err) {
+        if (cancelled) {
+          return;
+        }
+
+        setError(`Failed to initialize curated beta content: ${(err as Error).message}. Showing bundled beta fallback.`);
+        await loadBundledSamplePair(false);
+      } finally {
+        if (!cancelled) {
+          setIsInitializing(false);
+        }
+      }
+    };
+
+    void initializeBetaContent();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [handleLoadCuratedScenario, loadBundledSamplePair]);
+
   const handleResultFile = useCallback(
     async (file: File) => {
       setError(null);
       try {
         const parsed = (await readJsonFile(file)) as SimulationResult;
         setResult(parsed);
+        setDebugReport(null);
         setResultFileName(file.name);
+        resetCuratedSelection("manual");
       } catch (err) {
         setError((err as Error).message);
       }
     },
-    [readJsonFile]
+    [readJsonFile, resetCuratedSelection]
   );
 
   const handleTankFile = useCallback(
@@ -115,25 +219,32 @@ function App(): React.JSX.Element {
       try {
         const parsed = (await readJsonFile(file)) as TankDefinition;
         setTank(parsed);
+        setDebugReport(null);
         setTankFileName(file.name);
+        resetCuratedSelection("manual");
       } catch (err) {
         setError((err as Error).message);
       }
     },
-    [readJsonFile]
+    [readJsonFile, resetCuratedSelection]
   );
 
-  const handleLoadSampleResult = () => {
-    setError(null);
-    setResult(sampleResult);
-    setResultFileName(sampleResultFileName);
-  };
+  const handleLoadSampleResult = useCallback(() => {
+    void loadBundledSamplePair(true);
+  }, [loadBundledSamplePair]);
 
-  const handleLoadSampleTank = () => {
-    setError(null);
-    setTank(sampleTank);
-    setTankFileName(sampleTankFileName);
-  };
+  const handleLoadSampleTank = useCallback(() => {
+    void loadBundledSamplePair(true);
+  }, [loadBundledSamplePair]);
+
+  const handleResetToDefaultScenario = useCallback(() => {
+    if (!betaManifest) {
+      void loadBundledSamplePair(true);
+      return;
+    }
+
+    void handleLoadCuratedScenario(betaManifest.defaultScenarioId);
+  }, [betaManifest, handleLoadCuratedScenario, loadBundledSamplePair]);
 
   const handleSeek = (time: number) => {
     setIsPlaying(false);
@@ -143,6 +254,22 @@ function App(): React.JSX.Element {
   const toggleVisibility = (key: keyof VisibilityState) => {
     setVisibility((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  const scenarioMap = useMemo(() => {
+    return new Map(betaManifest?.scenarios.map((scenario) => [scenario.id, scenario]) ?? []);
+  }, [betaManifest]);
+
+  const tankMap = useMemo(() => {
+    return new Map(betaManifest?.tanks.map((entry) => [entry.id, entry]) ?? []);
+  }, [betaManifest]);
+
+  const shellMap = useMemo(() => {
+    return new Map(betaManifest?.shells.map((entry) => [entry.id, entry]) ?? []);
+  }, [betaManifest]);
+
+  const activeScenario = selectedScenarioId ? scenarioMap.get(selectedScenarioId) ?? null : null;
+  const activeTankEntry = activeScenario ? tankMap.get(activeScenario.tankId) ?? null : null;
+  const activeShellEntry = activeScenario ? shellMap.get(activeScenario.shellId) ?? null : null;
 
   const moduleCount = tank?.modules?.length ?? 0;
   const crewCount = tank?.crew?.length ?? 0;
@@ -160,11 +287,23 @@ function App(): React.JSX.Element {
   );
   const currentEvent = currentEventIndex >= 0 ? result?.events[currentEventIndex] ?? null : null;
   const currentEventLabel = currentEvent ? formatEventType(currentEvent.type) : "No events";
-  const shellTypeLabel = result?.hitContext?.shellType?.toUpperCase() ?? "—";
+  const shellTypeLabel = result?.hitContext?.shellType?.toUpperCase() ?? activeShellEntry?.type ?? "—";
   const fuseStatusLabel =
     result?.hitContext?.fuseStatus && result.hitContext.fuseStatus !== "not_applicable"
       ? result.hitContext.fuseStatus
       : "—";
+
+  const viewerStatus = isInitializing
+    ? {
+        title: "Loading curated beta pack",
+        text: "Fetching the manifest and the default showcase scenario."
+      }
+    : !result || !tank
+      ? {
+          title: "Viewer is waiting for content",
+          text: "Load a curated scenario or the bundled beta fallback to populate the replay scene."
+        }
+      : null;
 
   return (
     <div className="app-shell">
@@ -183,6 +322,12 @@ function App(): React.JSX.Element {
           showSurfaceDamage={visibility.surfaceDamage}
           xrayMode={visibility.xrayMode}
         />
+        {viewerStatus && (
+          <div className="viewer-state-overlay">
+            <p className="viewer-state-kicker">{viewerStatus.title}</p>
+            <p className="viewer-state-text">{viewerStatus.text}</p>
+          </div>
+        )}
         <div className="viewer-hud">
           <p className="viewer-hud-title">Inspection</p>
           <div className="viewer-hud-row">
@@ -193,6 +338,13 @@ function App(): React.JSX.Element {
             <span className="hud-pill">Fuse {fuseStatusLabel}</span>
             <span className="hud-pill">Zone {hitZoneLabel ?? "—"}</span>
           </div>
+          {activeScenario && (
+            <div className="viewer-hud-row">
+              <span className="hud-pill">
+                Scenario {activeScenario.name}
+              </span>
+            </div>
+          )}
           <p className="viewer-hud-event">
             {currentEventLabel}
             {currentEvent?.targetId ? ` -> ${currentEvent.targetId}` : ""}
@@ -200,10 +352,23 @@ function App(): React.JSX.Element {
         </div>
       </div>
       <ControlPanel
+        betaManifest={betaManifest}
+        selectedScenarioId={selectedScenarioId}
+        activeScenario={activeScenario}
+        activeTankEntry={activeTankEntry}
+        activeShellEntry={activeShellEntry}
+        contentMode={contentMode}
+        loadingScenarioId={loadingScenarioId}
+        defaultScenarioId={betaManifest?.defaultScenarioId ?? null}
+        debugReport={debugReport}
+        isInitializing={isInitializing}
         summary={result?.summary ?? null}
         hitContext={result?.hitContext ?? null}
+        loadedScenarioName={scenarioFileName}
         loadedResultName={resultFileName}
         loadedTankName={tankFileName}
+        loadedShellName={shellFileName}
+        loadedDebugName={debugFileName}
         hitZoneLabel={hitZoneLabel}
         damagedModules={damagedModules}
         damagedCrew={damagedCrew}
@@ -229,6 +394,8 @@ function App(): React.JSX.Element {
         onTankFileChange={handleTankFile}
         onLoadSampleResult={handleLoadSampleResult}
         onLoadSampleTank={handleLoadSampleTank}
+        onLoadCuratedScenario={handleLoadCuratedScenario}
+        onResetToDefaultScenario={handleResetToDefaultScenario}
         toggleArmor={visibility.armor}
         toggleModules={visibility.modules}
         toggleCrew={visibility.crew}

@@ -1,0 +1,88 @@
+{
+  "version": "0.1.0",
+  "seed": 4112,
+  "summary": {
+    "outcome": "no_penetration",
+    "hitZoneId": "hull_front",
+    "effectiveArmorMm": 87.234,
+    "penetrationMm": 80.5,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Upper Glacis",
+    "impactPoint": {
+      "x": -0.34,
+      "y": 1,
+      "z": 2.281
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0.342,
+      "z": -0.94
+    },
+    "impactAngleDeg": 19.948,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": null
+  },
+  "events": [
+    {
+      "t": 0.012302,
+      "type": "armor_hit",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "targetId": "hull_front",
+      "note": "Hit armor zone Upper Glacis."
+    },
+    {
+      "t": 0.013302,
+      "type": "no_penetration",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "targetId": "hull_front",
+      "note": "AP penetration 80.5 mm was below effective armor 87.234 mm."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": -0.34,
+      "y": 1,
+      "z": 12
+    },
+    {
+      "x": -0.34,
+      "y": 1,
+      "z": 2.281
+    }
+  ],
+  "fragments": [],
+  "surfaceDamage": [
+    {
+      "id": "ap_dent_1",
+      "kind": "dent",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "normal": {
+        "x": 0,
+        "y": 0.342,
+        "z": -0.94
+      },
+      "radius": 0.196,
+      "depth": 0.012,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP left a non-penetrating dent on the armor face."
+    }
+  ],
+  "damagedModules": [],
+  "crew": []
+}

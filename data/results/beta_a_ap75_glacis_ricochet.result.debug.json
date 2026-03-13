@@ -1,0 +1,58 @@
+{
+  "outcome": "ricochet",
+  "branch": "AP",
+  "shellType": "AP",
+  "hitZoneId": "hull_front",
+  "hitZoneName": "Upper Glacis",
+  "impactPoint": {
+    "x": 1.095,
+    "y": 1.12,
+    "z": 2.325
+  },
+  "impactNormal": {
+    "x": 0,
+    "y": 0.342,
+    "z": -0.94
+  },
+  "impactAngleDeg": 71.248,
+  "effectiveArmorMm": 255.07,
+  "normalImpactResistanceMm": 26.361,
+  "shellPenetrationMm": 104.2,
+  "fuseSensitivityMm": null,
+  "explosiveMassKg": null,
+  "fuseStatus": "not_applicable",
+  "ricochet": true,
+  "damageOriginPoint": null,
+  "reason": "AP ricocheted because impact angle 71.248 deg reached the 70 deg threshold.",
+  "normalizedDirection": {
+    "x": 0.94,
+    "y": 0,
+    "z": -0.342
+  },
+  "notes": [
+    "Shell type: AP.",
+    "Branch chosen: AP penetration flow.",
+    "Hit zone: Upper Glacis.",
+    "Impact angle: 71.248 deg.",
+    "Effective armor: 255.07 mm.",
+    "Range-adjusted AP penetration: 104.2 mm at 160 m from a base 109 mm with 3 mm loss per 100 m.",
+    "Outcome chosen: ricochet.",
+    "Fuse logic is not used for AP."
+  ],
+  "fragmentGeneration": null,
+  "fragmentLog": [],
+  "damageLog": [],
+  "surfaceDamageLog": [
+    {
+      "id": "ap_ricochet_scar_1",
+      "kind": "ricochet_scar",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "hull_front",
+      "radius": 0.223,
+      "depth": 0.008,
+      "sizeHeuristic": "radius from 75 mm caliber plus ricochet angle 71.248 deg; depth fixed as a shallow scar",
+      "reason": "AP struck above the ricochet threshold, so the viewer shows a grazing scar instead of a breach.",
+      "note": "AP ricochet scar on the outer armor face."
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "version": "0.1.0",
+  "title": "Tank Damage Simulator Beta Browser",
+  "subtitle": "Curated local replay pack for the current AP and HE prototype scenarios.",
+  "defaultScenarioId": "beta_a_ap75_frontal_penetration",
+  "tanks": [
+    {
+      "id": "test_tank_a",
+      "name": "Showcase Tank A",
+      "description": "Primary showcase medium tank with a readable driver hatch weak spot, sloped glacis, and a turret layout that supports crew-focused AP cases.",
+      "path": "tanks/test_tank_a.json"
+    },
+    {
+      "id": "test_tank_b",
+      "name": "Showcase Tank B",
+      "description": "Contrast assault gun with a tougher frontal package than Tank A and a weaker right side that exposes fuel and reserve ammunition.",
+      "path": "tanks/test_tank_b.json"
+    }
+  ],
+  "shells": [
+    {
+      "id": "ap_75mm",
+      "name": "75 mm AP Shot (Prototype)",
+      "type": "AP",
+      "caliberMm": 75,
+      "description": "Baseline AP round for frontal A vs B comparison and most side-penetration checks.",
+      "path": "shells/ap_75mm.json"
+    },
+    {
+      "id": "ap_88mm",
+      "name": "88 mm AP Shot (Prototype)",
+      "type": "AP",
+      "caliberMm": 88,
+      "description": "Stronger AP round for tougher front plates, roof entries, and turret crew knockout cases.",
+      "path": "shells/ap_88mm.json"
+    },
+    {
+      "id": "he_75mm",
+      "name": "75 mm HE Shell (Prototype)",
+      "type": "HE",
+      "caliberMm": 75,
+      "description": "Lighter HE shell for hatch detonation and fuse-failure contrast cases.",
+      "path": "shells/he_75mm.json"
+    },
+    {
+      "id": "he_105mm",
+      "name": "105 mm HE Shell (Prototype)",
+      "type": "HE",
+      "caliberMm": 105,
+      "description": "Heavier HE shell for the short-range right-side blast showcase case.",
+      "path": "shells/he_105mm.json"
+    }
+  ],
+  "categories": [
+    {
+      "id": "ap_penetration",
+      "label": "AP penetration",
+      "description": "Clean AP defeats against weaker plates and side or rear exposures.",
+      "scenarioIds": [
+        "beta_a_ap75_frontal_penetration",
+        "beta_a_ap75_right_side_module_damage",
+        "beta_a_ap75_rear_engine_damage"
+      ]
+    },
+    {
+      "id": "ap_deflection",
+      "label": "AP ricochet / no penetration",
+      "description": "Frontal AP cases where armor slope, thickness, or range holds.",
+      "scenarioIds": [
+        "beta_a_ap75_glacis_ricochet",
+        "beta_b_ap75_frontal_no_penetration",
+        "beta_a_ap75_frontal_long_range_no_penetration"
+      ]
+    },
+    {
+      "id": "he_detonation",
+      "label": "HE detonation",
+      "description": "Armed HE impacts that produce a visible internal damage story.",
+      "scenarioIds": [
+        "beta_a_he75_driver_hatch_detonation",
+        "beta_b_he105_right_side_blast"
+      ]
+    },
+    {
+      "id": "he_fuse_failure",
+      "label": "HE fuse failure",
+      "description": "Glancing or resistant impacts where HE stops short of arming.",
+      "scenarioIds": [
+        "beta_a_he75_glacis_fuse_failure"
+      ]
+    },
+    {
+      "id": "module_damage",
+      "label": "Module damage",
+      "description": "Cases where the shot is meant to cut through systems rather than center on crew.",
+      "scenarioIds": [
+        "beta_a_ap75_right_side_module_damage",
+        "beta_a_ap75_rear_engine_damage",
+        "beta_b_he105_right_side_blast"
+      ]
+    },
+    {
+      "id": "crew_knockout",
+      "label": "Crew knockout",
+      "description": "Shots that are curated to incapacitate crew without turning into a generic ammo-rack demo.",
+      "scenarioIds": [
+        "beta_a_ap88_turret_crew_knockout",
+        "beta_b_ap88_roof_crew_knockout"
+      ]
+    },
+    {
+      "id": "comparison_cases",
+      "label": "Comparison cases",
+      "description": "Best side-by-side showcases for the same shell family on different targets.",
+      "scenarioIds": [
+        "beta_a_ap75_frontal_penetration",
+        "beta_b_ap75_frontal_no_penetration",
+        "beta_a_ap75_frontal_long_range_no_penetration"
+      ]
+    },
+    {
+      "id": "vulnerability_paths",
+      "label": "Vulnerability paths",
+      "description": "Curated roof, rear, and weak-spot shots that show where the current beta sandbox is easiest to read.",
+      "scenarioIds": [
+        "beta_a_he75_driver_hatch_detonation",
+        "beta_a_ap75_rear_engine_damage",
+        "beta_b_ap88_roof_crew_knockout"
+      ]
+    },
+    {
+      "id": "range_contrast",
+      "label": "Range contrast",
+      "description": "Same family, same target, different engagement range with a materially different result.",
+      "scenarioIds": [
+        "beta_a_ap75_frontal_penetration",
+        "beta_a_ap75_frontal_long_range_no_penetration"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "beta_a_ap75_frontal_penetration",
+      "name": "Tank A front plate penetration",
+      "tankId": "test_tank_a",
+      "shellId": "ap_75mm",
+      "distanceMeters": 120,
+      "expectedOutcome": "penetration",
+      "description": "Baseline AP front hit on Tank A that should pierce the frontal plate and continue into front-drive internals.",
+      "scenarioPath": "scenarios/beta_a_ap75_frontal_penetration.json",
+      "resultPath": "results/beta_a_ap75_frontal_penetration.result.json",
+      "debugPath": "results/beta_a_ap75_frontal_penetration.result.debug.json",
+      "featured": true,
+      "comparisonLabel": "Tank A vs Tank B frontal AP baseline"
+    },
+    {
+      "id": "beta_a_ap75_glacis_ricochet",
+      "name": "Tank A glacis ricochet",
+      "tankId": "test_tank_a",
+      "shellId": "ap_75mm",
+      "distanceMeters": 160,
+      "expectedOutcome": "ricochet",
+      "description": "Shallow AP impact on Tank A's glacis that demonstrates slope-driven deflection and surface scarring.",
+      "scenarioPath": "scenarios/beta_a_ap75_glacis_ricochet.json",
+      "resultPath": "results/beta_a_ap75_glacis_ricochet.result.json",
+      "debugPath": "results/beta_a_ap75_glacis_ricochet.result.debug.json"
+    },
+    {
+      "id": "beta_a_ap75_right_side_module_damage",
+      "name": "Tank A right-side module damage",
+      "tankId": "test_tank_a",
+      "shellId": "ap_75mm",
+      "distanceMeters": 90,
+      "expectedOutcome": "penetration",
+      "description": "Close AP side shot that is curated to chain through the fuel tank and engine rather than focus on crew.",
+      "scenarioPath": "scenarios/beta_a_ap75_right_side_module_damage.json",
+      "resultPath": "results/beta_a_ap75_right_side_module_damage.result.json",
+      "debugPath": "results/beta_a_ap75_right_side_module_damage.result.debug.json",
+      "featured": true
+    },
+    {
+      "id": "beta_a_ap75_rear_engine_damage",
+      "name": "Tank A rear engine damage",
+      "tankId": "test_tank_a",
+      "shellId": "ap_75mm",
+      "distanceMeters": 80,
+      "expectedOutcome": "penetration",
+      "description": "Rear AP hit on Tank A's thin back plate that should drive fragments through the engine bay rather than the fighting compartment.",
+      "scenarioPath": "scenarios/beta_a_ap75_rear_engine_damage.json",
+      "resultPath": "results/beta_a_ap75_rear_engine_damage.result.json",
+      "debugPath": "results/beta_a_ap75_rear_engine_damage.result.debug.json",
+      "featured": true
+    },
+    {
+      "id": "beta_a_ap88_turret_crew_knockout",
+      "name": "Tank A turret crew knockout",
+      "tankId": "test_tank_a",
+      "shellId": "ap_88mm",
+      "distanceMeters": 140,
+      "expectedOutcome": "penetration",
+      "description": "Stronger AP turret hit that is tuned to incapacitate the gunner without centering on the ammo rack.",
+      "scenarioPath": "scenarios/beta_a_ap88_turret_crew_knockout.json",
+      "resultPath": "results/beta_a_ap88_turret_crew_knockout.result.json",
+      "debugPath": "results/beta_a_ap88_turret_crew_knockout.result.debug.json",
+      "featured": true
+    },
+    {
+      "id": "beta_a_he75_driver_hatch_detonation",
+      "name": "Tank A driver hatch detonation",
+      "tankId": "test_tank_a",
+      "shellId": "he_75mm",
+      "distanceMeters": 100,
+      "expectedOutcome": "detonation",
+      "description": "Lighter HE hit on the vulnerable hatch area that arms the fuse and damages both crew and transmission.",
+      "scenarioPath": "scenarios/beta_a_he75_driver_hatch_detonation.json",
+      "resultPath": "results/beta_a_he75_driver_hatch_detonation.result.json",
+      "debugPath": "results/beta_a_he75_driver_hatch_detonation.result.debug.json",
+      "featured": true
+    },
+    {
+      "id": "beta_a_he75_glacis_fuse_failure",
+      "name": "Tank A glacis fuse failure",
+      "tankId": "test_tank_a",
+      "shellId": "he_75mm",
+      "distanceMeters": 150,
+      "expectedOutcome": "fuse_failure",
+      "description": "HE glancing front hit on the stronger glacis where projected resistance stays below the fuse threshold.",
+      "scenarioPath": "scenarios/beta_a_he75_glacis_fuse_failure.json",
+      "resultPath": "results/beta_a_he75_glacis_fuse_failure.result.json",
+      "debugPath": "results/beta_a_he75_glacis_fuse_failure.result.debug.json"
+    },
+    {
+      "id": "beta_a_ap75_frontal_long_range_no_penetration",
+      "name": "Tank A frontal long-range no-penetration",
+      "tankId": "test_tank_a",
+      "shellId": "ap_75mm",
+      "distanceMeters": 950,
+      "expectedOutcome": "no_penetration",
+      "description": "Long-range version of the Tank A frontal baseline where the same 75 mm AP family falls off enough to stop on the upper glacis.",
+      "scenarioPath": "scenarios/beta_a_ap75_frontal_long_range_no_penetration.json",
+      "resultPath": "results/beta_a_ap75_frontal_long_range_no_penetration.result.json",
+      "debugPath": "results/beta_a_ap75_frontal_long_range_no_penetration.result.debug.json",
+      "featured": true,
+      "comparisonLabel": "Tank A short vs long-range 75 mm AP"
+    },
+    {
+      "id": "beta_b_ap75_frontal_no_penetration",
+      "name": "Tank B frontal no-penetration",
+      "tankId": "test_tank_b",
+      "shellId": "ap_75mm",
+      "distanceMeters": 140,
+      "expectedOutcome": "no_penetration",
+      "description": "Frontal AP comparison case showing the same shell family fail against Tank B's stronger upper glacis.",
+      "scenarioPath": "scenarios/beta_b_ap75_frontal_no_penetration.json",
+      "resultPath": "results/beta_b_ap75_frontal_no_penetration.result.json",
+      "debugPath": "results/beta_b_ap75_frontal_no_penetration.result.debug.json",
+      "featured": true,
+      "comparisonLabel": "Tank A vs Tank B frontal AP baseline"
+    },
+    {
+      "id": "beta_b_ap88_roof_crew_knockout",
+      "name": "Tank B roof crew knockout",
+      "tankId": "test_tank_b",
+      "shellId": "ap_88mm",
+      "distanceMeters": 320,
+      "expectedOutcome": "penetration",
+      "description": "Top-down AP entry through Tank B's thin casemate roof that should disable crew in the compact fighting compartment.",
+      "scenarioPath": "scenarios/beta_b_ap88_roof_crew_knockout.json",
+      "resultPath": "results/beta_b_ap88_roof_crew_knockout.result.json",
+      "debugPath": "results/beta_b_ap88_roof_crew_knockout.result.debug.json",
+      "featured": true
+    },
+    {
+      "id": "beta_b_he105_right_side_blast",
+      "name": "Tank B right-side HE blast",
+      "tankId": "test_tank_b",
+      "shellId": "he_105mm",
+      "distanceMeters": 80,
+      "expectedOutcome": "detonation",
+      "description": "Heavy HE side-blast showcase on Tank B that detonates and destroys the exposed right-side ammunition reserve.",
+      "scenarioPath": "scenarios/beta_b_he105_right_side_blast.json",
+      "resultPath": "results/beta_b_he105_right_side_blast.result.json",
+      "debugPath": "results/beta_b_he105_right_side_blast.result.debug.json",
+      "featured": true
+    }
+  ]
+}

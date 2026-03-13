@@ -1,0 +1,239 @@
+{
+  "outcome": "detonation",
+  "branch": "HE",
+  "shellType": "HE",
+  "hitZoneId": "hull_side_right",
+  "hitZoneName": "Right Hull Side",
+  "impactPoint": {
+    "x": 1.38,
+    "y": 1.02,
+    "z": -0.48
+  },
+  "impactNormal": {
+    "x": -1,
+    "y": 0,
+    "z": 0
+  },
+  "impactAngleDeg": 0,
+  "effectiveArmorMm": 32,
+  "normalImpactResistanceMm": 32,
+  "shellPenetrationMm": 28,
+  "fuseSensitivityMm": 18,
+  "explosiveMassKg": 1.85,
+  "fuseStatus": "armed",
+  "ricochet": false,
+  "damageOriginPoint": {
+    "x": 1.3,
+    "y": 1.02,
+    "z": -0.48
+  },
+  "reason": "HE fuse armed and detonated because projected armor resistance 32 mm met fuse sensitivity 18 mm",
+  "normalizedDirection": {
+    "x": -1,
+    "y": 0,
+    "z": 0
+  },
+  "notes": [
+    "Shell type: HE.",
+    "Branch chosen: HE blast flow.",
+    "Hit zone: Right Hull Side.",
+    "Impact angle: 0 deg.",
+    "Effective armor: 32 mm.",
+    "Projected armor resistance for the fuse check: 32 mm.",
+    "Fuse status: armed. projected armor resistance 32 mm met fuse sensitivity 18 mm",
+    "Generated 10 HE fragments from a shallow blast origin.",
+    "Spread heuristic: HE uses a wider cone and higher local jitter than AP; authored randomness 0.1 further opens the cone.",
+    "Energy heuristic: Explosive mass 1.85 kg scales both fragment count and local fragment energy, with blast fragments weaker than AP core fragments.",
+    "Reach heuristic: HE fragments are intentionally short-lived (roughly 0.9-2.1 m) so damage clusters near the blast origin instead of traveling deep like AP spall.",
+    "Continuation heuristic: HE fragments do not continue after a major interaction in the prototype; damage is front-loaded near the detonation point.",
+    "Damaged modules: 1. Damaged crew: 0."
+  ],
+  "fragmentGeneration": {
+    "branch": "HE",
+    "continuationHeuristic": "HE fragments do not continue after a major interaction in the prototype; damage is front-loaded near the detonation point.",
+    "energyHeuristic": "Explosive mass 1.85 kg scales both fragment count and local fragment energy, with blast fragments weaker than AP core fragments.",
+    "fragmentCount": 10,
+    "note": "Built 9 short-range HE blast fragments plus 1 shallow spall fragments.",
+    "reachHeuristic": "HE fragments are intentionally short-lived (roughly 0.9-2.1 m) so damage clusters near the blast origin instead of traveling deep like AP spall.",
+    "spreadHeuristic": "HE uses a wider cone and higher local jitter than AP; authored randomness 0.1 further opens the cone."
+  },
+  "fragmentLog": [
+    {
+      "branch": "HE",
+      "energy": 1.033,
+      "fragmentType": "blast",
+      "hitCount": 1,
+      "hitTargets": [
+        "module:ammo_rack_right"
+      ],
+      "id": "fragment_1",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 2.065,
+      "spread": 0.336,
+      "stoppedReason": "Fragment reached its configured interaction cap of 1."
+    },
+    {
+      "branch": "HE",
+      "energy": 1.211,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_2",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 2.612,
+      "spread": 0.454,
+      "stoppedReason": "No internal target intersected within 2.612 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 0.749,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_3",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 2.944,
+      "spread": 0.402,
+      "stoppedReason": "No internal target intersected within 2.944 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 0.957,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_4",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 1.661,
+      "spread": 0.511,
+      "stoppedReason": "No internal target intersected within 1.661 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 1.152,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_5",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 1.538,
+      "spread": 0.347,
+      "stoppedReason": "No internal target intersected within 1.538 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 1.07,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_6",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 1.871,
+      "spread": 0.412,
+      "stoppedReason": "No internal target intersected within 1.871 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 1.202,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_7",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 1.936,
+      "spread": 0.462,
+      "stoppedReason": "No internal target intersected within 1.936 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 0.857,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_8",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 1.844,
+      "spread": 0.329,
+      "stoppedReason": "No internal target intersected within 1.844 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 1.131,
+      "fragmentType": "blast",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_9",
+      "maxInteractions": 1,
+      "note": "Short-range HE blast fragment with wide local spread.",
+      "reach": 2.099,
+      "spread": 0.359,
+      "stoppedReason": "No internal target intersected within 2.099 m of remaining reach."
+    },
+    {
+      "branch": "HE",
+      "energy": 0.84,
+      "fragmentType": "spall",
+      "hitCount": 0,
+      "hitTargets": [],
+      "id": "fragment_10",
+      "maxInteractions": 1,
+      "note": "Localized HE spall fragment with slightly tighter focus than the blast cloud.",
+      "reach": 2.002,
+      "spread": 0.284,
+      "stoppedReason": "No internal target intersected within 2.002 m of remaining reach."
+    }
+  ],
+  "damageLog": [
+    {
+      "cause": "HE fragment fragment_1 (blast, energy 1.033, reach 2.065 m) hit module ammo_rack_right at 0.298 m because its blast path intersected the target hitbox before the fragment ran out of reach.",
+      "damage": 153,
+      "fragmentBranch": "HE",
+      "fragmentEnergy": 1.033,
+      "fragmentId": "fragment_1",
+      "fragmentReach": 2.065,
+      "fragmentType": "blast",
+      "interactionIndex": 0,
+      "kind": "module",
+      "point": {
+        "x": 1.002,
+        "y": 1.016,
+        "z": -0.481
+      },
+      "targetId": "ammo_rack_right",
+      "targetLabel": "ammo_rack",
+      "travelDistance": 0.298
+    }
+  ],
+  "surfaceDamageLog": [
+    {
+      "id": "he_detonation_scorch_1",
+      "kind": "detonation_scorch",
+      "sourceBranch": "HE",
+      "linkedHitZoneId": "hull_side_right",
+      "radius": 0.592,
+      "depth": null,
+      "sizeHeuristic": "radius from 105 mm caliber and explosive mass 1.85 kg",
+      "reason": "A functioning HE round leaves a visible scorch / blast signature on the impact face.",
+      "note": "HE detonation scorch on the outer armor face."
+    },
+    {
+      "id": "he_shallow_breach_1",
+      "kind": "penetration_hole",
+      "sourceBranch": "HE",
+      "linkedHitZoneId": "hull_side_right",
+      "radius": 0.066,
+      "depth": 0.022,
+      "sizeHeuristic": "interior breach radius from vulnerability ratio 0.875 against zone thickness 32 mm",
+      "reason": "The hit zone is thin enough relative to the HE shell's authored penetration to justify a shallow breach marker.",
+      "note": "Prototype shallow HE breach marker on a vulnerable plate."
+    }
+  ]
+}

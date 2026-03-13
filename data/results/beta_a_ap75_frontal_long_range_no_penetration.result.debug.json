@@ -1,0 +1,58 @@
+{
+  "outcome": "no_penetration",
+  "branch": "AP",
+  "shellType": "AP",
+  "hitZoneId": "hull_front",
+  "hitZoneName": "Upper Glacis",
+  "impactPoint": {
+    "x": -0.34,
+    "y": 1,
+    "z": 2.281
+  },
+  "impactNormal": {
+    "x": 0,
+    "y": 0.342,
+    "z": -0.94
+  },
+  "impactAngleDeg": 19.948,
+  "effectiveArmorMm": 87.234,
+  "normalImpactResistanceMm": 77.08,
+  "shellPenetrationMm": 80.5,
+  "fuseSensitivityMm": null,
+  "explosiveMassKg": null,
+  "fuseStatus": "not_applicable",
+  "ricochet": false,
+  "damageOriginPoint": null,
+  "reason": "AP penetration 80.5 mm was below effective armor 87.234 mm.",
+  "normalizedDirection": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "notes": [
+    "Shell type: AP.",
+    "Branch chosen: AP penetration flow.",
+    "Hit zone: Upper Glacis.",
+    "Impact angle: 19.948 deg.",
+    "Effective armor: 87.234 mm.",
+    "Range-adjusted AP penetration: 80.5 mm at 950 m from a base 109 mm with 3 mm loss per 100 m.",
+    "Outcome chosen: no penetration.",
+    "Armor defeated the AP shot before any internal fragment generation."
+  ],
+  "fragmentGeneration": null,
+  "fragmentLog": [],
+  "damageLog": [],
+  "surfaceDamageLog": [
+    {
+      "id": "ap_dent_1",
+      "kind": "dent",
+      "sourceBranch": "AP",
+      "linkedHitZoneId": "hull_front",
+      "radius": 0.196,
+      "depth": 0.012,
+      "sizeHeuristic": "radius from 75 mm caliber and penetration ratio 0.923; depth grows as the shot falls short of effective armor",
+      "reason": "AP failed to perforate, so the prototype records a localized dent instead of a hole.",
+      "note": "AP left a non-penetrating dent on the armor face."
+    }
+  ]
+}

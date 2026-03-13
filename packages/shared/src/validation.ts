@@ -106,6 +106,17 @@ export function validateShellDefinition(
     shell.fuseSensitivity = fuseSensitivity;
   }
 
+  const penetrationLossPer100m = expectOptionalNumber(
+    root.penetrationLossPer100m,
+    context,
+    "penetrationLossPer100m",
+    { min: 0 },
+  );
+
+  if (penetrationLossPer100m !== undefined) {
+    shell.penetrationLossPer100m = penetrationLossPer100m;
+  }
+
   const explosiveMassKg = expectOptionalNumber(
     root.explosiveMassKg,
     context,

@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "scripts": {
+    "beta:refresh": "npm --workspace @tank-sim/sim-core run beta:refresh",
     "build": "tsc --build",
     "typecheck": "tsc --build --pretty false",
     "clean": "tsc --build --clean"

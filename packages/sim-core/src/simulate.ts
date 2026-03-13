@@ -2,12 +2,17 @@ import type {
   ArmorZone,
   CrewDamageResult,
   CrewMember,
+  DebugDamageEntry,
+  DebugFragmentEntry,
+  DebugFragmentGenerationSummary,
+  DebugSurfaceDamageEntry,
   FragmentPath,
   FuseStatus,
   ModuleDamageResult,
   ModuleDefinition,
   ShellDefinition,
   ShellType,
+  SimulationDebugReport,
   SurfaceDamage,
   SurfaceDamageKind,
   SimulationEvent,
@@ -38,84 +43,6 @@ export interface SimulationRunRequest {
   tank: TankDefinition;
 }
 
-interface DebugDamageEntry {
-  cause: string;
-  damage: number;
-  fragmentBranch: ShellType;
-  fragmentEnergy: number;
-  fragmentId: string;
-  fragmentReach: number;
-  fragmentType: FragmentType;
-  interactionIndex: number;
-  kind: "crew" | "module";
-  point: Vec3;
-  targetId: string;
-  targetLabel: string;
-  travelDistance: number;
-}
-
-interface DebugFragmentGenerationSummary {
-  branch: ShellType;
-  continuationHeuristic: string;
-  energyHeuristic: string;
-  fragmentCount: number;
-  note: string;
-  reachHeuristic: string;
-  spreadHeuristic: string;
-}
-
-interface DebugFragmentEntry {
-  branch: ShellType;
-  energy: number;
-  fragmentType: FragmentType;
-  hitCount: number;
-  hitTargets: string[];
-  id: string;
-  maxInteractions: number;
-  note: string;
-  reach: number;
-  spread: number;
-  stoppedReason: string;
-}
-
-interface DebugSurfaceDamageEntry {
-  id: string;
-  kind: SurfaceDamageKind;
-  sourceBranch: ShellType;
-  linkedHitZoneId: string | null;
-  radius: number;
-  depth: number | null;
-  sizeHeuristic: string;
-  reason: string;
-  note: string | null;
-}
-
-export interface SimulationDebugReport {
-  outcome: SimulationOutcome;
-  branch: ShellType;
-  shellType: ShellType;
-  hitZoneId: string | null;
-  hitZoneName: string | null;
-  impactPoint: Vec3 | null;
-  impactNormal: Vec3 | null;
-  impactAngleDeg: number | null;
-  effectiveArmorMm: number | null;
-  normalImpactResistanceMm: number | null;
-  shellPenetrationMm: number;
-  fuseSensitivityMm: number | null;
-  explosiveMassKg: number | null;
-  fuseStatus: FuseStatus;
-  ricochet: boolean;
-  damageOriginPoint: Vec3 | null;
-  reason: string;
-  normalizedDirection: Vec3;
-  notes: string[];
-  fragmentGeneration: DebugFragmentGenerationSummary | null;
-  fragmentLog: DebugFragmentEntry[];
-  damageLog: DebugDamageEntry[];
-  surfaceDamageLog: DebugSurfaceDamageEntry[];
-}
-
 export interface SimulationRunResponse {
   result: SimulationResult;
   debugReport: SimulationDebugReport;
@@ -143,6 +70,7 @@ interface ImpactAnalysis {
   hitTimeSeconds: number;
   impactAngleDeg: number;
   normalImpactResistanceMm: number;
+  resolvedPenetrationMm: number;
   shellStart: Vec3;
   zoneNormal: Vec3;
 }
@@ -243,6 +171,26 @@ const HE_SPALL_DIRECTION_TEMPLATES: Vec3[] = [
   { x: -0.16, y: -0.18, z: 0 },
 ];
 
+function getResolvedPenetrationMm(
+  shell: ShellDefinition,
+  scenarioDistanceMeters: number,
+): number {
+  const penetrationLoss = (shell.penetrationLossPer100m ?? 0) * (scenarioDistanceMeters / 100);
+  return roundNumber(Math.max(0, shell.penetrationMm - penetrationLoss), 3);
+}
+
+function getPenetrationNote(
+  shell: ShellDefinition,
+  scenarioDistanceMeters: number,
+  resolvedPenetrationMm: number,
+): string | null {
+  if (!shell.penetrationLossPer100m) {
+    return null;
+  }
+
+  return `Range-adjusted AP penetration: ${resolvedPenetrationMm} mm at ${scenarioDistanceMeters} m from a base ${shell.penetrationMm} mm with ${shell.penetrationLossPer100m} mm loss per 100 m.`;
+}
+
 function getCrewHitboxSize(crewMember: CrewMember): Vec3 {
   return crewMember.size ?? CREW_BOX_SIZE;
 }
@@ -301,6 +249,10 @@ function analyzeImpact(
     armorHit.zone.thicknessMm * cosine,
     3,
   );
+  const resolvedPenetrationMm = getResolvedPenetrationMm(
+    shell,
+    scenario.distanceMeters,
+  );
   const hitTimeSeconds = roundNumber(
     armorHit.distance / Math.max(shell.velocityMps, 1),
     6,
@@ -320,6 +272,7 @@ function analyzeImpact(
     hitTimeSeconds,
     impactAngleDeg,
     normalImpactResistanceMm,
+    resolvedPenetrationMm,
     shellStart: roundVec3(scenario.origin),
     zoneNormal,
   };
@@ -330,6 +283,15 @@ function createMissResponse(
   shell: ShellDefinition,
   direction: Vec3,
 ): SimulationRunResponse {
+  const resolvedPenetrationMm = getResolvedPenetrationMm(
+    shell,
+    scenario.distanceMeters,
+  );
+  const penetrationNote = getPenetrationNote(
+    shell,
+    scenario.distanceMeters,
+    resolvedPenetrationMm,
+  );
   const missEnd = roundVec3(
     addVec3(scenario.origin, scaleVec3(direction, scenario.distanceMeters)),
   );
@@ -348,7 +310,7 @@ function createMissResponse(
         outcome: "miss",
         hitZoneId: null,
         effectiveArmorMm: null,
-        penetrationMm: shell.penetrationMm,
+        penetrationMm: resolvedPenetrationMm,
         ricochet: false,
       },
       hitContext,
@@ -376,7 +338,7 @@ function createMissResponse(
       impactAngleDeg: null,
       effectiveArmorMm: null,
       normalImpactResistanceMm: null,
-      shellPenetrationMm: shell.penetrationMm,
+      shellPenetrationMm: resolvedPenetrationMm,
       fuseSensitivityMm: shell.fuseSensitivity ?? null,
       explosiveMassKg: shell.explosiveMassKg ?? null,
       fuseStatus: "not_applicable",
@@ -387,6 +349,7 @@ function createMissResponse(
       notes: [
         `Shell type: ${shell.type}.`,
         `Branch chosen: ${shell.type}.`,
+        ...(penetrationNote ? [penetrationNote] : []),
         "Armor zone intersection search returned no hit.",
         "No ricochet, penetration, or fuse checks were applied.",
       ],
@@ -468,7 +431,7 @@ function createApNoPenetrationSurfaceDamage(
   impact: ImpactAnalysis,
   shell: ShellDefinition,
 ): SurfaceDamageEmission {
-  const penetrationRatio = shell.penetrationMm / Math.max(impact.effectiveArmorMm, 1);
+  const penetrationRatio = impact.resolvedPenetrationMm / Math.max(impact.effectiveArmorMm, 1);
   const radius = roundNumber(
     0.11 + (shell.caliberMm * 0.00065) + (penetrationRatio * 0.04),
     3,
@@ -500,7 +463,7 @@ function createApPenetrationSurfaceDamage(
   damage: DamageResolution,
   damageOriginPoint: Vec3,
 ): SurfaceDamageEmission {
-  const penetrationMarginMm = Math.max(0, shell.penetrationMm - impact.effectiveArmorMm);
+  const penetrationMarginMm = Math.max(0, impact.resolvedPenetrationMm - impact.effectiveArmorMm);
   const entranceRadius = roundNumber(
     0.09 + (shell.caliberMm * 0.00055) + (penetrationMarginMm * 0.00035),
     3,
@@ -604,8 +567,8 @@ function createHeDetonationSurfaceDamage(
     0.18 + (shell.caliberMm * 0.00075) + ((shell.explosiveMassKg ?? 0) * 0.18),
     3,
   );
-  const vulnerabilityRatio = shell.penetrationMm / Math.max(impact.armorHit.zone.thicknessMm, 1);
-  const shallowBreach = impact.armorHit.zone.thicknessMm <= (shell.penetrationMm * 1.8);
+  const vulnerabilityRatio = impact.resolvedPenetrationMm / Math.max(impact.armorHit.zone.thicknessMm, 1);
+  const shallowBreach = impact.armorHit.zone.thicknessMm <= (impact.resolvedPenetrationMm * 1.8);
   const specs: SurfaceDamageSpec[] = [
     {
       id: "he_detonation_scorch_1",
@@ -650,12 +613,18 @@ function createApResponse(args: {
     shell,
     tank,
   } = args;
+  const penetrationNote = getPenetrationNote(
+    shell,
+    scenario.distanceMeters,
+    impact.resolvedPenetrationMm,
+  );
   const commonNotes = [
     `Shell type: ${shell.type}.`,
     "Branch chosen: AP penetration flow.",
     `Hit zone: ${impact.armorHit.zone.name}.`,
     `Impact angle: ${impact.impactAngleDeg} deg.`,
     `Effective armor: ${impact.effectiveArmorMm} mm.`,
+    ...(penetrationNote ? [penetrationNote] : []),
   ];
 
   if (
@@ -683,7 +652,7 @@ function createApResponse(args: {
           outcome: "ricochet",
           hitZoneId: impact.armorHit.zone.id,
           effectiveArmorMm: impact.effectiveArmorMm,
-          penetrationMm: shell.penetrationMm,
+          penetrationMm: impact.resolvedPenetrationMm,
           ricochet: true,
         },
         hitContext,
@@ -714,7 +683,7 @@ function createApResponse(args: {
         impactAngleDeg: impact.impactAngleDeg,
         effectiveArmorMm: impact.effectiveArmorMm,
         normalImpactResistanceMm: impact.normalImpactResistanceMm,
-        shellPenetrationMm: shell.penetrationMm,
+        shellPenetrationMm: impact.resolvedPenetrationMm,
         fuseSensitivityMm: null,
         explosiveMassKg: null,
         fuseStatus: "not_applicable",
@@ -735,8 +704,8 @@ function createApResponse(args: {
     };
   }
 
-  if (shell.penetrationMm < impact.effectiveArmorMm) {
-    const reason = `AP penetration ${shell.penetrationMm} mm was below effective armor ${impact.effectiveArmorMm} mm.`;
+  if (impact.resolvedPenetrationMm < impact.effectiveArmorMm) {
+    const reason = `AP penetration ${impact.resolvedPenetrationMm} mm was below effective armor ${impact.effectiveArmorMm} mm.`;
     const surfaceDamage = createApNoPenetrationSurfaceDamage(impact, shell);
     const hitContext = createHitContext({
       damageOriginPoint: null,
@@ -753,7 +722,7 @@ function createApResponse(args: {
           outcome: "no_penetration",
           hitZoneId: impact.armorHit.zone.id,
           effectiveArmorMm: impact.effectiveArmorMm,
-          penetrationMm: shell.penetrationMm,
+          penetrationMm: impact.resolvedPenetrationMm,
           ricochet: false,
         },
         hitContext,
@@ -784,7 +753,7 @@ function createApResponse(args: {
         impactAngleDeg: impact.impactAngleDeg,
         effectiveArmorMm: impact.effectiveArmorMm,
         normalImpactResistanceMm: impact.normalImpactResistanceMm,
-        shellPenetrationMm: shell.penetrationMm,
+        shellPenetrationMm: impact.resolvedPenetrationMm,
         fuseSensitivityMm: null,
         explosiveMassKg: null,
         fuseStatus: "not_applicable",
@@ -813,7 +782,7 @@ function createApResponse(args: {
   );
   const fragmentModel = createApFragmentModel({
     fragmentCountMultiplier: scenario.simulation.fragmentCountMultiplier,
-    penetrationMarginMm: shell.penetrationMm - impact.effectiveArmorMm,
+    penetrationMarginMm: impact.resolvedPenetrationMm - impact.effectiveArmorMm,
     randomness: scenario.simulation.randomness,
     seed: scenario.seed,
     travelDirection: impact.direction,
@@ -829,6 +798,7 @@ function createApResponse(args: {
     getDamage: (targetType, hitDistance, travelDistance, fragment, interactionIndex) => getApInternalDamage(
       shell,
       impact.effectiveArmorMm,
+      impact.resolvedPenetrationMm,
       targetType,
       hitDistance,
       travelDistance,
@@ -839,7 +809,7 @@ function createApResponse(args: {
     hitTimeSeconds: impact.hitTimeSeconds,
     tank,
   });
-  const reason = `AP penetration ${shell.penetrationMm} mm exceeded effective armor ${impact.effectiveArmorMm} mm.`;
+  const reason = `AP penetration ${impact.resolvedPenetrationMm} mm exceeded effective armor ${impact.effectiveArmorMm} mm.`;
   const hitContext = createHitContext({
     damageOriginPoint,
     fuseStatus: "not_applicable",
@@ -867,7 +837,7 @@ function createApResponse(args: {
         outcome: "penetration",
         hitZoneId: impact.armorHit.zone.id,
         effectiveArmorMm: impact.effectiveArmorMm,
-        penetrationMm: shell.penetrationMm,
+        penetrationMm: impact.resolvedPenetrationMm,
         ricochet: false,
       },
       hitContext,
@@ -899,7 +869,7 @@ function createApResponse(args: {
       impactAngleDeg: impact.impactAngleDeg,
       effectiveArmorMm: impact.effectiveArmorMm,
       normalImpactResistanceMm: impact.normalImpactResistanceMm,
-      shellPenetrationMm: shell.penetrationMm,
+      shellPenetrationMm: impact.resolvedPenetrationMm,
       fuseSensitivityMm: null,
       explosiveMassKg: null,
       fuseStatus: "not_applicable",
@@ -937,6 +907,11 @@ function createHeResponse(args: {
     tank,
   } = args;
   const fuseStatus = evaluateHeFuseStatus(scenario, shell, impact);
+  const penetrationNote = getPenetrationNote(
+    shell,
+    scenario.distanceMeters,
+    impact.resolvedPenetrationMm,
+  );
   const commonNotes = [
     `Shell type: ${shell.type}.`,
     "Branch chosen: HE blast flow.",
@@ -944,6 +919,7 @@ function createHeResponse(args: {
     `Impact angle: ${impact.impactAngleDeg} deg.`,
     `Effective armor: ${impact.effectiveArmorMm} mm.`,
     `Projected armor resistance for the fuse check: ${impact.normalImpactResistanceMm} mm.`,
+    ...(penetrationNote ? [penetrationNote] : []),
   ];
 
   if (fuseStatus.status === "failed") {
@@ -964,7 +940,7 @@ function createHeResponse(args: {
           outcome: "fuse_failure",
           hitZoneId: impact.armorHit.zone.id,
           effectiveArmorMm: impact.effectiveArmorMm,
-          penetrationMm: shell.penetrationMm,
+          penetrationMm: impact.resolvedPenetrationMm,
           ricochet: false,
         },
         hitContext,
@@ -995,7 +971,7 @@ function createHeResponse(args: {
         impactAngleDeg: impact.impactAngleDeg,
         effectiveArmorMm: impact.effectiveArmorMm,
         normalImpactResistanceMm: impact.normalImpactResistanceMm,
-        shellPenetrationMm: shell.penetrationMm,
+        shellPenetrationMm: impact.resolvedPenetrationMm,
         fuseSensitivityMm: shell.fuseSensitivity ?? null,
         explosiveMassKg: shell.explosiveMassKg ?? null,
         fuseStatus: "failed",
@@ -1071,7 +1047,7 @@ function createHeResponse(args: {
         outcome: "detonation",
         hitZoneId: impact.armorHit.zone.id,
         effectiveArmorMm: impact.effectiveArmorMm,
-        penetrationMm: shell.penetrationMm,
+        penetrationMm: impact.resolvedPenetrationMm,
         ricochet: false,
       },
       hitContext,
@@ -1103,7 +1079,7 @@ function createHeResponse(args: {
       impactAngleDeg: impact.impactAngleDeg,
       effectiveArmorMm: impact.effectiveArmorMm,
       normalImpactResistanceMm: impact.normalImpactResistanceMm,
-      shellPenetrationMm: shell.penetrationMm,
+      shellPenetrationMm: impact.resolvedPenetrationMm,
       fuseSensitivityMm: shell.fuseSensitivity ?? null,
       explosiveMassKg: shell.explosiveMassKg ?? null,
       fuseStatus: "armed",
@@ -1804,6 +1780,7 @@ function getHeFragmentCount(
 function getApInternalDamage(
   shell: ShellDefinition,
   effectiveArmorMm: number,
+  resolvedPenetrationMm: number,
   targetType: "crew" | "module",
   hitDistance: number,
   travelDistance: number,
@@ -1813,7 +1790,7 @@ function getApInternalDamage(
   const baseDamage = 18 + Math.round(shell.caliberMm * 0.28);
   const surplusBonus = Math.max(
     0,
-    Math.round((shell.penetrationMm - effectiveArmorMm) * 0.11),
+    Math.round((resolvedPenetrationMm - effectiveArmorMm) * 0.11),
   );
   const energyBonus = Math.round(fragment.energy * 22);
   const typeBonus = fragment.fragmentType === "core"

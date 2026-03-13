@@ -1,5 +1,39 @@
 # Technical Decisions
 
+## 2026-03-13 — Keep curated beta regeneration manifest-driven and file-based
+The curated beta pack now regenerates from `data/beta-content.manifest.json` through `npm run beta:refresh` instead of a hand-written shell loop.
+
+Why:
+- The launcher and the regression runner should operate over the same curated source of truth so the beta pack stays coherent during iteration.
+- We needed a pre-commit-friendly command that refreshes every curated result/debug pair and fails clearly on broken authored scenarios without adding a test framework or backend.
+- The project still favors explicit JSON files and small local tooling over heavier infrastructure.
+
+What changed:
+- `packages/sim-core/src/runBetaRegression.ts` reads the manifest, resolves each curated scenario path, and reruns sim-core across the pack.
+- The root workspace now exposes the command as `npm run beta:refresh`.
+- The manifest now carries the full 11-scenario curated beta pack, including new roof, rear, and long-range showcase cases.
+
+Tradeoff:
+- The manifest has become a more important piece of authored data. If it drifts from the actual files, both the launcher and the regression runner will be wrong in the same place.
+- This is still refresh-and-inspect tooling, not a true automated assertion suite with semantic expectations.
+
+## 2026-03-13 — Use authored per-shell penetration falloff for long-range beta contrast
+AP shells can now opt into a simple `penetrationLossPer100m` field so the curated beta pack can include range-sensitive outcomes without rewriting the prototype ballistics model.
+
+Why:
+- The beta slice needed at least one longer-range case where the outcome changes meaningfully.
+- The existing shell model used a fixed penetration number, so distance only affected timing and not the result.
+- A tiny authored falloff rule keeps the change explicit, debuggable, and small enough for the prototype.
+
+What changed:
+- `packages/shared/src/shell.ts` and `packages/shared/src/validation.ts` now support optional `penetrationLossPer100m`.
+- `packages/sim-core/src/simulate.ts` resolves range-adjusted penetration from the scenario distance before AP penetration/no-penetration decisions and writes the adjusted penetration into result/debug output.
+- `data/shells/ap_75mm.json` and `data/shells/ap_88mm.json` now opt into simple falloff values, enabling the new `beta_a_ap75_frontal_long_range_no_penetration` showcase.
+
+Tradeoff:
+- This is still a prototype heuristic, not a real ballistic table or velocity-based armor penetration model.
+- Only authored shells that opt in lose penetration with range; HE still behaves as before unless we decide to model it more deeply later.
+
 ## 2026-03-11 — TypeScript-first prototype
 We start with TypeScript for all packages to maximize speed of development and simplify shared types.
 Rust/WASM is postponed until the simulation core proves its shape and bottlenecks.
@@ -218,5 +252,39 @@ What changed:
 
 Tradeoff:
 - The runtime shape model is still box-only. Rotated boxes improve plausibility, but they do not represent wedges, curved cast armor, or cutout-heavy geometry.
+
+## 2026-03-13 — Curated beta browser uses a lightweight local manifest over static `data/`
+The dev viewer now presents the curated beta pack through a small manifest file and static asset fetches instead of requiring manual file pairing for normal use.
+
+Why:
+- The project needed the viewer to feel like a small beta product without adding a backend, router, database, or heavier content system.
+- The existing `data/` pack already had the right raw JSON artifacts; the missing piece was a readable launcher index with categories, featured cases, and file links.
+- Keeping the source of truth as authored JSON files preserves the existing scenario -> result/debug pipeline and keeps a later Rust/WASM migration uncomplicated.
+
+What changed:
+- `data/beta-content.manifest.json` now groups the curated scenarios into readable showcase categories and links each case to its scenario, result, debug, tank, and shell files.
+- `packages/dev-viewer/vite.config.ts` now serves the repository `data/` directory as static public content so the browser can fetch the manifest and linked JSON artifacts directly.
+- `packages/dev-viewer/src/content/betaContent.ts` provides a thin fetch/path layer, while the control panel uses the manifest to auto-load a default scenario and expose one-click curated switching.
+
+Tradeoff:
+- The manifest duplicates a small amount of viewer-facing metadata such as category labels and short scenario descriptions.
+- This remains a local-static launcher, not a full content platform. There is still no live sim execution, persistence, or searchable content index.
 - Euler-degree rotation is JSON-friendly and easy to author, but it can still produce overlapping or physically awkward layouts if the tank data is authored carelessly.
 - This supersedes the strict axis-aligned part of the 2026-03-11 AABB decision while keeping the same box-first prototype boundary and avoiding a mesh collision system.
+
+## 2026-03-12 — Curated beta content uses mirrored scenario/result stems
+The first beta-oriented content slice now uses a small naming convention instead of ad hoc scenario fixture names.
+
+Why:
+- The old fixture set mixed one-off validation names with showcase intent, which made `data/scenarios` and `data/results` harder to scan once the pack grew beyond a few files.
+- We needed a predictable way to pair scenario JSON, result JSON, and debug JSON while keeping the file-based workflow easy to inspect manually.
+- A curated beta slice should read like a deliberate pack, not like leftover test artifacts.
+
+What changed:
+- Scenario files now use `beta_<tank>_<shell>_<target>_<outcome>.json`.
+- Result and debug files mirror the scenario stem in `data/results/<stem>.result.json` and `data/results/<stem>.result.debug.json`.
+- `data/README.md` documents the available tanks, shells, and scenario pack so the content is navigable without opening every JSON file.
+
+Tradeoff:
+- The convention is intentionally descriptive rather than minimal, so some file names are longer.
+- The stems describe the intended showcase case, but they are still only as accurate as the authored scenario and should be validated against real sim output when content changes.

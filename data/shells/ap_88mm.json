@@ -1,0 +1,9 @@
+{
+  "id": "ap_88mm",
+  "name": "88 mm AP Shot (Prototype)",
+  "type": "AP",
+  "caliberMm": 88,
+  "velocityMps": 920,
+  "penetrationMm": 168,
+  "penetrationLossPer100m": 4
+}

@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "seed": 101,
+  "seed": 4112,
   "tankId": "test_tank_a",
   "shellId": "ap_75mm",
-  "distanceMeters": 100,
+  "distanceMeters": 950,
   "origin": {
-    "x": 0.4,
-    "y": 0.95,
-    "z": 10
+    "x": -0.34,
+    "y": 1,
+    "z": 12
   },
   "direction": {
     "x": 0,
@@ -17,7 +17,7 @@
   "simulation": {
     "allowRicochet": true,
     "allowFuseFailure": false,
-    "randomness": 0.05,
-    "fragmentCountMultiplier": 1
+    "randomness": 0.04,
+    "fragmentCountMultiplier": 1.05
   }
 }

@@ -1,8 +1,9 @@
 {
   "id": "ap_75mm",
-  "name": "75 mm AP",
+  "name": "75 mm AP Shot (Prototype)",
   "type": "AP",
   "caliberMm": 75,
   "velocityMps": 790,
-  "penetrationMm": 109
+  "penetrationMm": 109,
+  "penetrationLossPer100m": 3
 }

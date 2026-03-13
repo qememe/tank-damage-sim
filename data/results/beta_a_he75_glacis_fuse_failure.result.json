@@ -1,65 +1,65 @@
 {
   "version": "0.1.0",
-  "seed": 303,
+  "seed": 4303,
   "summary": {
     "outcome": "fuse_failure",
     "hitZoneId": "hull_front",
-    "effectiveArmorMm": 245.971,
+    "effectiveArmorMm": 255.07,
     "penetrationMm": 18,
     "ricochet": false
   },
   "hitContext": {
     "branch": "HE",
     "shellType": "HE",
-    "hitZoneName": "Hull Front",
+    "hitZoneName": "Upper Glacis",
     "impactPoint": {
-      "x": 1.118,
-      "y": 1.2,
-      "z": 2.317
+      "x": 1.065,
+      "y": 1.15,
+      "z": 2.336
     },
     "impactNormal": {
       "x": 0,
-      "y": 0.309,
-      "z": -0.951
+      "y": 0.342,
+      "z": -0.94
     },
-    "impactAngleDeg": 71.02,
+    "impactAngleDeg": 71.248,
     "fuseStatus": "failed",
     "damageOriginPoint": null
   },
   "events": [
     {
-      "t": 0.036236,
+      "t": 0.036144,
       "type": "armor_hit",
       "position": {
-        "x": 1.118,
-        "y": 1.2,
-        "z": 2.317
+        "x": 1.065,
+        "y": 1.15,
+        "z": 2.336
       },
       "targetId": "hull_front",
-      "note": "Hit armor zone Hull Front."
+      "note": "Hit armor zone Upper Glacis."
     },
     {
-      "t": 0.037236,
+      "t": 0.037144,
       "type": "he_fuse_failed",
       "position": {
-        "x": 1.118,
-        "y": 1.2,
-        "z": 2.317
+        "x": 1.065,
+        "y": 1.15,
+        "z": 2.336
       },
       "targetId": "hull_front",
-      "note": "HE fuse failed: projected armor resistance 26.019 mm stayed below fuse sensitivity 30 mm"
+      "note": "HE fuse failed: projected armor resistance 26.361 mm stayed below fuse sensitivity 30 mm"
     }
   ],
   "shellPath": [
     {
       "x": -20,
-      "y": 1.2,
+      "y": 1.15,
       "z": 10
     },
     {
-      "x": 1.118,
-      "y": 1.2,
-      "z": 2.317
+      "x": 1.065,
+      "y": 1.15,
+      "z": 2.336
     }
   ],
   "fragments": [],
@@ -68,14 +68,14 @@
       "id": "he_fuse_failure_1",
       "kind": "dent",
       "position": {
-        "x": 1.118,
-        "y": 1.2,
-        "z": 2.317
+        "x": 1.065,
+        "y": 1.15,
+        "z": 2.336
       },
       "normal": {
         "x": 0,
-        "y": 0.309,
-        "z": -0.951
+        "y": 0.342,
+        "z": -0.94
       },
       "radius": 0.215,
       "depth": 0.01,

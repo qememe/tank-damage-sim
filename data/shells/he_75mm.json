@@ -1,6 +1,6 @@
 {
   "id": "he_75mm",
-  "name": "75 mm HE (Prototype)",
+  "name": "75 mm HE Shell (Prototype)",
   "type": "HE",
   "caliberMm": 75,
   "velocityMps": 620,

@@ -1,0 +1,365 @@
+{
+  "version": "0.1.0",
+  "seed": 4101,
+  "summary": {
+    "outcome": "penetration",
+    "hitZoneId": "hull_front",
+    "effectiveArmorMm": 87.234,
+    "penetrationMm": 105.4,
+    "ricochet": false
+  },
+  "hitContext": {
+    "branch": "AP",
+    "shellType": "AP",
+    "hitZoneName": "Upper Glacis",
+    "impactPoint": {
+      "x": -0.34,
+      "y": 1,
+      "z": 2.281
+    },
+    "impactNormal": {
+      "x": 0,
+      "y": 0.342,
+      "z": -0.94
+    },
+    "impactAngleDeg": 19.948,
+    "fuseStatus": "not_applicable",
+    "damageOriginPoint": {
+      "x": -0.34,
+      "y": 1,
+      "z": 2.231
+    }
+  },
+  "events": [
+    {
+      "t": 0.012302,
+      "type": "armor_hit",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "targetId": "hull_front",
+      "note": "Hit armor zone Upper Glacis."
+    },
+    {
+      "t": 0.013302,
+      "type": "penetration",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "targetId": "hull_front",
+      "note": "AP penetration 105.4 mm exceeded effective armor 87.234 mm."
+    },
+    {
+      "t": 0.022302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.343,
+        "y": 1.004,
+        "z": 1.7
+      },
+      "targetId": "transmission",
+      "damage": 77,
+      "note": "AP fragment fragment_1 (core, energy 1.216, reach 4.428 m) hit module transmission at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.025302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.344,
+        "y": 1.004,
+        "z": 1.66
+      },
+      "targetId": "driver",
+      "damage": 81,
+      "note": "AP fragment fragment_1 (core, energy 0.705, reach 1.987 m) hit crew driver at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.032302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.334,
+        "y": 0.999,
+        "z": 1.7
+      },
+      "targetId": "transmission",
+      "damage": 76,
+      "note": "AP fragment fragment_2 (core, energy 1.185, reach 3.51 m) hit module transmission at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.035302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.334,
+        "y": 0.999,
+        "z": 1.66
+      },
+      "targetId": "driver",
+      "damage": 80,
+      "note": "AP fragment fragment_2 (core, energy 0.687, reach 1.509 m) hit crew driver at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.042302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.314,
+        "y": 1.002,
+        "z": 1.7
+      },
+      "targetId": "transmission",
+      "damage": 56,
+      "note": "AP fragment fragment_3 (spall, energy 0.59, reach 1.863 m) hit module transmission at 0.532 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.052302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.367,
+        "y": 1.016,
+        "z": 1.7
+      },
+      "targetId": "transmission",
+      "damage": 56,
+      "note": "AP fragment fragment_4 (side, energy 0.761, reach 1.904 m) hit module transmission at 0.532 m because its side path intersected the target hitbox before the fragment ran out of reach."
+    },
+    {
+      "t": 0.062302,
+      "type": "internal_damage",
+      "position": {
+        "x": -0.311,
+        "y": 1.032,
+        "z": 1.7
+      },
+      "targetId": "transmission",
+      "damage": 59,
+      "note": "AP fragment fragment_5 (spall, energy 0.71, reach 1.775 m) hit module transmission at 0.533 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "shellPath": [
+    {
+      "x": -0.34,
+      "y": 1,
+      "z": 12
+    },
+    {
+      "x": -0.34,
+      "y": 1,
+      "z": 2.281
+    },
+    {
+      "x": -0.34,
+      "y": 1,
+      "z": -1.719
+    }
+  ],
+  "fragments": [
+    {
+      "id": "fragment_1",
+      "points": [
+        {
+          "x": -0.34,
+          "y": 1,
+          "z": 2.231
+        },
+        {
+          "x": -0.343,
+          "y": 1.004,
+          "z": 1.7
+        },
+        {
+          "x": -0.344,
+          "y": 1.004,
+          "z": 1.66
+        },
+        {
+          "x": -0.354,
+          "y": 1.018,
+          "z": -0.327
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.216,
+      "reach": 4.428
+    },
+    {
+      "id": "fragment_2",
+      "points": [
+        {
+          "x": -0.34,
+          "y": 1,
+          "z": 2.231
+        },
+        {
+          "x": -0.334,
+          "y": 0.999,
+          "z": 1.7
+        },
+        {
+          "x": -0.334,
+          "y": 0.999,
+          "z": 1.66
+        },
+        {
+          "x": -0.317,
+          "y": 0.996,
+          "z": 0.151
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "core",
+      "energy": 1.185,
+      "reach": 3.51
+    },
+    {
+      "id": "fragment_3",
+      "points": [
+        {
+          "x": -0.34,
+          "y": 1,
+          "z": 2.231
+        },
+        {
+          "x": -0.314,
+          "y": 1.002,
+          "z": 1.7
+        },
+        {
+          "x": -0.249,
+          "y": 1.006,
+          "z": 0.37
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.59,
+      "reach": 1.863
+    },
+    {
+      "id": "fragment_4",
+      "points": [
+        {
+          "x": -0.34,
+          "y": 1,
+          "z": 2.231
+        },
+        {
+          "x": -0.367,
+          "y": 1.016,
+          "z": 1.7
+        },
+        {
+          "x": -0.437,
+          "y": 1.059,
+          "z": 0.331
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "side",
+      "energy": 0.761,
+      "reach": 1.904
+    },
+    {
+      "id": "fragment_5",
+      "points": [
+        {
+          "x": -0.34,
+          "y": 1,
+          "z": 2.231
+        },
+        {
+          "x": -0.311,
+          "y": 1.032,
+          "z": 1.7
+        },
+        {
+          "x": -0.244,
+          "y": 1.107,
+          "z": 0.461
+        }
+      ],
+      "sourceBranch": "AP",
+      "fragmentType": "spall",
+      "energy": 0.71,
+      "reach": 1.775
+    }
+  ],
+  "surfaceDamage": [
+    {
+      "id": "ap_impact_mark_1",
+      "kind": "impact_mark",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "normal": {
+        "x": 0,
+        "y": 0.342,
+        "z": -0.94
+      },
+      "radius": 0.138,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP impact mark around the perforation point."
+    },
+    {
+      "id": "ap_penetration_hole_1",
+      "kind": "penetration_hole",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.281
+      },
+      "normal": {
+        "x": 0,
+        "y": 0.342,
+        "z": -0.94
+      },
+      "radius": 0.051,
+      "depth": 0.038,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP entrance hole through the armor plate."
+    },
+    {
+      "id": "ap_spall_exit_1",
+      "kind": "spall_exit",
+      "position": {
+        "x": -0.34,
+        "y": 1,
+        "z": 2.231
+      },
+      "normal": {
+        "x": 0,
+        "y": -0.342,
+        "z": 0.94
+      },
+      "radius": 0.101,
+      "depth": 0.018,
+      "relatedArmorZoneId": "hull_front",
+      "note": "AP interior spall cone marker."
+    }
+  ],
+  "damagedModules": [
+    {
+      "moduleId": "transmission",
+      "label": "transmission",
+      "damage": 324,
+      "remainingHp": 0,
+      "destroyed": true,
+      "note": "AP fragment fragment_1 (core, energy 1.216, reach 4.428 m) hit module transmission at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 1.185, reach 3.51 m) hit module transmission at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_3 (spall, energy 0.59, reach 1.863 m) hit module transmission at 0.532 m because its spall path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_4 (side, energy 0.761, reach 1.904 m) hit module transmission at 0.532 m because its side path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_5 (spall, energy 0.71, reach 1.775 m) hit module transmission at 0.533 m because its spall path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ],
+  "crew": [
+    {
+      "crewId": "driver",
+      "label": "driver",
+      "damage": 161,
+      "remainingHp": 0,
+      "incapacitated": true,
+      "note": "AP fragment fragment_1 (core, energy 0.705, reach 1.987 m) hit crew driver at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach. AP fragment fragment_2 (core, energy 0.687, reach 1.509 m) hit crew driver at 0.531 m because its core path intersected the target hitbox before the fragment ran out of reach."
+    }
+  ]
+}

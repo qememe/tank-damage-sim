@@ -1,12 +1,12 @@
 {
   "version": "0.1.0",
-  "seed": 303,
+  "seed": 4303,
   "tankId": "test_tank_a",
   "shellId": "he_75mm",
   "distanceMeters": 150,
   "origin": {
     "x": -20,
-    "y": 1.2,
+    "y": 1.15,
     "z": 10
   },
   "direction": {
